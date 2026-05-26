@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S3 · Dashboard · Daily Loss Reached</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumbs">
+  <a href="index.html">All screens</a>
+  <span class="sep">/</span>
+  <strong>S3 · Dashboard</strong>
+  <span class="sep">/</span>
+  <a href="s3-default.html">Default</a>
+  <a href="s3-open-position.html">Open position</a>
+  <a href="s3-amber-warning.html">Amber warning</a>
+  <a class="active" href="s3-daily-loss-reached.html">Daily loss reached</a>
+</nav>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="logo"><div class="logo-mark">G</div><div class="logo-text">Gatekeeper</div></div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item active"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>Dashboard</div>
+    <div class="nav-item locked"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>Trade<span class="badge">Locked</span></div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>Journal</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Rules</div>
+
+    <div class="nav-section" style="margin-top:16px">Account</div>
+    <div class="sb-account">
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v alert">$0 left</span></div>
+        <div class="sb-acc-bar"><div class="sb-acc-fill full" style="width:100%"></div></div>
+        <div class="sb-acc-sub alert">100% used · Locked</div>
+      </div>
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$2,784</span></div>
+        <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:47%"></div></div>
+        <div class="sb-acc-sub">47% used</div>
+      </div>
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Avg R:R (planned)</span><span class="sb-acc-v">1 : 1.65</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar">I</div>
+      <div class="user-info"><div class="u-name">Ivan H.</div><div class="u-mail">demo mode</div></div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="demo-badge">Demo Mode</div>
+    <div class="spacer"></div>
+    <div class="metric"><span class="metric-label">Balance</span><span class="metric-value">$50,340.00</span></div>
+    <div class="metric"><span class="metric-label">P&amp;L today</span><span class="metric-value alert">-$2,500.00</span></div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Daily loss</span><span class="pct alert">100%</span></div>
+      <div class="bar-track"><div class="bar-fill full" style="width:100%"></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Drawdown</span><span class="pct">47%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:47%"></div></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="banner block">
+      <div class="banner-icon">⊘</div>
+      <div class="banner-body">
+        <div class="banner-title">Trading locked</div>
+        <div class="banner-text">Daily loss limit reached — <span class="hi">100%</span> used. Resets at <span class="hi">00:00 UTC</span> (08:33:12).</div>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-block">
+        <div class="hero-label">Account balance</div>
+        <div class="hero-balance">$50,340.00</div>
+        <div class="hero-sub">Evaluation window: 27 days left · Phase 1</div>
+      </div>
+      <div class="hero-block mini-stat">
+        <div class="hero-label">Trading days</div>
+        <div class="mini-stat-val">3<span class="unit"> / 10</span></div>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:30%"></div></div>
+      </div>
+      <div class="hero-block mini-stat">
+        <div class="hero-label">Profit target</div>
+        <div class="mini-stat-val">−$2,500<span class="unit"> / $4,226</span></div>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:0%"></div></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Rules</div>
+          <div class="panel-sub">Trading locked · 1 rule blocking</div>
+        </div>
+        <div class="panel-meta"><span class="dot"></span>Unlocks at 00:00 UTC</div>
+      </div>
+      <div class="rules">
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Max risk</span><span class="rule-val">2%</span></div>
+        <div class="rule"><span class="rule-check block">⊘</span><span class="rule-text">Daily loss</span><span class="rule-val block">100%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Drawdown</span><span class="rule-val">47%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Stop-loss</span><span class="rule-val">Required</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">News window</span><span class="rule-val">Clear</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Consistency</span><span class="rule-val">Max 30%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Min days</span><span class="rule-val">3 / 10</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Balance</span><span class="rule-val">$50,340</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Today's activity</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="pos-row" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 110px">
+          <div class="pos-sym"><div class="pair-icon eur">€$</div><div class="pos-sym-info"><span class="pos-sym-name">EUR/USD</span><span class="pos-sym-sub">09:42 · closed</span></div></div>
+          <div class="pos-cell"><span class="pc-l">Direction</span><span class="pc-v">Long</span></div>
+          <div class="pos-cell"><span class="pc-l">P&amp;L</span><span class="pc-v">-$1,085</span></div>
+          <div class="pos-cell"><span class="pc-l">SL hit</span><span class="pc-v">Yes</span></div>
+          <div class="pos-cell"><span class="pc-l">Outcome</span><span class="tag neutral">Stopped</span></div>
+          <span class="tag block">Blocked next</span>
+        </div>
+        <div class="pos-row" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 110px">
+          <div class="pos-sym"><div class="pair-icon gbp">£$</div><div class="pos-sym-info"><span class="pos-sym-name">GBP/USD</span><span class="pos-sym-sub">11:18 · closed</span></div></div>
+          <div class="pos-cell"><span class="pc-l">Direction</span><span class="pc-v">Short</span></div>
+          <div class="pos-cell"><span class="pc-l">P&amp;L</span><span class="pc-v">-$1,415</span></div>
+          <div class="pos-cell"><span class="pc-l">SL hit</span><span class="pc-v">Yes</span></div>
+          <div class="pos-cell"><span class="pc-l">Outcome</span><span class="tag neutral">Stopped</span></div>
+          <span class="tag block">Blocked next</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-row center">
+      <a class="btn btn-ghost" href="s8-journal.html">View in Journal</a>
+      <button class="btn btn-disabled" disabled>+ New Trade (locked)</button>
+    </div>
+  </main>
+
+  <aside class="orderpanel">
+    <div class="op-head">
+      <div class="op-title">Order entry</div>
+      <div class="op-step">Locked</div>
+    </div>
+
+    <div class="gk-bar block">
+      <div class="gk-icon">⊘</div>
+      <div class="gk-content">
+        <div class="gk-title">1 Rule preventing execution</div>
+        <div class="gk-text">Daily loss limit reached. You have used <strong>100%</strong> of your <strong>$2,500</strong> daily allowance. No new trades today.</div>
+        <div class="gk-countdown">08:33:12</div>
+      </div>
+    </div>
+
+    <div class="op-disabled">
+      <div class="op-field"><span class="op-field-label">Instrument</span><div class="op-field-input">—</div></div>
+      <div class="op-field"><span class="op-field-label">Direction</span><div class="op-field-input">—</div></div>
+      <div class="op-field"><span class="op-field-label">Risk</span><div class="op-field-input">—</div></div>
+    </div>
+
+    <div class="op-footer-hint" style="margin-top:auto">Trading resumes at 00:00 UTC. Rules reset daily.</div>
+  </aside>
+
+</div>
+
+</body>
+</html>

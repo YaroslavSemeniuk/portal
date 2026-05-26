@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S2 · Rule Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumbs">
+  <a href="index.html">All screens</a>
+  <span class="sep">/</span>
+  <strong>S2 · Rule Setup</strong>
+  <span class="sep">/</span>
+  <a class="active" href="s2-rule-setup.html">Default</a>
+  <a href="s2-after-preset.html">After preset</a>
+  <a href="s2-staleness-gate.html">Staleness gate</a>
+</nav>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="logo"><div class="logo-mark">G</div><div class="logo-text">Gatekeeper</div></div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item locked"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>Dashboard</div>
+    <div class="nav-item locked"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>Trade</div>
+    <div class="nav-item locked"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>Journal</div>
+    <div class="nav-item active"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Rules</div>
+    <div class="sidebar-footer">
+      <div class="user-avatar">I</div>
+      <div class="user-info"><div class="u-name">Ivan H.</div><div class="u-mail">demo mode</div></div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="demo-badge">Demo Mode</div>
+    <div class="spacer"></div>
+    <div class="metric"><span class="metric-label">Balance</span><span class="metric-value">$52,840.00</span></div>
+    <div class="metric"><span class="metric-label">P&amp;L today</span><span class="metric-value">$0.00</span></div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Daily loss</span><span class="pct">0%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Drawdown</span><span class="pct">0%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Set your rules</div>
+        <div class="page-sub">Before you trade, the platform needs to know what rules you're trading under.</div>
+      </div>
+    </div>
+
+    <div class="setup-body" style="padding:0">
+      <div class="setup-lede">Paste your prop firm's rules below — straight from their website or PDF. The platform will read them and enforce them on every trade you attempt.</div>
+      <div class="setup-note">Prop firm rules change regularly — verify your current rules before each new challenge phase.</div>
+
+      <div class="setup-options">
+        <div class="setup-card">
+          <div class="setup-card-tag">Option A</div>
+          <div class="setup-card-title">Use a preset (demo)</div>
+          <div class="setup-card-preset">
+            <div style="font-weight:700;margin-bottom:4px">Demo Firm — Standard Evaluation</div>
+            <div style="font-size:12px;color:var(--c-06)">8 rules · last verified April 6, 2026</div>
+          </div>
+          <div class="setup-card-body">For demo mode we ship a canonical prop-firm ruleset so you can experience enforcement without real firm integration.</div>
+          <a class="btn btn-primary btn-full" href="s2-after-preset.html">Select</a>
+        </div>
+
+        <div class="setup-card dim">
+          <div class="setup-card-tag">Option B</div>
+          <div class="setup-card-title">Paste your firm's rules</div>
+          <div class="setup-textarea">Paste your prop firm rules here…</div>
+          <div class="setup-card-body">We'll parse the text and build an enforceable ruleset automatically.</div>
+          <div class="setup-coming">Coming in full version</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="orderpanel">
+    <div class="op-head">
+      <div class="op-title">Order entry</div>
+      <div class="op-step">Locked</div>
+    </div>
+    <div class="op-disabled">
+      <div class="op-field">
+        <span class="op-field-label">Instrument</span>
+        <div class="op-field-input">—</div>
+      </div>
+      <div class="op-field">
+        <span class="op-field-label">Direction</span>
+        <div class="op-field-input">—</div>
+      </div>
+      <div class="op-field">
+        <span class="op-field-label">Risk</span>
+        <div class="op-field-input">—</div>
+      </div>
+    </div>
+    <div class="op-footer-hint">Confirm rules to activate trading</div>
+  </aside>
+
+</div>
+
+</body>
+</html>

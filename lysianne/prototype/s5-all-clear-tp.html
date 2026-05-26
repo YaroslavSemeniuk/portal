@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S5 · All Clear + TP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumbs">
+  <a href="index.html">All screens</a><span class="sep">/</span><strong>S5 · Gatekeeper states</strong><span class="sep">/</span>
+  <a href="s5-neutral.html">Neutral</a>
+  <a href="s5-all-clear.html">All clear</a>
+  <a class="active" href="s5-all-clear-tp.html">All clear + TP</a>
+  <a href="s5-blocked-risk.html">Blocked · Risk</a>
+  <a href="s5-blocked-no-sl.html">Blocked · No SL</a>
+  <a href="s5-blocked-daily-loss.html">Blocked · Daily loss</a>
+  <a href="s5-blocked-news.html">Blocked · News</a>
+  <a href="s5-blocked-fee.html">Blocked · Fee</a>
+  <a href="s5-blocked-multiple.html">Blocked · Multiple</a>
+  <a href="s5-blocked-drawdown.html">Blocked · Drawdown</a>
+  <a href="s5-warning-drawdown.html">Warning · Drawdown</a>
+  <a href="s5-warning-consistency.html">Warning · Consistency</a>
+  <a href="s5-softblock-consistency.html">Soft block · Consistency</a>
+  <a href="s5-warning-news.html">Warning · News</a>
+  <a href="s5-warning-day-qual.html">Warning · Day qual</a>
+  <a href="s5-modal-day-qual-exit.html">Modal · Exit</a>
+  <a href="s5-modal-close-confirm.html">Modal · Close confirm</a>
+</nav>
+
+<div class="frame">
+  <aside class="sidebar">
+    <div class="logo"><div class="logo-mark">G</div><div class="logo-text">Gatekeeper</div></div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>Dashboard</div>
+    <div class="nav-item active"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>Trade</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>Journal</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Rules</div>
+    <div class="nav-section" style="margin-top:16px">Account</div>
+    <div class="sb-account">
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v">$2,500 left</span></div><div class="sb-acc-bar"><div class="sb-acc-fill" style="width:0%"></div></div></div>
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$5,284</span></div><div class="sb-acc-bar"><div class="sb-acc-fill" style="width:0%"></div></div></div>
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Avg R:R (planned)</span><span class="sb-acc-v">1 : 2.00</span></div></div>
+    </div>
+    <div class="sidebar-footer"><div class="user-avatar">I</div><div class="user-info"><div class="u-name">Ivan H.</div><div class="u-mail">demo mode</div></div></div>
+  </aside>
+
+  <header class="topbar">
+    <div class="demo-badge">Demo Mode</div><div class="spacer"></div>
+    <div class="metric"><span class="metric-label">Balance</span><span class="metric-value">$52,840.00</span></div>
+    <div class="metric"><span class="metric-label">P&amp;L today</span><span class="metric-value">$0.00</span></div>
+    <div class="bar-group"><div class="bar-head"><span class="label">Daily loss</span><span class="pct">0%</span></div><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+    <div class="bar-group"><div class="bar-head"><span class="label">Drawdown</span><span class="pct">0%</span></div><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+  </header>
+
+  <main class="main dim">
+    <div class="chart-header"><div><div class="chart-pair">EUR/USD · Long ↗</div><div class="chart-price"><span class="chart-price-val">1.08546</span><span class="chart-price-chg">+0.0003 (+0.03%)</span></div></div></div>
+    <section class="chart-area"><div class="chart-placeholder">[ Chart dimmed · focus is the order panel ]</div></section>
+  </main>
+
+  <aside class="orderpanel">
+    <div class="op-head"><div class="op-title">Order entry · EUR/USD</div><div class="op-step">Step 2 of 4</div></div>
+    <div class="op-section">
+      <div class="op-section-label">Risk mode</div>
+      <div class="op-seg"><span class="op-seg-item active">% of account</span><span class="op-seg-item">$ amount</span></div>
+      <div class="op-field"><input class="op-field-input" value="2.00"><span class="op-field-hint">≈ $1,056.80</span></div>
+    </div>
+    <div class="op-field-row">
+      <div class="op-field"><span class="op-field-label">Entry</span><div class="op-field-input">1.08542</div></div>
+      <div class="op-field"><span class="op-field-label">Stop loss</span><input class="op-field-input" value="1.08342"></div>
+      <div class="op-field"><span class="op-field-label">Take profit</span><input class="op-field-input" value="1.08942"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;padding:4px 2px">
+      <div class="op-kpi"><span class="op-kpi-l">Dollar risk</span><span class="op-kpi-v">$1,056.80</span></div>
+      <div class="op-kpi op-kpi-divider"><span class="op-kpi-l">Position size</span><span class="op-kpi-v">5.28 lots</span></div>
+      <div class="op-kpi op-kpi-divider"><span class="op-kpi-l">SL distance</span><span class="op-kpi-v">20 pips</span></div>
+      <div class="op-kpi op-kpi-divider"><span class="op-kpi-l">Risk : reward</span><span class="op-kpi-v">1 : 2.00</span></div>
+    </div>
+    <div class="gk-bar clear"><div class="gk-icon">✓</div><div class="gk-content"><div class="gk-title">All clear</div><div class="gk-text">All rules satisfied. R:R <strong>1:2.00</strong>. Proceed to review.</div></div></div>
+    <div class="review-disclaimer">Demo execution uses simulated fills with realistic slippage. No real funds are used.</div>
+    <div class="op-cta"><div class="op-cta-row"><a class="btn btn-outline" href="s4-instrument.html">Back</a><a class="btn btn-primary btn-full" href="s6-review-all-clear.html">Continue</a></div></div>
+  </aside>
+</div>
+
+</body>
+</html>

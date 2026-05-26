@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1440">
+<title>Gatekeeper · Trade with Discipline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles-v2.css">
+</head>
+<body>
+
+<!-- Shared SVG defs (gradient for sparklines) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="spark-grad" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="currentColor" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- Each view renders a full prototype-style .frame inside .view-frame -->
+<div id="app">
+  <section class="view" data-view="entry"  hidden></section>
+  <section class="view" data-view="rules"  hidden></section>
+  <section class="view" data-view="dashboard" hidden></section>
+  <section class="view" data-view="trade"  hidden></section>
+  <section class="view" data-view="post"   hidden></section>
+  <section class="view" data-view="journal" hidden></section>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast-stack" class="toast-stack"></div>
+
+<button class="reset-demo" onclick="App.resetDemo()" title="Reset all demo state">
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+  Reset demo
+</button>
+
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="data.js"></script>
+<script src="state.js"></script>
+<script src="simulator.js"></script>
+<script src="gatekeeper.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

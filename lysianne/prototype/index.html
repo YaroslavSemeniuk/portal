@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gatekeeper · User Flow Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="index-wrap">
+
+  <div class="index-head">
+    <div class="index-title">Trading Gatekeeper · V1 Wireframes</div>
+    <div class="index-sub">Mid-fidelity monochrome wireframes covering the full user flow (S1 Demo Entry → S8 Trade Journal). All screens share <span class="mono">styles.css</span> — edit one file to propagate design changes to every state.</div>
+    <div class="index-meta">
+      <span>1440 desktop</span>
+      <span>10-color monochrome</span>
+      <span>32 frames · 8 screens</span>
+    </div>
+  </div>
+
+  <div class="index-groups">
+
+    <a class="index-group" href="ui-kit.html" style="grid-column: span 2;">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">UI Kit</div>
+          <div class="index-group-sub">Tokens, typography, components — single source of truth.</div>
+        </div>
+        <span class="index-group-tag">kit · 1 file</span>
+      </div>
+    </a>
+
+    <div class="index-group">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S1 · Demo Entry</div>
+          <div class="index-group-sub">Full-bleed landing before the shell appears.</div>
+        </div>
+        <span class="index-group-tag">2 variants</span>
+      </div>
+      <div class="index-variants">
+        <a class="index-variant" href="s1-demo-entry.html"><span>Demo Entry</span><span class="index-variant-tag">default</span></a>
+        <a class="index-variant" href="s1-mobile-fallback.html"><span>Mobile Fallback</span><span class="index-variant-tag">desktop-only copy</span></a>
+      </div>
+    </div>
+
+    <div class="index-group">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S2 · Rule Setup</div>
+          <div class="index-group-sub">Preset picker + staleness gate.</div>
+        </div>
+        <span class="index-group-tag">3 variants</span>
+      </div>
+      <div class="index-variants">
+        <a class="index-variant" href="s2-rule-setup.html"><span>Rule Setup</span><span class="index-variant-tag">default</span></a>
+        <a class="index-variant" href="s2-after-preset.html"><span>After Preset Selected</span><span class="index-variant-tag">confirm card</span></a>
+        <a class="index-variant" href="s2-staleness-gate.html"><span>Staleness Gate</span><span class="index-variant-tag">30+ days old</span></a>
+      </div>
+    </div>
+
+    <div class="index-group">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S3 · Dashboard</div>
+          <div class="index-group-sub">Execution dashboard states.</div>
+        </div>
+        <span class="index-group-tag">4 variants</span>
+      </div>
+      <div class="index-variants">
+        <a class="index-variant" href="s3-default.html"><span>Default</span><span class="index-variant-tag">all clear</span></a>
+        <a class="index-variant" href="s3-open-position.html"><span>Open Position</span><span class="index-variant-tag">active trade</span></a>
+        <a class="index-variant" href="s3-amber-warning.html"><span>Amber Warning</span><span class="index-variant-tag">85% daily loss</span></a>
+        <a class="index-variant" href="s3-daily-loss-reached.html"><span>Daily Loss Reached</span><span class="index-variant-tag">trading locked</span></a>
+      </div>
+    </div>
+
+    <div class="index-group">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S4 · Instrument & Direction</div>
+          <div class="index-group-sub">Pair + long/short selection.</div>
+        </div>
+        <span class="index-group-tag">2 variants</span>
+      </div>
+      <div class="index-variants">
+        <a class="index-variant" href="s4-instrument.html"><span>Instrument & Direction</span><span class="index-variant-tag">step 1 of 4</span></a>
+        <a class="index-variant" href="s4-no-results.html"><span>No Results</span><span class="index-variant-tag">empty search</span></a>
+      </div>
+    </div>
+
+    <div class="index-group" style="grid-column: span 2;">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S5 · Risk & Stop Loss · Gatekeeper States</div>
+          <div class="index-group-sub">All 16 order-panel variants (neutral → all clear → blocked → warning → soft block → exit modal).</div>
+        </div>
+        <span class="index-group-tag">17 variants</span>
+      </div>
+      <div class="index-variants" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <a class="index-variant" href="s5-neutral.html"><span>Neutral</span><span class="index-variant-tag">1</span></a>
+        <a class="index-variant" href="s5-all-clear.html"><span>All Clear</span><span class="index-variant-tag">2</span></a>
+        <a class="index-variant" href="s5-all-clear-tp.html"><span>All Clear + TP</span><span class="index-variant-tag">3</span></a>
+        <a class="index-variant" href="s5-blocked-risk.html"><span>Blocked · Risk</span><span class="index-variant-tag">4</span></a>
+        <a class="index-variant" href="s5-blocked-no-sl.html"><span>Blocked · No SL</span><span class="index-variant-tag">5</span></a>
+        <a class="index-variant" href="s5-blocked-daily-loss.html"><span>Blocked · Daily Loss</span><span class="index-variant-tag">6</span></a>
+        <a class="index-variant" href="s5-blocked-news.html"><span>Blocked · News</span><span class="index-variant-tag">7</span></a>
+        <a class="index-variant" href="s5-blocked-fee.html"><span>Blocked · Fee</span><span class="index-variant-tag">8</span></a>
+        <a class="index-variant" href="s5-blocked-multiple.html"><span>Blocked · Multiple</span><span class="index-variant-tag">9</span></a>
+        <a class="index-variant" href="s5-blocked-drawdown.html"><span>Blocked · Drawdown</span><span class="index-variant-tag">10</span></a>
+        <a class="index-variant" href="s5-warning-drawdown.html"><span>Warning · Drawdown</span><span class="index-variant-tag">11</span></a>
+        <a class="index-variant" href="s5-warning-consistency.html"><span>Warning · Consistency</span><span class="index-variant-tag">12</span></a>
+        <a class="index-variant" href="s5-softblock-consistency.html"><span>Soft Block · Consistency</span><span class="index-variant-tag">13 · TC 10.6</span></a>
+        <a class="index-variant" href="s5-warning-news.html"><span>Warning · News</span><span class="index-variant-tag">14</span></a>
+        <a class="index-variant" href="s5-warning-day-qual.html"><span>Warning · Day Qual</span><span class="index-variant-tag">15</span></a>
+        <a class="index-variant" href="s5-modal-day-qual-exit.html"><span>Modal · Exit Day Qual</span><span class="index-variant-tag">16</span></a>
+        <a class="index-variant" href="s5-modal-close-confirm.html"><span>Modal · Close Confirm</span><span class="index-variant-tag">17</span></a>
+      </div>
+    </div>
+
+    <div class="index-group">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S6 · Review & Confirm</div>
+          <div class="index-group-sub">Final summary before execution.</div>
+        </div>
+        <span class="index-group-tag">2 variants</span>
+      </div>
+      <div class="index-variants">
+        <a class="index-variant" href="s6-review-all-clear.html"><span>All Clear</span><span class="index-variant-tag">ready</span></a>
+        <a class="index-variant" href="s6-review-news-blocked.html"><span>Rule Changed Mid-Review</span><span class="index-variant-tag">news blocked</span></a>
+      </div>
+    </div>
+
+    <div class="index-group">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S7 · Post-Execution</div>
+          <div class="index-group-sub">Requested / Estimated / Actual comparison.</div>
+        </div>
+        <span class="index-group-tag">3 variants</span>
+      </div>
+      <div class="index-variants">
+        <a class="index-variant" href="s7-slippage.html"><span>With Slippage</span><span class="index-variant-tag">+0.5 pips</span></a>
+        <a class="index-variant" href="s7-no-slippage.html"><span>No Slippage</span><span class="index-variant-tag">clean fill</span></a>
+        <a class="index-variant" href="s7-trade-closed.html"><span>Position Closed</span><span class="index-variant-tag">day counts</span></a>
+      </div>
+    </div>
+
+    <div class="index-group">
+      <div class="index-group-head">
+        <div>
+          <div class="index-group-title">S8 · Trade Journal</div>
+          <div class="index-group-sub">Auto-populated journal entries.</div>
+        </div>
+        <span class="index-group-tag">2 variants</span>
+      </div>
+      <div class="index-variants">
+        <a class="index-variant" href="s8-journal.html"><span>Journal · With Entry</span><span class="index-variant-tag">#001</span></a>
+        <a class="index-variant" href="s8-journal-empty.html"><span>Journal · Empty</span><span class="index-variant-tag">no entries</span></a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

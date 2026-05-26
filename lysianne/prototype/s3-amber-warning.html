@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S3 · Dashboard · Amber Warning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumbs">
+  <a href="index.html">All screens</a>
+  <span class="sep">/</span>
+  <strong>S3 · Dashboard</strong>
+  <span class="sep">/</span>
+  <a href="s3-default.html">Default</a>
+  <a href="s3-open-position.html">Open position</a>
+  <a class="active" href="s3-amber-warning.html">Amber warning</a>
+  <a href="s3-daily-loss-reached.html">Daily loss reached</a>
+</nav>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="logo"><div class="logo-mark">G</div><div class="logo-text">Gatekeeper</div></div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item active"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>Dashboard</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>Trade</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>Journal</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Rules</div>
+
+    <div class="nav-section" style="margin-top:16px">Account</div>
+    <div class="sb-account">
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v alert">$375 left</span></div>
+        <div class="sb-acc-bar"><div class="sb-acc-fill warn" style="width:85%"></div></div>
+        <div class="sb-acc-sub alert">85% used · 15% remaining</div>
+      </div>
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$3,159</span></div>
+        <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:40%"></div></div>
+        <div class="sb-acc-sub">40% used</div>
+      </div>
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Avg R:R (planned)</span><span class="sb-acc-v">1 : 1.80</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar">I</div>
+      <div class="user-info"><div class="u-name">Ivan H.</div><div class="u-mail">demo mode</div></div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="demo-badge">Demo Mode</div>
+    <div class="spacer"></div>
+    <div class="metric"><span class="metric-label">Balance</span><span class="metric-value">$50,715.00</span></div>
+    <div class="metric"><span class="metric-label">P&amp;L today</span><span class="metric-value alert">-$2,125.00</span></div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Daily loss</span><span class="pct alert">85%</span></div>
+      <div class="bar-track"><div class="bar-fill warn" style="width:85%"></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Drawdown</span><span class="pct">40%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:40%"></div></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="banner warn">
+      <div class="banner-icon">!</div>
+      <div class="banner-body">
+        <div class="banner-title">Warning</div>
+        <div class="banner-text">Approaching daily loss limit — you have used <span class="hi">85%</span> of your daily allowance. <span class="hi">15%</span> remaining.</div>
+      </div>
+      <div class="banner-actions">
+        <button class="btn btn-inverted btn-disabled" disabled aria-disabled="true" title="Coming soon">Set day stop</button>
+        <a class="btn btn-inverted-ghost" href="s2-after-preset.html">Read rule</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-block">
+        <div class="hero-label">Account balance</div>
+        <div class="hero-balance">$50,715.00</div>
+        <div class="hero-sub">Evaluation window: 27 days left · Phase 1</div>
+      </div>
+      <div class="hero-block mini-stat">
+        <div class="hero-label">Trading days</div>
+        <div class="mini-stat-val">3<span class="unit"> / 10</span></div>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:30%"></div></div>
+      </div>
+      <div class="hero-block mini-stat">
+        <div class="hero-label">Profit target</div>
+        <div class="mini-stat-val">−$2,125<span class="unit"> / $4,226</span></div>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:0%"></div></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Rules</div>
+          <div class="panel-sub">Approaching limits · 1 warning active</div>
+        </div>
+        <div class="panel-meta"><span class="dot"></span>Watch daily allowance</div>
+      </div>
+      <div class="rules">
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Max risk</span><span class="rule-val">2%</span></div>
+        <div class="rule"><span class="rule-check warn">!</span><span class="rule-text">Daily loss</span><span class="rule-val warn">85%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Drawdown</span><span class="rule-val">40%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Stop-loss</span><span class="rule-val">Required</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">News window</span><span class="rule-val">Clear</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Consistency</span><span class="rule-val">Max 30%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Min days</span><span class="rule-val">3 / 10</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Balance</span><span class="rule-val">$50,715</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Open positions</div>
+      </div>
+      <div class="empty">
+        <div class="empty-illu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/></svg></div>
+        <div class="empty-title">No open positions</div>
+        <div class="empty-sub">Consider ending the session early. Your remaining allowance is tight.</div>
+      </div>
+    </section>
+
+    <div class="cta-row center">
+      <button class="btn btn-ghost">Pause for the day</button>
+      <a class="btn btn-primary btn-lg" href="s4-instrument.html">+ New Trade (risk reduced)</a>
+    </div>
+  </main>
+
+  <aside class="orderpanel">
+    <div class="op-head">
+      <div class="op-title">Order entry</div>
+      <div class="op-step">Caution</div>
+    </div>
+
+    <div class="gk-bar warn">
+      <div class="gk-icon">!</div>
+      <div class="gk-content">
+        <div class="gk-title">Warning</div>
+        <div class="gk-text">Approaching daily loss limit — you have used <strong>85%</strong> of your daily allowance. <strong>15%</strong> remaining.</div>
+      </div>
+    </div>
+
+    <div class="op-section">
+      <div class="op-section-label">Quick pairs</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="pair-card"><div class="pair-icon eur">€$</div><div class="pair-info"><div class="pair-name">EUR/USD</div><div class="pair-spread">Spread 1.2 pips</div></div><div class="pair-price"><div class="pair-price-val">1.08547</div><div class="pair-price-chg up">+0.03%</div></div></div>
+        <div class="pair-card"><div class="pair-icon gbp">£$</div><div class="pair-info"><div class="pair-name">GBP/USD</div><div class="pair-spread">Spread 1.8 pips</div></div><div class="pair-price"><div class="pair-price-val">1.26412</div><div class="pair-price-chg down">-0.11%</div></div></div>
+      </div>
+    </div>
+
+    <div class="op-footer-hint" style="margin-top:auto">Risk budget is low. Consider reducing position size or pausing.</div>
+  </aside>
+
+</div>
+
+</body>
+</html>

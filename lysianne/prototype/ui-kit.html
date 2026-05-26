@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gatekeeper · UI Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Kit-specific body override (padding for standalone kit page) */
+  body { padding: 40px 56px 80px; }
+
+  /* ── UI Kit layout ── */
+  .kit-header { max-width: 1240px; margin: 0 auto 48px; }
+  .kit-title { font-size: 36px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .kit-sub { font-size: 14px; color: var(--c-07); max-width: 640px; line-height: 1.6; }
+  .kit-meta { display: flex; gap: 16px; margin-top: 16px; font-size: 12px; color: var(--c-06); font-family: 'JetBrains Mono', monospace; }
+  .kit-meta span { padding: 4px 10px; background: var(--c-02); border-radius: 999px; }
+
+  .kit-wrap { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 64px; }
+  .section { display: flex; flex-direction: column; gap: 20px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 14px; background: linear-gradient(to right, var(--c-05), transparent) bottom / 100% 1px no-repeat; }
+  .section-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .section-sub { font-size: 13px; color: var(--c-07); }
+  .subsection-title { font-size: 12px; color: var(--c-06); font-weight: 500; margin-bottom: 4px; }
+
+  .stage {
+    background: var(--c-02);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .stage.split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .stage.triple { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .stage.quad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  .demo-label {
+    font-size: 11px;
+    color: var(--c-06);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 10px;
+  }
+
+  /* ── Color palette ── */
+  .swatch-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 12px; }
+  .swatch { display: flex; flex-direction: column; gap: 6px; }
+  .swatch-chip {
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-md);
+  }
+  .swatch-chip.wire { outline: 1px solid var(--c-05); outline-offset: -1px; }
+  .swatch-name { font-size: 11px; color: var(--c-09); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+  .swatch-hex { font-size: 10px; color: var(--c-07); font-family: 'JetBrains Mono', monospace; }
+  .swatch-role { font-size: 10px; color: var(--c-06); }
+
+  /* ── Typography ── */
+  .type-row { display: grid; grid-template-columns: 140px 1fr 200px; gap: 20px; align-items: baseline; padding: 12px 0; background: linear-gradient(to right, var(--c-04), transparent) bottom / 100% 1px no-repeat; }
+  .type-row:last-child { background: none; }
+  .type-label { font-size: 11px; color: var(--c-06); font-family: 'JetBrains Mono', monospace; }
+  .type-spec { font-size: 11px; color: var(--c-06); font-family: 'JetBrains Mono', monospace; }
+  .t-display { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; font-family: 'JetBrains Mono', monospace; }
+  .t-h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .t-h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .t-h3 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .t-body { font-size: 14px; font-weight: 500; }
+  .t-body-s { font-size: 13px; color: var(--c-07); }
+  .t-caption { font-size: 12px; color: var(--c-06); }
+  .t-micro { font-size: 11px; color: var(--c-06); }
+  .t-mono-lg { font-size: 32px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -0.01em; }
+  .t-mono-md { font-size: 14px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .t-mono-sm { font-size: 12px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 20px;
+    font-size: 14px; font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn-primary { background: var(--c-09); color: var(--c-00); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,255,255,0.15); }
+  .btn-ghost { background: var(--c-04); color: var(--c-08); }
+  .btn-ghost:hover { background: var(--c-05); color: var(--c-09); }
+  .btn-outline { background: transparent; color: var(--c-09); outline: 1px solid var(--c-05); outline-offset: -1px; }
+  .btn-outline:hover { outline-color: var(--c-09); }
+  .btn-disabled { background: var(--c-03); color: var(--c-06); cursor: not-allowed; }
+  .btn-inverted { background: var(--c-00); color: var(--c-09); }
+  .btn-inverted-ghost { background: transparent; color: var(--c-00); outline: 1px solid var(--c-00); outline-offset: -1px; }
+  .btn-sm { padding: 8px 14px; font-size: 12px; }
+  .btn-lg { padding: 14px 24px; font-size: 15px; }
+
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn-row.on-white { background: var(--c-09); padding: 20px; border-radius: var(--radius-md); }
+
+  /* ── Badges / pills ── */
+  .demo-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    background: var(--c-04);
+    border-radius: 999px;
+    font-size: 12px; font-weight: 500;
+    color: var(--c-08);
+  }
+  .demo-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--c-09); }
+  .lock-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 14px;
+    background: var(--c-09); color: var(--c-00);
+    border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+  }
+  .tag { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .tag.neutral { background: var(--c-05); color: var(--c-09); }
+  .tag.win { background: var(--c-09); color: var(--c-00); }
+  .tag.block {
+    background: var(--c-00); color: var(--c-09);
+    position: relative; overflow: hidden;
+  }
+  .tag.block::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, transparent 0, transparent 2px, rgba(255,255,255,0.15) 2px, rgba(255,255,255,0.15) 4px);
+  }
+
+  /* ── Status / dots ── */
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c-09); display: inline-block; }
+  .status-line { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--c-06); }
+  .status-line.live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--c-09); animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* ── Progress bars ── */
+  .bar-group { display: flex; flex-direction: column; gap: 6px; min-width: 160px; }
+  .bar-head { display: flex; justify-content: space-between; }
+  .bar-head .label { font-size: 11px; font-weight: 500; color: var(--c-06); }
+  .bar-head .pct { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--c-07); }
+  .bar-head .pct.alert { color: var(--c-09); font-weight: 800; }
+  .bar-track { height: 6px; background: var(--c-04); border-radius: 999px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; background: var(--c-09); border-radius: 999px; position: relative; }
+  .bar-fill.warn::after, .bar-fill.full::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, transparent 0, transparent 3px, rgba(0,0,0,0.3) 3px, rgba(0,0,0,0.3) 6px);
+    border-radius: 999px;
+  }
+  .bar-track.thin { height: 4px; }
+  .bar-track.thick { height: 10px; }
+
+  /* ── Form fields ── */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 12px; color: var(--c-07); font-weight: 500; }
+  .field-input {
+    background: var(--c-04);
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    color: var(--c-09);
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+  }
+  .field-input:focus { outline: 1px solid var(--c-09); outline-offset: -1px; }
+  .field-input::placeholder { color: var(--c-06); }
+  .field-hint { font-size: 11px; color: var(--c-06); }
+  .field-hint.alert { color: var(--c-09); }
+
+  .select {
+    background: var(--c-04);
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    color: var(--c-09);
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer;
+  }
+  .select::after { content: '⌄'; color: var(--c-06); }
+
+  /* ── Toggle / segmented ── */
+  .seg {
+    display: inline-flex;
+    background: var(--c-03);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    gap: 4px;
+  }
+  .seg-item {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    color: var(--c-07);
+    cursor: pointer;
+  }
+  .seg-item.active { background: var(--c-05); color: var(--c-09); }
+
+  .toggle {
+    width: 40px; height: 22px; border-radius: 999px;
+    background: var(--c-04);
+    position: relative; cursor: pointer; display: inline-block;
+  }
+  .toggle::after {
+    content: ''; position: absolute; left: 3px; top: 3px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--c-07);
+    transition: all 0.15s ease;
+  }
+  .toggle.on { background: var(--c-09); }
+  .toggle.on::after { left: 21px; background: var(--c-00); }
+
+  /* ── Avatar / Icons ── */
+  .user-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--c-08); color: var(--c-00);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+  .logo-mark {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--c-09); color: var(--c-00);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px;
+  }
+  .pair-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    background: var(--c-05); color: var(--c-09);
+  }
+  .pair-icon.gbp { background: var(--c-07); color: var(--c-00); }
+  .pair-icon.usd { background: var(--c-06); color: var(--c-00); }
+
+  .ic-circle {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--c-09); color: var(--c-00);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .ic-circle.warn { background: var(--c-00); color: var(--c-09); outline: 2px solid var(--c-09); outline-offset: -2px; }
+
+  /* ── Navigation ── */
+  .nav-demo {
+    background: var(--c-00);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    width: 220px;
+    display: flex; flex-direction: column;
+  }
+  .nav-section {
+    font-size: 12px; font-weight: 500;
+    color: var(--c-06);
+    padding: 12px 12px 8px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; margin: 2px 0;
+    border-radius: 10px;
+    font-size: 14px; font-weight: 500;
+    color: var(--c-07);
+    cursor: pointer;
+    position: relative;
+  }
+  .nav-item.active { background: var(--c-04); color: var(--c-09); }
+  .nav-item.active::before {
+    content: ''; position: absolute; left: -16px; top: 10px; bottom: 10px; width: 3px;
+    background: var(--c-09); border-radius: 0 2px 2px 0;
+  }
+  .nav-item.locked { opacity: 0.4; cursor: not-allowed; }
+  .nav-item .badge { margin-left: auto; background: var(--c-09); color: var(--c-00); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 999px; }
+  .nav-icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .nav-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+  /* ── Cards / Panels ── */
+  .panel { background: var(--c-02); border-radius: var(--radius-lg); padding: 22px 24px; }
+  .panel.on-kit { background: var(--c-03); }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .panel-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .panel-meta { font-size: 12px; color: var(--c-06); display: flex; align-items: center; gap: 6px; }
+
+  .stat-card {
+    background: var(--c-03);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .stat-card .left { display: flex; flex-direction: column; gap: 4px; }
+  .stat-card .label { font-size: 12px; color: var(--c-07); font-weight: 500; }
+  .stat-card .value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 600; }
+
+  /* ── Rule item ── */
+  .rule {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: var(--c-03);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+  }
+  .rule-check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--c-09); color: var(--c-00);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .rule-check.warn { background: var(--c-00); color: var(--c-09); outline: 2px solid var(--c-09); outline-offset: -2px; }
+  .rule-check.block { background: var(--c-00); color: var(--c-09); outline: 2px solid var(--c-09); outline-offset: -2px; font-size: 12px; }
+  .rule-text { color: var(--c-07); flex: 1; font-size: 12px; }
+  .rule-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--c-09); }
+  .rule-val.warn, .rule-val.block { font-weight: 800; }
+
+  /* ── Banners ── */
+  .banner {
+    background: var(--c-09);
+    color: var(--c-00);
+    padding: 24px 32px;
+    display: flex; align-items: center; gap: 24px;
+    position: relative; overflow: hidden;
+    border-radius: var(--radius-md);
+  }
+  .banner.warn::after {
+    content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 180px;
+    background: repeating-linear-gradient(135deg, transparent 0, transparent 8px, rgba(0,0,0,0.06) 8px, rgba(0,0,0,0.06) 16px);
+    pointer-events: none;
+  }
+  .banner.block { padding: 32px 40px; gap: 32px; flex-wrap: wrap; }
+  .banner.block::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, transparent 0, transparent 12px, rgba(0,0,0,0.04) 12px, rgba(0,0,0,0.04) 24px);
+    pointer-events: none;
+  }
+  .banner-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--c-00); color: var(--c-09);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 22px; font-weight: 700;
+    position: relative; z-index: 1;
+  }
+  .banner.block .banner-icon { width: 64px; height: 64px; border-radius: 16px; flex: 0 0 64px; }
+  .banner.block .banner-icon svg { width: 30px; height: 30px; }
+  .banner-body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+  .banner.block .banner-body { flex: 1 1 420px; }
+  .banner-title { font-size: 13px; font-weight: 700; color: var(--c-00); margin-bottom: 6px; opacity: 0.7; }
+  .banner-text { font-size: 15px; color: var(--c-00); font-weight: 500; line-height: 1.4; }
+  .banner.block .banner-text { font-size: 17px; font-weight: 600; }
+  .banner-text .hi { font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+  .banner-actions { display: flex; gap: 8px; position: relative; z-index: 1; flex-shrink: 0; }
+  .banner-reset {
+    flex: 0 0 auto; font-size: 12px; color: var(--c-00);
+    text-align: right; display: flex; flex-direction: column; gap: 4px;
+    position: relative; z-index: 1; opacity: 0.9; min-width: 160px;
+  }
+  .banner-reset-label { font-weight: 600; }
+  .banner-reset-val { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; opacity: 1; }
+
+  /* ── Hero block ── */
+  .hero {
+    background: linear-gradient(135deg, var(--c-04) 0%, var(--c-03) 50%, var(--c-02) 100%);
+    border-radius: var(--radius-lg);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 40px; align-items: center;
+    min-height: 200px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute;
+    top: -120px; right: -120px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-block { position: relative; z-index: 1; }
+  .hero-label { font-size: 12px; font-weight: 500; color: var(--c-07); margin-bottom: 10px; }
+  .hero-balance {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 40px; font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--c-09);
+  }
+  .hero-sub { font-size: 13px; color: var(--c-06); margin-top: 8px; line-height: 1.5; }
+  .mini-stat { display: flex; flex-direction: column; gap: 6px; }
+  .mini-stat-val { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; letter-spacing: -0.01em; }
+  .mini-stat-val .unit { color: var(--c-06); font-size: 16px; font-weight: 500; }
+  .mini-bar { height: 4px; background: var(--c-05); border-radius: 999px; overflow: hidden; margin-top: 4px; }
+  .mini-bar-fill { height: 100%; background: var(--c-09); border-radius: 999px; }
+
+  /* ── Sidebar account ── */
+  .sb-account-demo { background: var(--c-00); padding: 16px 12px; border-radius: var(--radius-md); width: 220px; }
+  .sb-account { display: flex; flex-direction: column; gap: 14px; }
+  .sb-acc-row { display: flex; flex-direction: column; gap: 6px; }
+  .sb-acc-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .sb-acc-l { font-size: 12px; color: var(--c-07); font-weight: 500; }
+  .sb-acc-v { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--c-09); }
+  .sb-acc-v.alert { font-weight: 800; }
+  .sb-acc-bar { height: 4px; background: var(--c-04); border-radius: 999px; overflow: hidden; position: relative; }
+  .sb-acc-fill { height: 100%; background: var(--c-09); border-radius: 999px; position: relative; }
+  .sb-acc-fill.warn::after, .sb-acc-fill.full::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, transparent 0, transparent 2px, rgba(0,0,0,0.3) 2px, rgba(0,0,0,0.3) 4px);
+  }
+  .sb-acc-sub { font-size: 11px; color: var(--c-06); }
+  .sb-acc-sub.alert { color: var(--c-09); font-weight: 600; }
+
+  /* ── Position row ── */
+  .pos-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr 110px;
+    gap: 16px; align-items: center;
+    padding: 18px;
+    background: linear-gradient(90deg, var(--c-05) 0%, var(--c-04) 50%, var(--c-03) 100%);
+    border-radius: var(--radius-md);
+    position: relative;
+  }
+  .pos-row::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+    background: var(--c-09); border-radius: 0 2px 2px 0;
+  }
+  .pos-sym { display: flex; align-items: center; gap: 10px; }
+  .pos-sym-info { display: flex; flex-direction: column; }
+  .pos-sym-name { font-size: 14px; font-weight: 600; }
+  .pos-sym-sub { font-size: 11px; color: var(--c-07); }
+  .pos-cell { display: flex; flex-direction: column; gap: 3px; }
+  .pc-l { font-size: 11px; color: var(--c-07); font-weight: 500; }
+  .pc-v { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; }
+  .pc-v.dir { display: inline-flex; align-items: center; gap: 4px; font-family: 'Inter', sans-serif; padding: 3px 8px; background: var(--c-09); color: var(--c-00); border-radius: 6px; font-size: 12px; font-weight: 700; width: fit-content; }
+  .pos-action { padding: 8px 14px; background: var(--c-02); color: var(--c-09); border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+  /* ── History row ── */
+  .history-row { display: grid; grid-template-columns: auto 1fr auto auto; gap: 14px; align-items: center; padding: 10px 12px; background: var(--c-03); border-radius: var(--radius-sm); font-size: 13px; }
+  .hist-ic { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: var(--c-05); color: var(--c-09); }
+  .hist-ic.gbp { background: var(--c-07); color: var(--c-00); }
+  .hist-info { display: flex; flex-direction: column; }
+  .hist-pair { font-weight: 600; font-size: 13px; }
+  .hist-time { font-size: 11px; color: var(--c-06); }
+  .hist-pnl { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; text-align: right; }
+
+  /* ── Pair card ── */
+  .pair-card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    background: var(--c-03);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+  .pair-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .pair-name { font-size: 13px; font-weight: 600; }
+  .pair-spread { font-size: 11px; color: var(--c-06); }
+  .pair-price { text-align: right; }
+  .pair-price-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; }
+  .pair-price-chg { font-size: 11px; font-weight: 600; }
+  .pair-price-chg.up { color: var(--c-09); }
+  .pair-price-chg.down { color: var(--c-06); }
+
+  /* ── Locked section ── */
+  .locked-section {
+    position: relative;
+    padding: 28px 24px;
+    background: var(--c-03);
+    border-radius: var(--radius-lg);
+    display: flex; align-items: center; gap: 24px;
+    overflow: hidden;
+  }
+  .locked-section::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+    background: var(--c-09);
+  }
+  .lock-big {
+    width: 72px; height: 72px; border-radius: 18px;
+    background: var(--c-09); color: var(--c-00);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative; overflow: hidden;
+  }
+  .lock-big::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, transparent 0, transparent 4px, rgba(0,0,0,0.05) 4px, rgba(0,0,0,0.05) 8px);
+  }
+  .lock-big svg { width: 32px; height: 32px; position: relative; z-index: 1; }
+  .ls-body { flex: 1; }
+  .ls-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .ls-sub { font-size: 13px; color: var(--c-07); line-height: 1.5; }
+  .countdown-box { text-align: right; display: flex; flex-direction: column; gap: 2px; min-width: 160px; }
+  .cd-label { font-size: 12px; font-weight: 500; color: var(--c-06); }
+  .cd-time { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; color: var(--c-09); letter-spacing: -0.02em; }
+  .cd-sub { font-size: 11px; color: var(--c-06); }
+
+  /* ── Gatekeeper card ── */
+  .gatekeep-card {
+    background: var(--c-09);
+    color: var(--c-00);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 14px;
+    position: relative; overflow: hidden;
+    width: 320px;
+  }
+  .gatekeep-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, transparent 0, transparent 8px, rgba(0,0,0,0.05) 8px, rgba(0,0,0,0.05) 16px);
+    pointer-events: none;
+  }
+  .gk-status { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--c-00); opacity: 0.7; position: relative; z-index: 1; }
+  .gk-status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c-00); }
+  .gk-title { font-size: 17px; font-weight: 700; line-height: 1.3; position: relative; z-index: 1; color: var(--c-00); }
+  .gk-body { font-size: 13px; color: var(--c-00); opacity: 0.8; line-height: 1.5; position: relative; z-index: 1; }
+  .gk-body strong { font-family: 'JetBrains Mono', monospace; font-weight: 800; opacity: 1; }
+  .gk-progress { position: relative; z-index: 1; }
+  .gk-prog-track { height: 10px; background: rgba(0,0,0,0.15); border-radius: 999px; overflow: hidden; }
+  .gk-prog-fill { height: 100%; width: 85%; background: var(--c-00); border-radius: 999px; position: relative; }
+  .gk-prog-fill::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0, transparent 3px, rgba(255,255,255,0.15) 3px, rgba(255,255,255,0.15) 6px); }
+  .gk-prog-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--c-00); }
+  .gk-prog-labels .used { font-weight: 800; }
+  .gk-prog-labels .max { opacity: 0.6; }
+
+  /* ── Empty state ── */
+  .empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 24px; text-align: center; gap: 12px;
+    background: var(--c-03);
+    border-radius: var(--radius-md);
+  }
+  .empty-illu {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--c-02);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .empty-illu::before {
+    content: ''; position: absolute; inset: -1px;
+    border-radius: 50%;
+    background:
+      conic-gradient(from 0deg, var(--c-05) 0, var(--c-05) 8px, transparent 8px, transparent 16px) center/100% 100%;
+    mask: radial-gradient(circle, transparent 32px, black 33px);
+    -webkit-mask: radial-gradient(circle, transparent 32px, black 33px);
+  }
+  .empty-illu svg { width: 28px; height: 28px; color: var(--c-08); }
+  .empty-title { font-size: 15px; font-weight: 600; }
+  .empty-sub { font-size: 13px; color: var(--c-06); max-width: 320px; line-height: 1.5; }
+
+  /* ── Alerts ── */
+  .alert-card { background: var(--c-03); border-radius: var(--radius-md); padding: 14px 16px; display: flex; gap: 10px; align-items: flex-start; }
+  .alert-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-08); flex-shrink: 0; margin-top: 6px; }
+  .alert-body { font-size: 12px; color: var(--c-07); line-height: 1.5; }
+  .alert-body strong { color: var(--c-09); display: block; margin-bottom: 2px; }
+
+  /* ── Grid helpers ── */
+  .rules-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 12px; }
+  .flex-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+
+  /* ── Scrollable nav ── */
+  .kit-jump {
+    position: sticky; top: 16px; z-index: 10;
+    background: var(--c-02);
+    padding: 12px 20px;
+    border-radius: 999px;
+    display: flex; gap: 8px;
+    flex-wrap: wrap;
+    max-width: 1240px; margin: 0 auto 48px;
+    font-size: 12px;
+  }
+  .kit-jump a { color: var(--c-08); padding: 4px 10px; border-radius: 999px; text-decoration: none; transition: all 0.15s ease; }
+  .kit-jump a:hover { background: var(--c-04); color: var(--c-09); }
+</style>
+</head>
+<body>
+
+<div class="kit-header">
+  <div class="kit-title">Gatekeeper · UI Kit</div>
+  <div class="kit-sub">Shared tokens, components, and patterns used across the Dashboard states. Use this file as the single source of truth when iterating on fixes — edit a component here first, then propagate to the screens.</div>
+  <div class="kit-meta">
+    <span>1440 desktop</span>
+    <span>10-color monochrome</span>
+    <span>Borderless · depth via background stack</span>
+  </div>
+</div>
+
+<nav class="kit-jump">
+  <a href="#tokens">Tokens</a>
+  <a href="#typography">Typography</a>
+  <a href="#buttons">Buttons</a>
+  <a href="#badges">Badges</a>
+  <a href="#inputs">Inputs</a>
+  <a href="#progress">Progress</a>
+  <a href="#nav">Nav</a>
+  <a href="#rules">Rules</a>
+  <a href="#account">Account</a>
+  <a href="#banners">Banners</a>
+  <a href="#hero">Hero</a>
+  <a href="#panels">Panels</a>
+  <a href="#position">Position</a>
+  <a href="#locked">Locked</a>
+  <a href="#gatekeeper">Gatekeeper</a>
+  <a href="#empty">Empty</a>
+</nav>
+
+<div class="kit-wrap">
+
+  <!-- ── Tokens ── -->
+  <section class="section" id="tokens">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Color tokens</div>
+        <div class="section-sub">10-step monochrome ramp. Stack backgrounds (01 → 02 → 03 → 04) to create depth without strokes.</div>
+      </div>
+      <div class="mono" style="font-size:11px;color:var(--c-06)">--c-00 to --c-09</div>
+    </div>
+    <div class="stage">
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-chip wire" style="background:#000000"></div><span class="swatch-name">00</span><span class="swatch-hex">#000000</span><span class="swatch-role">pure void</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#0A0A0A"></div><span class="swatch-name">01</span><span class="swatch-hex">#0A0A0A</span><span class="swatch-role">app bg</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#141414"></div><span class="swatch-name">02</span><span class="swatch-hex">#141414</span><span class="swatch-role">surface L1</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#1C1C1C"></div><span class="swatch-name">03</span><span class="swatch-hex">#1C1C1C</span><span class="swatch-role">cards / L2</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#262626"></div><span class="swatch-name">04</span><span class="swatch-hex">#262626</span><span class="swatch-role">inputs</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#3D3D3D"></div><span class="swatch-name">05</span><span class="swatch-hex">#3D3D3D</span><span class="swatch-role">separators</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#666666"></div><span class="swatch-name">06</span><span class="swatch-hex">#666666</span><span class="swatch-role">muted text</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#8C8C8C"></div><span class="swatch-name">07</span><span class="swatch-hex">#8C8C8C</span><span class="swatch-role">secondary</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#BDBDBD"></div><span class="swatch-name">08</span><span class="swatch-hex">#BDBDBD</span><span class="swatch-role">bright 2nd</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#FFFFFF"></div><span class="swatch-name">09</span><span class="swatch-hex">#FFFFFF</span><span class="swatch-role">primary</span></div>
+      </div>
+    </div>
+
+    <div class="stage triple">
+      <div class="panel on-kit">
+        <div class="subsection-title">Radii</div>
+        <div style="display:flex;gap:12px;align-items:flex-end">
+          <div style="width:56px;height:56px;background:var(--c-04);border-radius:6px"></div>
+          <div style="width:56px;height:56px;background:var(--c-04);border-radius:10px"></div>
+          <div style="width:56px;height:56px;background:var(--c-04);border-radius:14px"></div>
+          <div style="width:56px;height:56px;background:var(--c-04);border-radius:20px"></div>
+        </div>
+        <div class="demo-label">6px · 10px · 14px · 20px</div>
+      </div>
+      <div class="panel on-kit">
+        <div class="subsection-title">Spacing scale</div>
+        <div style="display:flex;gap:6px;align-items:flex-end">
+          <div style="width:4px;height:24px;background:var(--c-05)"></div>
+          <div style="width:8px;height:24px;background:var(--c-05)"></div>
+          <div style="width:12px;height:24px;background:var(--c-05)"></div>
+          <div style="width:16px;height:24px;background:var(--c-05)"></div>
+          <div style="width:20px;height:24px;background:var(--c-05)"></div>
+          <div style="width:24px;height:24px;background:var(--c-05)"></div>
+          <div style="width:32px;height:24px;background:var(--c-05)"></div>
+          <div style="width:40px;height:24px;background:var(--c-05)"></div>
+        </div>
+        <div class="demo-label">4 · 8 · 12 · 16 · 20 · 24 · 32 · 40</div>
+      </div>
+      <div class="panel on-kit">
+        <div class="subsection-title">Depth stack</div>
+        <div style="background:var(--c-01);padding:16px;border-radius:10px">
+          <div style="background:var(--c-02);padding:12px;border-radius:8px">
+            <div style="background:var(--c-03);padding:10px;border-radius:6px">
+              <div style="background:var(--c-04);padding:8px;border-radius:4px;font-size:11px" class="mono">04 input</div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-label">01 app → 02 surf → 03 card → 04 input</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Typography ── -->
+  <section class="section" id="typography">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Typography</div>
+        <div class="section-sub">Inter for UI, JetBrains Mono for all numerical data. Sentence case everywhere — no uppercase labels.</div>
+      </div>
+      <div class="mono" style="font-size:11px;color:var(--c-06)">Inter · JetBrains Mono</div>
+    </div>
+
+    <div class="stage">
+      <div class="type-row">
+        <span class="type-label">Balance</span>
+        <span class="t-display">$52,840.00</span>
+        <span class="type-spec">Mono 40 / 700 / -0.02</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Page title</span>
+        <span class="t-h1">Good morning, Vania</span>
+        <span class="type-spec">Inter 28 / 700 / -0.02</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Section title</span>
+        <span class="t-h2">Open Position</span>
+        <span class="type-spec">Inter 22 / 700 / -0.02</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Panel title</span>
+        <span class="t-h3">Rules</span>
+        <span class="type-spec">Inter 16 / 600 / -0.01</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Body</span>
+        <span class="t-body">Your rules are active. Balance is fresh. Ready when you are.</span>
+        <span class="type-spec">Inter 14 / 500</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Body small</span>
+        <span class="t-body-s">Demo · Standard Evaluation · Phase 1 · 30 days left</span>
+        <span class="type-spec">Inter 13 / 400</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Caption</span>
+        <span class="t-caption">April 15, 2026 · 09:24 UTC</span>
+        <span class="type-spec">Inter 12 / 400</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Micro label</span>
+        <span class="t-micro">Daily allowance</span>
+        <span class="type-spec">Inter 11 / 500</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Mono hero</span>
+        <span class="t-mono-lg">+$4,226</span>
+        <span class="type-spec">Mono 32 / 700 / -0.01</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Mono body</span>
+        <span class="t-mono-md">1.08547</span>
+        <span class="type-spec">Mono 14 / 600</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Mono small</span>
+        <span class="t-mono-sm">+24 pips</span>
+        <span class="type-spec">Mono 12 / 600</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Buttons ── -->
+  <section class="section" id="buttons">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Buttons</div>
+        <div class="section-sub">Primary (white), Ghost (04), Outline, Disabled. Inverted variants for use on white banners.</div>
+      </div>
+    </div>
+    <div class="stage split">
+      <div>
+        <div class="subsection-title">On dark surfaces</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">+ New Trade</button>
+          <button class="btn btn-ghost">Browse pairs</button>
+          <button class="btn btn-outline">Pause</button>
+          <button class="btn btn-disabled" disabled>Locked</button>
+        </div>
+        <div class="demo-label">Primary · Ghost · Outline · Disabled</div>
+        <div class="btn-row" style="margin-top:16px">
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary">Default</button>
+          <button class="btn btn-primary btn-lg">Large</button>
+        </div>
+        <div class="demo-label">Size variants</div>
+      </div>
+      <div>
+        <div class="subsection-title">On white banners (inverted)</div>
+        <div class="btn-row on-white">
+          <button class="btn btn-inverted">Set day stop</button>
+          <button class="btn btn-inverted-ghost">Read rule</button>
+        </div>
+        <div class="demo-label">For use inside warn/block banners</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Badges / tags / pills ── -->
+  <section class="section" id="badges">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Badges, tags & pills</div>
+        <div class="section-sub">Demo mode indicator, halt pill, history tags, pair icons.</div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="flex-row">
+        <div>
+          <div class="subsection-title">Demo badge</div>
+          <div class="demo-badge">Demo Mode</div>
+        </div>
+        <div>
+          <div class="subsection-title">Lock pill (halt state)</div>
+          <div class="lock-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+            Trading Halted
+          </div>
+        </div>
+        <div>
+          <div class="subsection-title">History tags</div>
+          <div style="display:flex;gap:6px">
+            <span class="tag neutral">Stopped</span>
+            <span class="tag win">Win</span>
+            <span class="tag block">Blocked</span>
+          </div>
+        </div>
+        <div>
+          <div class="subsection-title">Pair icons</div>
+          <div style="display:flex;gap:8px">
+            <div class="pair-icon">€$</div>
+            <div class="pair-icon gbp">£$</div>
+            <div class="pair-icon usd">$¥</div>
+          </div>
+        </div>
+        <div>
+          <div class="subsection-title">Status dots</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span class="status-line"><span class="dot"></span>Verified April 6</span>
+            <span class="status-line live">Live · fill at 14:23:04</span>
+          </div>
+        </div>
+        <div>
+          <div class="subsection-title">Rule icons</div>
+          <div style="display:flex;gap:8px">
+            <span class="ic-circle">✓</span>
+            <span class="ic-circle warn">!</span>
+            <span class="ic-circle warn">⊘</span>
+          </div>
+          <div class="demo-label">Pass · Warning · Blocked</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Inputs / forms ── -->
+  <section class="section" id="inputs">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Inputs & controls</div>
+        <div class="section-sub">Text inputs, selects, toggles, and segmented controls. Dark 04 surface, focus ring in white.</div>
+      </div>
+    </div>
+    <div class="stage split">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="field">
+          <span class="field-label">Entry price</span>
+          <input class="field-input" value="1.08547">
+          <span class="field-hint">Default input</span>
+        </div>
+        <div class="field">
+          <span class="field-label">Stop loss</span>
+          <input class="field-input" placeholder="Set SL to continue">
+          <span class="field-hint alert">Required by gatekeeper</span>
+        </div>
+        <div class="field">
+          <span class="field-label">Pair</span>
+          <div class="select">EUR / USD</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <div class="subsection-title">Segmented</div>
+          <div class="seg">
+            <span class="seg-item active">Long</span>
+            <span class="seg-item">Short</span>
+          </div>
+        </div>
+        <div>
+          <div class="subsection-title">Segmented · 3-up</div>
+          <div class="seg">
+            <span class="seg-item">1m</span>
+            <span class="seg-item active">15m</span>
+            <span class="seg-item">1h</span>
+            <span class="seg-item">4h</span>
+          </div>
+        </div>
+        <div>
+          <div class="subsection-title">Toggle</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="toggle on"></span>
+            <span class="t-caption">Auto-close on SL</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+            <span class="toggle"></span>
+            <span class="t-caption">Trail stop</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Progress ── -->
+  <section class="section" id="progress">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Progress bars</div>
+        <div class="section-sub">Three thicknesses. Stripe overlay on the fill signals "approaching limit" or "full" states.</div>
+      </div>
+    </div>
+    <div class="stage triple">
+      <div class="panel on-kit">
+        <div class="subsection-title">Thin (4px · sidebar account)</div>
+        <div class="bar-track thin"><div class="bar-fill" style="width:30%"></div></div>
+        <div class="bar-track thin" style="margin-top:10px"><div class="bar-fill warn" style="width:85%"></div></div>
+        <div class="bar-track thin" style="margin-top:10px"><div class="bar-fill full" style="width:100%"></div></div>
+      </div>
+      <div class="panel on-kit">
+        <div class="subsection-title">Default (6px · topbar)</div>
+        <div class="bar-group">
+          <div class="bar-head"><span class="label">Daily Loss</span><span class="pct">0 / 5%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+        </div>
+        <div class="bar-group" style="margin-top:12px">
+          <div class="bar-head"><span class="label">Daily Loss</span><span class="pct alert">85 / 5%</span></div>
+          <div class="bar-track"><div class="bar-fill warn" style="width:85%"></div></div>
+        </div>
+      </div>
+      <div class="panel on-kit">
+        <div class="subsection-title">Thick (8px · hero big-bar)</div>
+        <div class="bar-track thick"><div class="bar-fill warn" style="width:85%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px" class="mono">
+          <span class="t-micro" style="color:var(--c-09);font-weight:700">$2,125 used</span>
+          <span class="t-micro" style="color:var(--c-09);font-weight:700">85% · $375 to limit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Navigation ── -->
+  <section class="section" id="nav">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Sidebar navigation</div>
+        <div class="section-sub">Active state has 04 bg + 3px white accent bar. Locked items dim to 40% with a lock icon.</div>
+      </div>
+    </div>
+    <div class="flex-row">
+      <div class="nav-demo">
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 12px 16px">
+          <div class="logo-mark">G</div>
+          <span style="font-size:16px;font-weight:700">Gatekeeper</span>
+        </div>
+        <div class="nav-section">Main</div>
+        <div class="nav-item active">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>
+          Dashboard
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>
+          Trade
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>
+          Journal<span class="badge">1</span>
+        </div>
+        <div class="nav-item locked">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>
+          Trade
+          <svg class="nav-icon" style="margin-left:auto;width:14px;height:14px" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--c-07);max-width:280px">
+        <div><strong style="color:var(--c-09)">Item states:</strong> default, hover, active, locked.</div>
+        <div><strong style="color:var(--c-09)">Badge:</strong> circular white pill with count or "!" symbol.</div>
+        <div><strong style="color:var(--c-09)">Active marker:</strong> 3px white bar pinned to the sidebar edge.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Rules ── -->
+  <section class="section" id="rules">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Rules panel</div>
+        <div class="section-sub">Unified structure across all states. 4-column grid of rule items. Only the icon and optional warn/block weights change per state.</div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="subsection-title">Individual rule items · 3 states</div>
+      <div class="rules-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Max risk / trade</span><span class="rule-val">2%</span></div>
+        <div class="rule"><span class="rule-check warn">!</span><span class="rule-text">Daily loss limit</span><span class="rule-val warn">85%</span></div>
+        <div class="rule"><span class="rule-check block">⊘</span><span class="rule-text">Daily loss limit</span><span class="rule-val block">100%</span></div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="panel on-kit">
+        <div class="panel-head">
+          <div class="panel-title">Rules</div>
+          <div class="panel-meta"><span class="dot"></span>8 of 8 passing · verified April 6</div>
+        </div>
+        <div class="rules-grid">
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Max risk / trade</span><span class="rule-val">2%</span></div>
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Daily loss limit</span><span class="rule-val">5%</span></div>
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Overall drawdown</span><span class="rule-val">10%</span></div>
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Stop-loss</span><span class="rule-val">Required</span></div>
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">News window</span><span class="rule-val">± 2 min</span></div>
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Consistency</span><span class="rule-val">30%</span></div>
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Min trading days</span><span class="rule-val">10</span></div>
+          <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Starting balance</span><span class="rule-val">$52,840</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Account section ── -->
+  <section class="section" id="account">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Sidebar · Account section</div>
+        <div class="section-sub">Account metrics live in the sidebar: Daily allowance, Drawdown buffer, Avg R:R. Compact rows with optional mini progress bars.</div>
+      </div>
+    </div>
+    <div class="flex-row">
+      <div class="sb-account-demo">
+        <div class="nav-section" style="padding:0 0 12px">Account · default</div>
+        <div class="sb-account">
+          <div class="sb-acc-row">
+            <div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v">$2,500</span></div>
+            <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:0%"></div></div>
+            <span class="sb-acc-sub">$0 used · full budget left</span>
+          </div>
+          <div class="sb-acc-row">
+            <div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$5,284</span></div>
+            <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:0%"></div></div>
+            <span class="sb-acc-sub">0% of 10% floor</span>
+          </div>
+          <div class="sb-acc-row">
+            <div class="sb-acc-head"><span class="sb-acc-l">Avg R:R (planned)</span><span class="sb-acc-v">1 : 2.00</span></div>
+            <span class="sb-acc-sub">From your rule set</span>
+          </div>
+        </div>
+      </div>
+      <div class="sb-account-demo">
+        <div class="nav-section" style="padding:0 0 12px">Account · warning</div>
+        <div class="sb-account">
+          <div class="sb-acc-row">
+            <div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v alert">$375 left</span></div>
+            <div class="sb-acc-bar"><div class="sb-acc-fill warn" style="width:85%"></div></div>
+            <span class="sb-acc-sub alert">85% used · $2,125 of $2,500</span>
+          </div>
+          <div class="sb-acc-row">
+            <div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$3,159</span></div>
+            <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:40%"></div></div>
+            <span class="sb-acc-sub">40% of $5,284 floor</span>
+          </div>
+        </div>
+      </div>
+      <div class="sb-account-demo">
+        <div class="nav-section" style="padding:0 0 12px">Account · blocked</div>
+        <div class="sb-account">
+          <div class="sb-acc-row">
+            <div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v alert">$0 left</span></div>
+            <div class="sb-acc-bar"><div class="sb-acc-fill full" style="width:100%"></div></div>
+            <span class="sb-acc-sub alert">100% used · limit reached</span>
+          </div>
+          <div class="sb-acc-row">
+            <div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$2,784</span></div>
+            <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:50%"></div></div>
+            <span class="sb-acc-sub">50% of $5,284 floor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Banners ── -->
+  <section class="section" id="banners">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Banners</div>
+        <div class="section-sub">White surface + black text as the attention pattern. Warning uses a right-side stripe fade; Blocked uses a full stripe overlay and larger padding.</div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="subsection-title">Warning banner</div>
+      <div class="banner warn">
+        <div class="banner-icon">!</div>
+        <div class="banner-body">
+          <div class="banner-title">Warning · Approaching daily loss limit</div>
+          <div class="banner-text">You've used <span class="hi">85%</span> of your $2,500 daily allowance. <span class="hi">$375 remaining</span> before trading halts today.</div>
+        </div>
+        <div class="banner-actions">
+          <button class="btn btn-inverted-ghost btn-sm">Read rule</button>
+          <button class="btn btn-inverted btn-sm">Set day stop</button>
+        </div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="subsection-title">Blocked banner · larger, wraps gracefully at 1440</div>
+      <div class="banner block">
+        <div class="banner-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+        </div>
+        <div class="banner-body">
+          <div class="banner-title">1 Rule Preventing Execution · Blocked</div>
+          <div class="banner-text">Daily loss limit reached. You have used <span class="hi">100%</span> of your <span class="hi">$2,500</span> daily allowance. No new trades today.</div>
+        </div>
+        <div class="banner-reset">
+          <span class="banner-reset-label">Reset in</span>
+          <span class="banner-reset-val">06:22:14</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Hero ── -->
+  <section class="section" id="hero">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Hero block</div>
+        <div class="section-sub">36 / 40 padding, 200 min-height, 40px balance number. Three columns: balance, left stat, right stat.</div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="hero">
+        <div class="hero-block">
+          <div class="hero-label">Account Balance</div>
+          <div class="hero-balance">$52,840.00</div>
+          <div class="hero-sub">Demo · Standard Evaluation · Phase 1 · 30 days left</div>
+        </div>
+        <div class="hero-block mini-stat">
+          <div class="hero-label">Trading Days</div>
+          <div class="mini-stat-val">0<span class="unit"> / 10</span></div>
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:0%"></div></div>
+          <div class="hero-sub">Minimum required to pass</div>
+        </div>
+        <div class="hero-block mini-stat">
+          <div class="hero-label">Profit Target</div>
+          <div class="mini-stat-val mono">+$4,226</div>
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:0%"></div></div>
+          <div class="hero-sub">8% of starting balance</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Panels & stat cards ── -->
+  <section class="section" id="panels">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Panels & stat cards</div>
+        <div class="section-sub">Panel is the standard 02-bg container for all main content. Stat card is a single-row mini-panel on 03.</div>
+      </div>
+    </div>
+    <div class="stage split">
+      <div>
+        <div class="subsection-title">Panel shell</div>
+        <div class="panel on-kit">
+          <div class="panel-head">
+            <div class="panel-title">Panel title</div>
+            <div class="panel-meta"><span class="dot"></span>meta info</div>
+          </div>
+          <div style="color:var(--c-07);font-size:13px;line-height:1.5">Panel content sits inside 22 / 24 padding. Use this for Rules, Open Position, Today's Trades, etc.</div>
+        </div>
+      </div>
+      <div>
+        <div class="subsection-title">Stat card</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="stat-card">
+            <div class="left"><span class="label">Day's P&amp;L</span><span class="value">+$124.50</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="left"><span class="label">Trading days</span><span class="value">0 / 10</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="subsection-title">Pair card (watchlist)</div>
+      <div style="display:flex;flex-direction:column;gap:8px;max-width:320px">
+        <div class="pair-card">
+          <div class="pair-icon">€$</div>
+          <div class="pair-info"><span class="pair-name">EUR / USD</span><span class="pair-spread">Spread 1.2 pips</span></div>
+          <div class="pair-price"><div class="pair-price-val">1.08546</div><div class="pair-price-chg up">+0.03%</div></div>
+        </div>
+        <div class="pair-card">
+          <div class="pair-icon gbp">£$</div>
+          <div class="pair-info"><span class="pair-name">GBP / USD</span><span class="pair-spread">Spread 1.8 pips</span></div>
+          <div class="pair-price"><div class="pair-price-val">1.26412</div><div class="pair-price-chg down">−0.12%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="subsection-title">History row</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="history-row">
+          <div class="hist-ic">€$</div>
+          <div class="hist-info"><span class="hist-pair">EUR / USD · Long</span><span class="hist-time">09:14 · SL hit at 1.08412</span></div>
+          <div><span class="tag neutral">Stopped</span></div>
+          <div class="hist-pnl">−$528.00</div>
+        </div>
+        <div class="history-row">
+          <div class="hist-ic gbp">£$</div>
+          <div class="hist-info"><span class="hist-pair">GBP / USD · Long</span><span class="hist-time">13:18 · TP hit at 1.26640</span></div>
+          <div><span class="tag win">Win</span></div>
+          <div class="hist-pnl">+$412.50</div>
+        </div>
+        <div class="history-row">
+          <div class="hist-ic">€$</div>
+          <div class="hist-info"><span class="hist-pair">EUR / USD · Short</span><span class="hist-time">17:32 · blocked by gatekeeper</span></div>
+          <div><span class="tag block">Blocked</span></div>
+          <div class="hist-pnl" style="color:var(--c-06)">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="subsection-title">Alert card</div>
+      <div class="alert-card" style="max-width:360px">
+        <div class="alert-dot"></div>
+        <div class="alert-body">
+          <strong>News in 2h 10m</strong>
+          High-impact EUR/USD release. Gatekeeper will pause new trades ±2 min.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Position row ── -->
+  <section class="section" id="position">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Open position row</div>
+        <div class="section-sub">Horizontal gradient row (05 → 04 → 03) with a white accent bar on the left edge. Seven columns.</div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="pos-row">
+        <div class="pos-sym">
+          <div class="pair-icon">€$</div>
+          <div class="pos-sym-info">
+            <span class="pos-sym-name">EUR / USD</span>
+            <span class="pos-sym-sub">5.28 lots</span>
+          </div>
+        </div>
+        <div class="pos-cell"><span class="pc-l">Direction</span><span class="pc-v dir">↗ Long</span></div>
+        <div class="pos-cell"><span class="pc-l">Entry</span><span class="pc-v">1.08547</span></div>
+        <div class="pos-cell"><span class="pc-l">Current</span><span class="pc-v">1.08571</span></div>
+        <div class="pos-cell"><span class="pc-l">P&amp;L</span><span class="pc-v">+$124.50</span></div>
+        <div class="pos-cell"><span class="pc-l">Stop Loss</span><span class="pc-v">1.08347<br><span style="font-size:10px;color:var(--c-06);font-family:Inter">20 pips below</span></span></div>
+        <button class="pos-action">Close</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Locked section ── -->
+  <section class="section" id="locked">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Locked section</div>
+        <div class="section-sub">Used in the Blocked state between banner and trade history. Big lock icon + body copy + countdown.</div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="locked-section">
+        <div class="lock-big">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+        </div>
+        <div class="ls-body">
+          <div class="ls-title">New trades are blocked until session reset</div>
+          <div class="ls-sub">This is not a punishment — it's your own rule protecting your account. The gatekeeper will unlock trading automatically at 00:00 UTC.</div>
+        </div>
+        <div class="countdown-box">
+          <span class="cd-label">Unlocks in</span>
+          <span class="cd-time">06:22:14</span>
+          <span class="cd-sub">04:00 local time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Gatekeeper card ── -->
+  <section class="section" id="gatekeeper">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Gatekeeper status card</div>
+        <div class="section-sub">Inverted (white surface) card that lives in the order panel during warning/blocked states. Stripe overlay reinforces urgency.</div>
+      </div>
+    </div>
+    <div class="flex-row">
+      <div class="gatekeep-card">
+        <div class="gk-status">● Warning state</div>
+        <div class="gk-title">Daily allowance almost exhausted</div>
+        <div class="gk-body">You've used <strong>85%</strong> of your $2,500 daily loss budget. Only <strong>$375</strong> remaining before trading halts today.</div>
+        <div class="gk-progress">
+          <div class="gk-prog-track"><div class="gk-prog-fill"></div></div>
+          <div class="gk-prog-labels"><span class="used">$2,125 used</span><span class="max">$2,500 max</span></div>
+        </div>
+      </div>
+      <div class="gatekeep-card">
+        <div class="gk-status">● Blocked</div>
+        <div class="gk-title" style="text-align:center">Daily loss limit reached</div>
+        <div class="gk-body" style="text-align:center">You have used <strong>100%</strong> of your <strong>$2,500</strong> daily allowance. No new trades today.</div>
+        <div class="gk-progress">
+          <div class="gk-prog-track"><div class="gk-prog-fill" style="width:100%"></div></div>
+          <div class="gk-prog-labels"><span class="used">$2,500 / $2,500</span><span class="max">limit</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Empty ── -->
+  <section class="section" id="empty">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Empty state</div>
+        <div class="section-sub">Used in the default Dashboard when there are no open positions. Subtle conic-ring illustration + CTA pair.</div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="empty">
+        <div class="empty-illu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg>
+        </div>
+        <div class="empty-title">No open positions</div>
+        <div class="empty-sub">Your dashboard is quiet. Open your first trade whenever you're ready — the gatekeeper will check every rule before execution.</div>
+        <div class="btn-row" style="justify-content:center;margin-top:4px">
+          <button class="btn btn-ghost">Browse pairs</button>
+          <button class="btn btn-primary">+ New Trade</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

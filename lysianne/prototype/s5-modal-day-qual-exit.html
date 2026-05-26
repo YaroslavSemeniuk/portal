@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S5 · Modal · Day qualification exit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumbs">
+  <a href="index.html">All screens</a><span class="sep">/</span><strong>S5 · Gatekeeper states</strong><span class="sep">/</span>
+  <a href="s5-neutral.html">Neutral</a>
+  <a href="s5-all-clear.html">All clear</a>
+  <a href="s5-all-clear-tp.html">All clear + TP</a>
+  <a href="s5-blocked-risk.html">Blocked · Risk</a>
+  <a href="s5-blocked-no-sl.html">Blocked · No SL</a>
+  <a href="s5-blocked-daily-loss.html">Blocked · Daily loss</a>
+  <a href="s5-blocked-news.html">Blocked · News</a>
+  <a href="s5-blocked-fee.html">Blocked · Fee</a>
+  <a href="s5-blocked-multiple.html">Blocked · Multiple</a>
+  <a href="s5-blocked-drawdown.html">Blocked · Drawdown</a>
+  <a href="s5-warning-drawdown.html">Warning · Drawdown</a>
+  <a href="s5-warning-consistency.html">Warning · Consistency</a>
+  <a href="s5-softblock-consistency.html">Soft block · Consistency</a>
+  <a href="s5-warning-news.html">Warning · News</a>
+  <a href="s5-warning-day-qual.html">Warning · Day qual</a>
+  <a class="active" href="s5-modal-day-qual-exit.html">Modal · Exit</a>
+  <a href="s5-modal-close-confirm.html">Modal · Close confirm</a>
+</nav>
+
+<div class="frame dim-under-modal">
+  <aside class="sidebar">
+    <div class="logo"><div class="logo-mark">G</div><div class="logo-text">Gatekeeper</div></div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item active"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>Dashboard</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>Trade</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>Journal</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Rules</div>
+    <div class="nav-section" style="margin-top:16px">Account</div>
+    <div class="sb-account">
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v">$1,706 left</span></div><div class="sb-acc-bar"><div class="sb-acc-fill" style="width:32%"></div></div></div>
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$5,284</span></div><div class="sb-acc-bar"><div class="sb-acc-fill" style="width:0%"></div></div></div>
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Avg R:R (planned)</span><span class="sb-acc-v">1 : 2.00</span></div></div>
+    </div>
+    <div class="sidebar-footer"><div class="user-avatar">I</div><div class="user-info"><div class="u-name">Ivan H.</div><div class="u-mail">demo mode</div></div></div>
+  </aside>
+
+  <header class="topbar">
+    <div class="demo-badge">Demo Mode</div><div class="spacer"></div>
+    <div class="metric"><span class="metric-label">Balance</span><span class="metric-value">$53,315.60</span></div>
+    <div class="metric"><span class="metric-label">P&amp;L today</span><span class="metric-value">+$475.60 (+0.9%)</span></div>
+    <div class="bar-group"><div class="bar-head"><span class="label">Daily loss</span><span class="pct">0%</span></div><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+    <div class="bar-group"><div class="bar-head"><span class="label">Drawdown</span><span class="pct">0%</span></div><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+  </header>
+
+  <main class="main">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Live position</div>
+        <div class="page-sub">EUR/USD long is active. Gatekeeper is watching.</div>
+      </div>
+      <div class="page-date mono">April 15, 2026 · 14:27 UTC</div>
+    </div>
+    <section class="panel">
+      <div class="panel-head"><div class="panel-title">Open position</div></div>
+      <div class="pos-row">
+        <div class="pos-sym"><div class="pair-icon eur">€$</div><div class="pos-sym-info"><span class="pos-sym-name">EUR/USD</span><span class="pos-sym-sub">Entry 1.08547</span></div></div>
+        <div class="pos-cell"><span class="pc-l">P&amp;L</span><span class="pc-v">+$475.60</span></div>
+        <div class="pos-cell"><span class="pc-l">% gain</span><span class="pc-v">+0.9%</span></div>
+        <div class="pos-cell"><span class="pc-l">SL</span><span class="pc-v">20 pips</span></div>
+        <div class="pos-cell"><span class="pc-l">TP</span><span class="pc-v">40 pips</span></div>
+        <a class="pos-action" href="s5-modal-close-confirm.html">Close</a>
+      </div>
+    </section>
+  </main>
+
+  <aside class="orderpanel">
+    <div class="op-head"><div class="op-title">Order entry</div><div class="op-step">1 position open</div></div>
+    <div class="op-section"><div class="op-section-label">Manage</div></div>
+  </aside>
+</div>
+
+<div class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-icon">!</div>
+    <div class="modal-title">This close will not count as a trading day</div>
+    <div class="modal-body">
+      Closing here (<strong>+0.9%</strong>) will not count as a valid trading day — minimum gain required is <strong>1.0%</strong>.
+      <br><br>
+      If you close now, today does not count toward your challenge. Hold to target or accept the consequence.
+    </div>
+    <div class="modal-stats">
+      <div class="modal-stat"><span class="ms-l">Current gain</span><span class="ms-v">+0.9%</span></div>
+      <div class="modal-stat"><span class="ms-l">Required</span><span class="ms-v">1.0%</span></div>
+      <div class="modal-stat"><span class="ms-l">Shortfall</span><span class="ms-v">−0.1%</span></div>
+    </div>
+    <div class="modal-cta">
+      <a class="btn btn-outline" href="s5-warning-day-qual.html">Hold to target</a>
+      <a class="btn btn-primary" href="s7-trade-closed.html">Close anyway</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

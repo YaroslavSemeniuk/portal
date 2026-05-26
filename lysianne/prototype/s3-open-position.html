@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S3 · Dashboard · Open Position</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumbs">
+  <a href="index.html">All screens</a>
+  <span class="sep">/</span>
+  <strong>S3 · Dashboard</strong>
+  <span class="sep">/</span>
+  <a href="s3-default.html">Default</a>
+  <a class="active" href="s3-open-position.html">Open position</a>
+  <a href="s3-amber-warning.html">Amber warning</a>
+  <a href="s3-daily-loss-reached.html">Daily loss reached</a>
+</nav>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="logo"><div class="logo-mark">G</div><div class="logo-text">Gatekeeper</div></div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item active"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>Dashboard</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>Trade</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>Journal</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Rules</div>
+
+    <div class="nav-section" style="margin-top:16px">Account</div>
+    <div class="sb-account">
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v">$1,706 left</span></div>
+        <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:32%"></div></div>
+        <div class="sb-acc-sub">32% used today ($794 risk)</div>
+      </div>
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$5,284</span></div>
+        <div class="sb-acc-bar"><div class="sb-acc-fill" style="width:0%"></div></div>
+        <div class="sb-acc-sub">High water mark: $52,840</div>
+      </div>
+      <div class="sb-acc-row">
+        <div class="sb-acc-head"><span class="sb-acc-l">Avg R:R (planned)</span><span class="sb-acc-v">1 : 2.00</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar">I</div>
+      <div class="user-info"><div class="u-name">Ivan H.</div><div class="u-mail">demo mode</div></div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="demo-badge">Demo Mode</div>
+    <div class="spacer"></div>
+    <div class="metric"><span class="metric-label">Balance</span><span class="metric-value">$52,964.50</span></div>
+    <div class="metric"><span class="metric-label">P&amp;L today</span><span class="metric-value">+$124.50</span></div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Daily loss</span><span class="pct">32%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:32%"></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-head"><span class="label">Drawdown</span><span class="pct">0%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Live position</div>
+        <div class="page-sub">EUR/USD long is active. Gatekeeper is watching.</div>
+      </div>
+      <div class="page-date mono">April 15, 2026 · 14:27 UTC</div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-block">
+        <div class="hero-label">Account balance</div>
+        <div class="hero-balance">$52,964.50</div>
+        <div class="hero-sub">Evaluation window: 30 days left · Phase 1</div>
+      </div>
+      <div class="hero-block mini-stat">
+        <div class="hero-label">Trading days</div>
+        <div class="mini-stat-val">1<span class="unit"> / 10</span></div>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:10%"></div></div>
+      </div>
+      <div class="hero-block mini-stat">
+        <div class="hero-label">Profit target</div>
+        <div class="mini-stat-val">$124.50<span class="unit"> / $4,226</span></div>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:3%"></div></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Rules</div>
+          <div class="panel-sub">8 / 8 passing · No breaches</div>
+        </div>
+        <div class="panel-meta"><span class="dot"></span>Next news: EUR/USD in 2h 14m</div>
+      </div>
+      <div class="rules">
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Max risk</span><span class="rule-val">1.5%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Daily loss</span><span class="rule-val">32%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Drawdown</span><span class="rule-val">0%</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Stop-loss</span><span class="rule-val">20 pips</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">News window</span><span class="rule-val">Clear</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Consistency</span><span class="rule-val">OK</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Min days</span><span class="rule-val">0 / 10</span></div>
+        <div class="rule"><span class="rule-check">✓</span><span class="rule-text">Balance</span><span class="rule-val">$52,965</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Open position</div>
+        <div class="panel-meta"><span class="status-line live">Live · fill at 14:23:04</span></div>
+      </div>
+
+      <div class="pos-row">
+        <div class="pos-sym">
+          <div class="pair-icon eur">€$</div>
+          <div class="pos-sym-info">
+            <span class="pos-sym-name">EUR/USD</span>
+            <span class="pos-sym-sub">Entry 1.08547</span>
+          </div>
+        </div>
+        <div class="pos-cell"><span class="pc-l">Direction</span><span class="pc-v dir">Long ↗</span></div>
+        <div class="pos-cell"><span class="pc-l">P&amp;L</span><span class="pc-v">+$124.50</span></div>
+        <div class="pos-cell"><span class="pc-l">Risk</span><span class="pc-v">$794</span></div>
+        <div class="pos-cell"><span class="pc-l">SL</span><span class="pc-v">20 pips</span></div>
+        <div class="pos-cell"><span class="pc-l">TP</span><span class="pc-v">40 pips</span></div>
+        <a class="pos-action" href="s5-modal-close-confirm.html">Close</a>
+      </div>
+
+    </section>
+
+    <div class="cta-row center">
+      <a class="btn btn-ghost" href="s8-journal.html">View in Journal</a>
+      <a class="btn btn-primary btn-lg" href="s4-instrument.html">+ New Trade</a>
+    </div>
+  </main>
+
+  <aside class="orderpanel">
+    <div class="op-head">
+      <div class="op-title">Order entry</div>
+      <div class="op-step">1 position open</div>
+    </div>
+
+    <div class="op-section">
+      <div class="op-section-label">Manage</div>
+      <button class="btn btn-outline btn-full">Modify SL / TP</button>
+      <a class="btn btn-ghost btn-full" href="s5-modal-close-confirm.html">Close at market</a>
+    </div>
+
+    <div class="op-section">
+      <div class="op-section-label">Quick pairs</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="pair-card"><div class="pair-icon gbp">£$</div><div class="pair-info"><div class="pair-name">GBP/USD</div><div class="pair-spread">Spread 1.8 pips</div></div><div class="pair-price"><div class="pair-price-val">1.26412</div><div class="pair-price-chg down">-0.11%</div></div></div>
+        <div class="pair-card"><div class="pair-icon usd">$¥</div><div class="pair-info"><div class="pair-name">USD/JPY</div><div class="pair-spread">Spread 1.5 pips</div></div><div class="pair-price"><div class="pair-price-val">154.283</div><div class="pair-price-chg up">+0.22%</div></div></div>
+      </div>
+    </div>
+
+    <div class="op-footer-hint" style="margin-top:auto">Only one position at a time in demo. Close to start a new trade.</div>
+  </aside>
+
+</div>
+
+</body>
+</html>

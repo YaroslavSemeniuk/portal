@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Gatekeeper Platform — PRD & SOW v2.1</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-page: #08090C;
+    --bg-card: #0F1117;
+    --bg-card-hover: #141720;
+    --bg-table-header: #111420;
+    --bg-table-row: #0C0E14;
+    --bg-table-row-alt: #0F1117;
+    --bg-code: #0D0F15;
+    --bg-tag: #1A1D28;
+    --border: #1E2130;
+    --border-accent: #2A2E42;
+    --text-primary: #E8EAF0;
+    --text-secondary: #8B90A5;
+    --text-muted: #5C6078;
+    --accent-green: #00C853;
+    --accent-green-dim: rgba(0, 200, 83, 0.12);
+    --accent-red: #E53935;
+    --accent-red-dim: rgba(229, 57, 53, 0.10);
+    --accent-amber: #FF9100;
+    --accent-amber-dim: rgba(255, 145, 0, 0.10);
+    --accent-blue: #448AFF;
+    --accent-blue-dim: rgba(68, 138, 255, 0.08);
+    --radius: 8px;
+    --radius-lg: 12px;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Instrument Serif', Georgia, serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #2A2E42 transparent;
+  }
+
+  body {
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    line-height: 1.7;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── SIDEBAR NAV ─── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 24px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #2A2E42 transparent;
+  }
+
+  .sidebar-logo {
+    padding: 0 24px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-logo h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .sidebar-logo .version {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .sidebar-section {
+    padding: 8px 16px;
+  }
+
+  .sidebar-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    padding: 0 8px;
+    margin-bottom: 4px;
+  }
+
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.15s;
+  }
+
+  .sidebar a:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+
+  .sidebar a .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-green { background: var(--accent-green); }
+  .dot-blue { background: var(--accent-blue); }
+  .dot-amber { background: var(--accent-amber); }
+  .dot-red { background: var(--accent-red); }
+  .dot-grey { background: var(--text-muted); }
+
+  /* ─── MAIN CONTENT ─── */
+  .main {
+    margin-left: 260px;
+    max-width: 920px;
+    padding: 48px 56px 120px;
+  }
+
+  /* ─── DOCUMENT HEADER ─── */
+  .doc-header {
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .doc-header h1 {
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+  }
+
+  .doc-header h1 em {
+    font-style: italic;
+    color: var(--accent-green);
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 24px;
+  }
+
+  .meta-item {
+    background: var(--bg-card);
+    padding: 14px 18px;
+  }
+
+  .meta-item .label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .meta-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    margin-bottom: 56px;
+  }
+
+  .section-anchor {
+    scroll-margin-top: 24px;
+  }
+
+  h2.section-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3.subsection-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 32px 0 12px;
+  }
+
+  /* ─── SCREEN HEADERS ─── */
+  .screen-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin: 56px 0 28px;
+  }
+
+  .screen-header .screen-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-green);
+    margin-bottom: 8px;
+  }
+
+  .screen-header h2 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    border: none;
+    padding: 0;
+  }
+
+  .screen-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 8px;
+  }
+
+  .screen-meta span {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .screen-meta strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* ─── FLOW HEADERS ─── */
+  .flow-header {
+    margin: 36px 0 20px;
+    padding: 16px 20px;
+    background: var(--accent-blue-dim);
+    border-left: 3px solid var(--accent-blue);
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  .flow-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  /* ─── TC BLOCKS ─── */
+  .tc-block {
+    margin: 20px 0 32px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .tc-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tc-id {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .tc-id.happy { background: var(--accent-green-dim); color: var(--accent-green); }
+  .tc-id.blocked { background: var(--accent-red-dim); color: var(--accent-red); }
+  .tc-id.warning { background: var(--accent-amber-dim); color: var(--accent-amber); }
+  .tc-id.edge { background: var(--bg-tag); color: var(--text-secondary); }
+  .tc-id.recovery { background: rgba(68, 138, 255, 0.12); color: var(--accent-blue); }
+
+  .tc-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .tc-desc {
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    font-style: italic;
+  }
+
+  /* ─── TABLES ─── */
+  .tc-table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    background: var(--bg-table-header);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  thead th:first-child { width: 48px; text-align: center; }
+
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  tbody td:first-child {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(odd) { background: var(--bg-table-row); }
+  tbody tr:nth-child(even) { background: var(--bg-table-row-alt); }
+
+  /* Scope tables */
+  .scope-table { margin: 12px 0 24px; }
+  .scope-table table { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .scope-table thead th:first-child { width: 40px; }
+
+  /* ─── TAGS & BADGES ─── */
+  .tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+
+  .tag-green { background: var(--accent-green-dim); color: var(--accent-green); }
+  .tag-red { background: var(--accent-red-dim); color: var(--accent-red); }
+  .tag-amber { background: var(--accent-amber-dim); color: var(--accent-amber); }
+  .tag-blue { background: var(--accent-blue-dim); color: var(--accent-blue); }
+  .tag-grey { background: var(--bg-tag); color: var(--text-secondary); }
+
+  /* ─── CODE BLOCKS ─── */
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--bg-tag);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--accent-green);
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* ─── CALLOUT BOXES ─── */
+  .callout {
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    margin: 16px 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+
+  .callout-green {
+    background: var(--accent-green-dim);
+    border-left: 3px solid var(--accent-green);
+    color: var(--text-primary);
+  }
+
+  .callout-red {
+    background: var(--accent-red-dim);
+    border-left: 3px solid var(--accent-red);
+    color: var(--text-primary);
+  }
+
+  .callout-amber {
+    background: var(--accent-amber-dim);
+    border-left: 3px solid var(--accent-amber);
+    color: var(--text-primary);
+  }
+
+  .callout-blue {
+    background: var(--accent-blue-dim);
+    border-left: 3px solid var(--accent-blue);
+    color: var(--text-primary);
+  }
+
+  /* ─── PARAGRAPHS ─── */
+  p { margin: 10px 0; color: var(--text-secondary); }
+  strong { color: var(--text-primary); font-weight: 600; }
+
+  /* ─── SIGN-OFF ─── */
+  .signoff {
+    margin-top: 56px;
+    padding: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .signoff h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+  }
+
+  .signoff-line {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .signoff-line:last-child { border-bottom: none; }
+
+  .signoff-role {
+    font-weight: 600;
+    color: var(--text-primary);
+    width: 100px;
+  }
+
+  .signoff-field {
+    flex: 1;
+    border-bottom: 1px dashed var(--border-accent);
+    height: 20px;
+  }
+
+  .signoff-date {
+    color: var(--text-muted);
+    font-size: 13px;
+    width: 140px;
+  }
+
+  /* ─── CHECKLIST TABLE ─── */
+  .checklist-table td:nth-child(3) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .checklist-table td:nth-child(4) {
+    width: 100px;
+    border-bottom: 1px dashed var(--border-accent) !important;
+  }
+
+  /* ─── APPENDIX FLOW TABLE ─── */
+  .flow-path {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-muted);
+    word-break: break-all;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 32px 24px 80px; }
+    .meta-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; max-width: 100%; }
+    body { background: #fff; color: #111; }
+    .screen-header, .tc-block, .flow-header, .callout, pre, .signoff {
+      break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Trading Gatekeeper</h2>
+    <div class="version">PRD & SOW · v2.1</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Agreement</div>
+    <a href="#scope"><span class="dot dot-green"></span> Scope Agreement</a>
+    <a href="#design-system"><span class="dot dot-green"></span> Design System</a>
+    <a href="#layout"><span class="dot dot-green"></span> Layout & Constants</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Screens</div>
+    <a href="#s1"><span class="dot dot-blue"></span> S1 · Demo Entry</a>
+    <a href="#s2"><span class="dot dot-blue"></span> S2 · Rule Setup</a>
+    <a href="#s3"><span class="dot dot-blue"></span> S3 · Dashboard</a>
+    <a href="#s4"><span class="dot dot-blue"></span> S4 · Instrument</a>
+    <a href="#s5"><span class="dot dot-blue"></span> S5 · Risk & SL</a>
+    <a href="#s6"><span class="dot dot-blue"></span> S6 · Review</a>
+    <a href="#s7"><span class="dot dot-blue"></span> S7 · Truth Display</a>
+    <a href="#s8"><span class="dot dot-blue"></span> S8 · Journal</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Gatekeeper</div>
+    <a href="#flow9"><span class="dot dot-red"></span> Blocked States</a>
+    <a href="#flow10"><span class="dot dot-amber"></span> Warning States</a>
+    <a href="#flow11"><span class="dot dot-green"></span> Recovery Flow</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Appendix</div>
+    <a href="#appendix-a"><span class="dot dot-grey"></span> Navigation Flows</a>
+    <a href="#appendix-b"><span class="dot dot-grey"></span> Sign-Off Checklist</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+<main class="main">
+
+  <!-- DOCUMENT HEADER -->
+  <header class="doc-header">
+    <h1>Trading Gatekeeper Platform<br><em>PRD & Statement of Work</em></h1>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="label">Version</div>
+        <div class="value">2.1</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Date</div>
+        <div class="value">06 Apr 2026</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Status</div>
+        <div class="value" style="color: var(--accent-amber)">Pending Approval</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Mode</div>
+        <div class="value">Demo Only (V1)</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════ 0. SCOPE AGREEMENT ═══════════════ -->
+  <section class="section" id="scope">
+    <h2 class="section-title section-anchor">0. Scope Agreement</h2>
+
+    <h3 class="subsection-title">0.1 In Scope</h3>
+    <div class="scope-table">
+      <table>
+        <thead><tr><th>#</th><th>Deliverable</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>D1</td><td><strong>Demo Entry Screen (S1)</strong></td><td>Single click "Enter Demo" → transition to S2</td></tr>
+          <tr><td>D2</td><td><strong>Rule Setup Screen (S2)</strong></td><td>Preset + Copy-Paste parsing → Confirm → Lock</td></tr>
+          <tr><td>D3</td><td><strong>Execution Dashboard (S3)</strong></td><td>Live risk status, progress bars, open positions</td></tr>
+          <tr><td>D4</td><td><strong>Order Entry — 4-step flow (S4–S7)</strong></td><td>Instrument → Risk → Review → Execute → Truth Display</td></tr>
+          <tr><td>D5</td><td><strong>Rule Gatekeeper Engine</strong></td><td>7 blocked states + 5 warning states, real-time</td></tr>
+          <tr><td>D6</td><td><strong>Trade Journal (S8)</strong></td><td>Auto-populated entry, zero manual input</td></tr>
+          <tr><td>D7</td><td><strong>Navigation & 3-Panel Layout</strong></td><td>Sidebar + Main + Order Panel, persistent</td></tr>
+          <tr><td>D8</td><td><strong>Demo Firm Preset</strong></td><td>Pre-loaded ruleset "Demo Firm — Standard Evaluation"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subsection-title">0.2 Out of Scope</h3>
+    <p>Real broker API, mobile version, advanced charting, prop firm dashboard, settings/account management, onboarding tutorial, multiple broker integrations, user authentication.</p>
+
+    <h3 class="subsection-title">0.3 Definition of Done</h3>
+    <div class="callout callout-green">
+      Each Test Case (TC) below is an <strong>independent acceptance unit</strong>. A Deliverable is considered accepted when <strong>all TCs belonging to it pass</strong> against the "Expected System Response" column without discrepancies.
+    </div>
+
+    <h3 class="subsection-title" id="design-system">0.4 Design System (Global)</h3>
+    <div class="scope-table">
+      <table>
+        <thead><tr><th>Token</th><th>Hex</th><th>Usage</th></tr></thead>
+        <tbody>
+          <tr><td><code>--bg-primary</code></td><td><strong>#0F0F0F</strong></td><td>Main app background</td></tr>
+          <tr><td><code>--bg-secondary</code></td><td><strong>#1A1A1A</strong></td><td>Cards, panels, order entry area</td></tr>
+          <tr><td><code>--bg-tertiary</code></td><td><strong>#2D2D2D</strong></td><td>Input fields, secondary surfaces</td></tr>
+          <tr><td><code>--bg-gradient-start</code></td><td><strong>#0A0E17</strong></td><td>Subtle background gradient (optional)</td></tr>
+          <tr><td><code>--bg-gradient-end</code></td><td><strong>#111820</strong></td><td>Subtle background gradient (optional)</td></tr>
+          <tr><td><code>--text-primary</code></td><td><strong>#FFFFFF</strong></td><td>Main text, prices, key numbers</td></tr>
+          <tr><td><code>--text-secondary</code></td><td><strong>#888888</strong></td><td>Supporting text, inactive elements</td></tr>
+          <tr><td><code>--accent-green</code></td><td><strong>#00C853</strong></td><td>All Clear, Execute, positive P&L</td></tr>
+          <tr><td><code>--accent-red</code></td><td><strong>#D50000</strong></td><td>Blocked states, negative P&L</td></tr>
+          <tr><td><code>--accent-amber</code></td><td><strong>#FF6D00</strong></td><td>Warning states</td></tr>
+          <tr><td><code>--border</code></td><td><strong>#2D2D2D</strong></td><td>Tables, card dividers</td></tr>
+          <tr><td><code>--font</code></td><td><strong>Inter</strong></td><td>Regular 400 · Medium 500 · Bold 700</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subsection-title" id="layout">0.5 Layout Constraints (Global)</h3>
+<pre>┌─────────────────────────────────────────────────────────────────────┐
+│  TOP BAR  height: 40px  │  DEMO MODE banner │ Balance │ P&L │ Bars │
+├───────────┬─────────────────────────────────┬───────────────────────┤
+│  SIDEBAR  │        MAIN CONTENT             │    ORDER PANEL        │
+│  w: 200px │        w: fluid (min 920px)     │    w: 320px fixed     │
+│  fixed    │                                 │    always visible     │
+│           │                                 │                       │
+│  Tabs:    │  Renders: S3 / S4-S7 / S8 / S2 │  Trade entry,         │
+│  Dash     │  based on active tab            │  risk input,          │
+│  Trade    │                                 │  gatekeeper bar,      │
+│  Journal  │                                 │  execute button       │
+│  Rules    │                                 │                       │
+└───────────┴─────────────────────────────────┴───────────────────────┘</pre>
+    <div class="callout callout-green"><strong>The Right Order Panel is ALWAYS visible</strong> — this is the key differentiator from MT5. It never hides on any screen.</div>
+
+    <h3 class="subsection-title">0.6 Demo Account Constants</h3>
+    <div class="scope-table">
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Starting Balance</td><td><strong>$52,840.00</strong></td></tr>
+          <tr><td>Commission</td><td><strong>$3.50</strong> per lot per side</td></tr>
+          <tr><td>EUR/USD Spread</td><td>~1.2 pips</td></tr>
+          <tr><td>GBP/USD Spread</td><td>~1.8 pips</td></tr>
+          <tr><td>Simulated Slippage</td><td>0–1.5 pips (random)</td></tr>
+          <tr><td>Simulated Fill Delay</td><td>~200ms UI delay</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SCREEN 1 ═══════════════ -->
+  <div class="screen-header" id="s1">
+    <div class="screen-label">Screen 1</div>
+    <h2>Demo Entry</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D1</span>
+      <span><strong>Epic:</strong> Onboarding — zero-barrier platform entry</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 1: Entering Demo Mode</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 1.1</span><span class="tc-name">Successful Demo Mode Entry</span></div>
+    <div class="tc-desc">First-time user sees the platform, understands it is Demo, enters with a single click.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Opens the platform URL</td><td>—</td><td>S1 loads. Centered layout: logo, headline, CTA.</td><td>Logo/wordmark centered. Headline: "Trade the right way. No real money required." Sub-text below. Single button "Enter Demo". Below button: "No real trades. No broker required. Rules run live."</td></tr>
+          <tr><td>2</td><td>Clicks "Enter Demo"</td><td>—</td><td>Transition to S2 (Rule Setup). Session initialized.</td><td>URL changes. S2 renders. Sidebar, Top Bar, Order Panel become visible.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id edge">TC 1.2</span><span class="tc-name">Opening on a Mobile Device</span></div>
+    <div class="tc-desc">Platform is desktop-only (V1). Mobile traffic receives an informational message.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Opens URL from mobile</td><td>viewport &lt; 1024px</td><td>Informational screen shown instead of S1.</td><td>Text: "This platform is designed for desktop use. A mobile companion is planned for Phase 2." No "Enter Demo" button.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SCREEN 2 ═══════════════ -->
+  <div class="screen-header" id="s2">
+    <div class="screen-label">Screen 2</div>
+    <h2>Rule Setup</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D2, D8</span>
+      <span><strong>Epic:</strong> Rule Engine — loading and locking rules for the session</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 2: Loading Rules via Preset</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 2.1</span><span class="tc-name">Successful Demo Firm Preset Load</span></div>
+    <div class="tc-desc">User selects a ready-made preset, sees all 8 rules, confirms, proceeds to Dashboard. Right Order Panel is visible but inactive until rules are confirmed.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Sees S2 after entry</td><td>—</td><td>Header: "Set Your Rules". Two cards: Option A (Preset) and Option B (Paste). Option B displays a label: "Coming in full version" and is non-interactive.</td><td>Option A clickable. Option B visible but disabled/greyed with "Coming in full version" badge. Right Order Panel is visible but fully disabled — all inputs inactive, no gatekeeper status, muted appearance — until rules are confirmed.</td></tr>
+          <tr><td>2</td><td>Clicks Option A: "Use a preset (demo)"</td><td>—</td><td>"Demo Firm — Standard Evaluation" loads. Confirmation card displays all 8 rules: (1) Max risk per trade: 2%, (2) Daily loss limit: 5%, (3) Overall drawdown: 10% trailing, (4) Stop-loss required: mandatory, (5) News window: 2 min before/after, (6) Consistency score: max 30%, (7) Minimum trading days: 10, (8) Demo account balance: $52,840. Date: "Last verified: [today]".</td><td>All 8 rules visible in structured form with values. Each rule has a green checkmark. CTA: "Confirm Rules and Continue".</td></tr>
+          <tr><td>3</td><td>Clicks "Confirm Rules and Continue"</td><td>—</td><td>Rules locked. Right Order Panel activates (inputs become enabled, gatekeeper bar appears). Transition to S3.</td><td>Rules immutable for session. "Rules" tab shows locked rules (read-only). Order Panel transitions from disabled to active state.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 3: Loading Rules via Copy-Paste</h3></div>
+
+  <div class="callout callout-amber">
+    <strong>Prototype Scope Note:</strong> The copy-paste rule parsing flow (Option B) will not be functional in this prototype build. The Rule Setup screen will display both Option A (preset) and Option B (paste your firm's rules), but only Option A will be interactive. Option B will be visible and marked "Coming in full version" so test users understand the feature exists and is planned. TC 3.1–3.3 are retained below as future reference for the full product build.
+  </div>
+
+  <div class="tc-block" style="opacity: 0.5; pointer-events: none;">
+    <div class="tc-header"><span class="tc-id edge">TC 3.1</span><span class="tc-name">Successful Parsing of Pasted Text <span class="tag tag-grey" style="margin-left: 8px;">DEFERRED — Full Version</span></span></div>
+    <div class="tc-desc">User pastes rule text, parser recognizes all parameters, user confirms.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Clicks Option B: "Paste your firm's rules"</td><td>—</td><td>Textarea opens + "Parse Rules" button.</td><td>Placeholder: "Paste your prop firm's rules here..." Parse disabled if empty.</td></tr>
+          <tr><td>2</td><td>Pastes rule text</td><td>"Max risk: 1.5% per trade. Daily loss limit: 4%. Trailing drawdown: 8%. Stop-loss mandatory. No trading 3 min before/after news."</td><td>Clicks "Parse Rules". Confirmation card with parsed rules.</td><td>Parsed: max_risk=1.5%, daily_loss=4%, drawdown=8%, stop_loss=required, news_window=3min. All green.</td></tr>
+          <tr><td>3</td><td>Clicks "Confirm Rules and Continue"</td><td>—</td><td>Rules locked. Transition to S3.</td><td>Identical to TC 2.1 Step 3.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block" style="opacity: 0.5; pointer-events: none;">
+    <div class="tc-header"><span class="tc-id edge">TC 3.2</span><span class="tc-name">Parser Did Not Recognize Some Rules <span class="tag tag-grey" style="margin-left: 8px;">DEFERRED — Full Version</span></span></div>
+    <div class="tc-desc">Some rules unrecognized — user sees a warning and can add them manually.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Pastes incomplete text</td><td>"Risk limit 2%. Stop loss required."</td><td>Parser recognizes max_risk and stop_loss. Rest — "Could not detect".</td><td>Recognized: green checkmark. Unrecognized: amber + "Could not detect — this rule will not be enforced. You can add it manually."</td></tr>
+          <tr><td>2</td><td>Clicks "Add manually"</td><td>daily_loss = 5%</td><td>Field updates. Rule marked manually added.</td><td>Checkmark turns green. Label: "(manually added)".</td></tr>
+          <tr><td>3</td><td>Clicks "Confirm Rules and Continue"</td><td>—</td><td>Rules locked. Transition to S3.</td><td>All confirmed rules enforced by Gatekeeper.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block" style="opacity: 0.5; pointer-events: none;">
+    <div class="tc-header"><span class="tc-id edge">TC 3.3</span><span class="tc-name">Empty Textarea on Parse Click <span class="tag tag-grey" style="margin-left: 8px;">DEFERRED — Full Version</span></span></div>
+    <div class="tc-desc">Edge case — user clicks Parse with no input.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Focus on textarea, types nothing</td><td>textarea = ""</td><td>"Parse Rules" button disabled.</td><td>Button: opacity 0.4, cursor not-allowed.</td></tr>
+          <tr><td>2</td><td>Types fewer than 10 characters</td><td>"risk 2"</td><td>Button remains disabled.</td><td>Tooltip: "Please paste a complete rule set (minimum 10 characters)."</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 4: Rule Staleness Protection</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 4.1</span><span class="tc-name">Rules Older Than 30 Days — Blocked</span></div>
+    <div class="tc-desc">Rules not re-confirmed within 30+ days block access to trading.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Opens platform with saved rules</td><td>confirmed_at = 36 days ago</td><td>Non-dismissible banner: "Your rule set is 30+ days old. Verify your firm's current rules before proceeding."</td><td>Banner: amber bg, full-width, cannot be closed.</td></tr>
+          <tr><td>2</td><td>Attempts to navigate to Dashboard</td><td>—</td><td>Blocked. Must re-confirm or update rules.</td><td>Dashboard / Trade / Journal tabs disabled. Only Rules active.</td></tr>
+          <tr><td>3</td><td>Clicks "Re-confirm current rules"</td><td>—</td><td>confirmed_at updated. Banner disappears.</td><td>All tabs active. "Last verified: [today]".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SCREEN 3 ═══════════════ -->
+  <div class="screen-header" id="s3">
+    <div class="screen-label">Screen 3</div>
+    <h2>Execution Dashboard</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D3</span>
+      <span><strong>Epic:</strong> Session Monitoring — live risk overview and trade initiation</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 5: Viewing Account Status</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 5.1</span><span class="tc-name">Dashboard in Starting State (Empty)</span></div>
+    <div class="tc-desc">First entry after rule confirmation. No open positions, no trades.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Arrives at S3 after confirming rules</td><td>Balance: $52,840. P&L: $0. Loss: 0%. Drawdown: 0%.</td><td>Four blocks displayed. Progress bars green (0%). Open Positions: empty. "New Trade +" active.</td><td>Block 1: Account Status. Block 2: Active Rules + checkmarks + news countdown. Block 3: "No open positions." Block 4: "New Trade +" green button.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id warning">TC 5.2</span><span class="tc-name">Dashboard with Daily Loss Limit Warning</span></div>
+    <div class="tc-desc">Trader has used 85% of the daily loss limit — amber banner.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Returns to Dashboard</td><td>Daily loss: 85%</td><td>Amber banner: "Approaching daily loss limit." Progress bar amber. "New Trade +" remains active.</td><td>Banner: amber. Bar: amber 85%. Button active.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 5.3</span><span class="tc-name">Dashboard with Daily Loss Limit Reached</span></div>
+    <div class="tc-desc">100% daily limit — "New Trade" button blocked.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Returns to Dashboard</td><td>Daily loss: 100%</td><td>Red banner: "Daily loss limit reached. No new trades today." Button disabled.</td><td>Button greyed out. Banner: red.</td></tr>
+          <tr><td>2</td><td>Attempts to click "New Trade +"</td><td>—</td><td>Nothing happens.</td><td>Tooltip: "Daily loss limit reached."</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 6: Initiating a New Trade</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 6.1</span><span class="tc-name">Clicking "New Trade +" → Order Entry</span></div>
+    <div class="tc-desc">Happy path — button active, transition to S4.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Clicks "New Trade +"</td><td>daily_loss &lt; limit</td><td>Transition to S4. Step indicator "1 of 4".</td><td>Main → S4. Order Panel → Step 1. Sidebar "Trade" highlighted.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SCREEN 4 ═══════════════ -->
+  <div class="screen-header" id="s4">
+    <div class="screen-label">Screen 4</div>
+    <h2>Order Entry — Instrument & Direction</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D4 (Step 1/4)</span>
+      <span><strong>Epic:</strong> Core Execution</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 7: Selecting Instrument and Direction</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 7.1</span><span class="tc-name">Selecting EUR/USD Long</span></div>
+    <div class="tc-desc">Happy path — default instrument, Long direction.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Sees S4</td><td>—</td><td>Header: "New Trade", Step "1 of 4". Dropdown = EUR/USD. Live bid/ask.</td><td>Bid: 1.08540, Ask: 1.08552. Long/Short buttons inactive.</td></tr>
+          <tr><td>2</td><td>Clicks "Long ↗"</td><td>—</td><td>Long highlighted green. Transition to S5.</td><td>Long: green tint. Step → "2 of 4".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 7.2</span><span class="tc-name">Selecting GBP/USD Short</span></div>
+    <div class="tc-desc">Alternative path — different instrument, Short direction.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Types "GBP" in search</td><td>—</td><td>Filter shows GBP/USD, EUR/GBP.</td><td>Dropdown filtered.</td></tr>
+          <tr><td>2</td><td>Selects GBP/USD</td><td>—</td><td>Bid/Ask updates.</td><td>Bid: 1.26340, Ask: 1.26358. Spread: 1.8 pips.</td></tr>
+          <tr><td>3</td><td>Clicks "Short ↘"</td><td>—</td><td>Short highlighted red. Transition to S5.</td><td>Short active. Direction = "short".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id edge">TC 7.3</span><span class="tc-name">Search with No Results</span></div>
+    <div class="tc-desc">Entered text does not match any instrument.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Types "XYZ"</td><td>—</td><td>"No instruments matching your search."</td><td>Long/Short disabled.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SCREEN 5 ═══════════════ -->
+  <div class="screen-header" id="s5">
+    <div class="screen-label">Screen 5</div>
+    <h2>Order Entry — Risk & Stop Loss</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D4 (Step 2/4), D5</span>
+      <span><strong>Epic:</strong> Core Execution + Rule Gatekeeper</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 8: Risk and Stop Loss Input (Happy Path)</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 8.1</span><span class="tc-name">Valid Input — 2% Risk, SL Set, All Clear</span></div>
+    <div class="tc-desc">Trader enters parameters within rules. Gatekeeper = All Clear.</div>
+    <div class="callout callout-blue" style="margin: 0; border-radius: 0; border-left: 3px solid var(--accent-blue);">
+      <strong>Core Logic Clarification:</strong> When fee-inclusive risk (spread + commission) would exceed the 2% limit, the platform automatically reduces the position size to keep the total all-in cost within the cap. The trader enters their desired risk percentage; the system calculates the maximum position size that stays within that limit after all fees. The platform does not flag the overage after sizing — it prevents it by adjusting lots downward before presenting the calculated output.
+    </div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Sees S5</td><td>Risk mode: %</td><td>Step "2 of 4". Toggle, empty inputs, Gatekeeper neutral. Continue disabled.</td><td>Gatekeeper bar grey: "Enter trade parameters."</td></tr>
+          <tr><td>2</td><td>Enters Risk = 2.00%</td><td>Risk: 2.00</td><td>Dollar Risk ≈ $1,056.80 (incl. fees). Gatekeeper RED: no SL. Continue disabled.</td><td>Dollar equivalent shown. Gatekeeper red.</td></tr>
+          <tr><td>3</td><td>Enters SL = 1.08342</td><td>SL: 20 pips</td><td>Position Size ≈ 5.28 lots. Gatekeeper: <strong>"ALL CLEAR"</strong>. Continue enabled.</td><td>Gatekeeper green. Continue active.</td></tr>
+          <tr><td>4</td><td>Enters TP = 1.08942 (optional)</td><td>TP: 40 pips</td><td>R:R = 1:2.00. Day Qualification: "Qualifies".</td><td>Green text for Day Qualification.</td></tr>
+          <tr><td>5</td><td>Clicks Continue</td><td>—</td><td>Transition to S6.</td><td>Step → "3 of 4".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flow-header" id="flow9"><h3>Flow 9: Gatekeeper — Blocked States</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 9.1</span><span class="tc-name">Blocked — Risk Limit Exceeded (3% > 2%)</span></div>
+    <div class="tc-desc">Trader enters 3% risk. Gatekeeper blocks execution.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Enters Risk = 3.00%</td><td>SL set</td><td>RED: "1 RULE PREVENTING EXECUTION: Risk limit is 2% per trade — you've entered 3.00%. Reduce your risk to proceed." Continue disabled.</td><td>Bar red. Dollar Risk ≈ $1,585.20.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 9.2</span><span class="tc-name">Blocked — No Stop-Loss</span></div>
+    <div class="tc-desc">Valid risk but SL empty.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Risk = 2.00%, SL empty</td><td>SL = null</td><td>RED: "No stop-loss set. A stop-loss is required before this trade can exist." Continue disabled.</td><td>SL input highlighted red.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 9.3</span><span class="tc-name">Blocked — Daily Loss Limit Reached</span></div>
+    <div class="tc-desc">Daily loss at 100%.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Reaches S5</td><td>daily_loss = 100%</td><td>RED: "Daily loss limit reached. You have used 100% of your $2,500 daily allowance. No new trades today." All inputs disabled.</td><td>Full bar red.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 9.4</span><span class="tc-name">Blocked — News Window Active</span></div>
+    <div class="tc-desc">High-impact news within restricted window.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>EUR/USD, valid params</td><td>News in 1 min</td><td>RED: "News restriction active. High-impact EUR/USD news in 1 minute. Trading resumes at 14:32." Live countdown.</td><td>Timer updates every second.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 9.5</span><span class="tc-name">Blocked — Fee-Adjusted Risk Breach</span></div>
+    <div class="tc-desc">Raw risk within limit but fees push total over threshold.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Risk = 2.00%, SL tight (5 pips)</td><td>Fee-inclusive = 2.18%</td><td>RED: "Fee-adjusted risk would exceed your 2% limit. After accounting for broker spread and commission, this trade costs 2.18%. Reduce your position or widen your stop."</td><td>Dollar Risk shows fee-inclusive amount.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 9.6</span><span class="tc-name">Blocked — Multiple Violations</span></div>
+    <div class="tc-desc">Two or more rules violated simultaneously.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Risk = 3.00%, SL = null</td><td>—</td><td>RED: "2 RULES PREVENTING EXECUTION: Risk limit exceeded (3.00% — max 2%). No stop-loss set. Fix both to proceed."</td><td>Count: "2 RULES". Both listed.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 9.7</span><span class="tc-name">Blocked — Overall Trailing Drawdown Reached</span></div>
+    <div class="tc-desc">Account equity has breached the 10% trailing drawdown limit. All trading activity is blocked for the session.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Attempts any trade action</td><td>Peak balance: $52,840. Current balance: $47,556 (drawdown = 10.0%)</td><td>RED: "Maximum trailing drawdown reached. You have used 100% of your 10% drawdown allowance ($5,284). No further trading is permitted." All trade inputs disabled. "New Trade +" disabled on Dashboard.</td><td>Full bar red. All inputs disabled across S3–S6. Dashboard shows red banner: "Maximum drawdown reached. Session ended." No recovery possible within this session.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="flow-header" id="flow10"><h3>Flow 10: Gatekeeper — Warning States</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id warning">TC 10.1</span><span class="tc-name">Warning — Drawdown Proximity</span></div>
+    <div class="tc-desc">Trade valid but daily loss usage is approaching the limit.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Valid input (1.5%, SL set)</td><td>daily_loss_used = 88%</td><td>GREEN "All Clear" + AMBER: "Approaching daily loss limit — you have used 88% of your daily allowance. 12% remaining." Continue <strong>enabled</strong>.</td><td>Dual state: green status + amber warning below. Trader CAN proceed.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id warning">TC 10.2</span><span class="tc-name">Warning — Consistency Score</span></div>
+    <div class="tc-desc">Trade target may violate the consistency ratio.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Valid input, R:R 1:3</td><td>Previous small P&L trades</td><td>AMBER: "Letting this trade run to your target would exceed your consistency score ratio. Consider closing at 1:2 instead of 1:3." Continue enabled.</td><td>Warning below All Clear.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id warning">TC 10.3</span><span class="tc-name">Warning — News Proximity (22 min)</span></div>
+    <div class="tc-desc">News approaching but not yet within restricted window.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Valid input</td><td>News in 22 min</td><td>AMBER: "High-impact news in 22 minutes. Ensure your position is managed before 14:32." Continue enabled.</td><td>Countdown in warning.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id warning">TC 10.4</span><span class="tc-name">Warning — Day Qualification at Entry</span></div>
+    <div class="tc-desc">Trade target does not meet minimum gain for the day to count.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Risk 1%, TP small</td><td>Projected +0.9%</td><td>AMBER: "Day qualification: your target of +0.9% does not meet the minimum gain required (1.0%). Adjust or proceed knowing this day will not count."</td><td>Day Qualification: amber "Does not qualify".</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id warning">TC 10.5</span><span class="tc-name">Warning — Day Qualification at Exit</span></div>
+    <div class="tc-desc">Warning when closing a position below minimum gain threshold.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Clicks "Close Position"</td><td>P&L = +0.9%</td><td>AMBER popup: "Closing here (+0.9%) will not count as a valid trading day — minimum 1.0% required." Buttons: "Close Anyway" / "Keep Open".</td><td>Modal with amber border. Two buttons.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="flow-header" id="flow11"><h3>Flow 11: Blocked-to-Valid Recovery</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id recovery">TC 11.1</span><span class="tc-name">Trader Fixes Risk from 3% to 1.5%, Adds SL → All Clear</span></div>
+    <div class="tc-desc">Key "fix-and-proceed" scenario. Trader triggers block, understands cause, corrects, continues.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Risk = 3.00%, SL empty</td><td>—</td><td>RED: "2 RULES: Risk limit exceeded. No stop-loss set. Fix both." Continue disabled.</td><td>2 violations listed.</td></tr>
+          <tr><td>2</td><td>Changes Risk to 1.50%</td><td>—</td><td>Updates to "1 RULE: No stop-loss set." Continue disabled.</td><td>Count drops 2 → 1. Risk recalculated.</td></tr>
+          <tr><td>3</td><td>Enters SL = 1.08342</td><td>—</td><td>GREEN: "ALL CLEAR." Continue <strong>enabled</strong>.</td><td>Red → green transition. Fields populated.</td></tr>
+          <tr><td>4</td><td>Clicks Continue</td><td>—</td><td>Transition to S6.</td><td>Step "3 of 4".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SCREEN 6 ═══════════════ -->
+  <div class="screen-header" id="s6">
+    <div class="screen-label">Screen 6</div>
+    <h2>Order Entry — Review & Confirm</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D4 (Step 3/4)</span>
+      <span><strong>Epic:</strong> Core Execution — final confirmation</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 12: Confirming and Executing a Trade</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 12.1</span><span class="tc-name">Successful Confirmation — Execute Long</span></div>
+    <div class="tc-desc">All parameters valid, trader confirms and executes.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Sees S6</td><td>EUR/USD Long, Entry 1.08542, SL 1.08342, TP 1.08942, 5.28 lots, $1,056.80, R:R 1:2.00</td><td>Summary card. Disclaimer. Gatekeeper "All Clear ●". "Execute Long" active. "Back" ghost.</td><td>Disclaimer: "Estimated risk at stop, including broker spread and commission. Actual outcome may vary due to slippage."</td></tr>
+          <tr><td>2</td><td>Clicks "Execute Long"</td><td>—</td><td>Spinner → "Executing..." (~200ms). Transition to S7.</td><td>Simulated fill generated. Trade saved.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id blocked">TC 12.2</span><span class="tc-name">Rule Violated Between S5 and S6</span></div>
+    <div class="tc-desc">Time-based rule triggers while on Review screen.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>On S6, was All Clear</td><td>News window activates</td><td>Gatekeeper live update: RED. Execute disabled.</td><td>Must wait or go Back.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <!-- ═══════════════ SCREEN 7 ═══════════════ -->
+  <div class="screen-header" id="s7">
+    <div class="screen-label">Screen 7</div>
+    <h2>Post-Execution Truth Display</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D4 (Step 4/4)</span>
+      <span><strong>Epic:</strong> Transparency — showing execution reality</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 13: Truth Display After Execution</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 13.1</span><span class="tc-name">Execution with Slippage</span></div>
+    <div class="tc-desc">Fill price differs from requested — slippage highlighted.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Arrives at S7</td><td>Requested: 1.08542, Estimated: 1.08544, Actual: 1.08547, Slippage: +0.5 pips</td><td>"Trade Executed ✓". Three-column comparison. Slippage amber.</td><td>"+0.5 pips — Your fill was 0.5 pips worse than requested. This is normal in live markets."</td></tr>
+          <tr><td>2</td><td>Clicks "View in Journal"</td><td>—</td><td>Transition to S8.</td><td>Trade entry pre-populated.</td></tr>
+          <tr><td>3</td><td>(Alt) Clicks "New Trade"</td><td>—</td><td>Transition to S4. New flow.</td><td>Step resets to "1 of 4".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 13.2</span><span class="tc-name">Execution without Slippage</span></div>
+    <div class="tc-desc">Fill matches requested price exactly.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Arrives at S7</td><td>Slippage: 0</td><td>"Trade Executed ✓". Green: "No slippage. Fill matched your requested price."</td><td>No amber. Green text.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <!-- ═══════════════ SCREEN 8 ═══════════════ -->
+  <div class="screen-header" id="s8">
+    <div class="screen-label">Screen 8</div>
+    <h2>Trade Journal</h2>
+    <div class="screen-meta">
+      <span><strong>Deliverable:</strong> D6</span>
+      <span><strong>Epic:</strong> Auto-Journaling — zero-input trade documentation</span>
+    </div>
+  </div>
+
+  <div class="flow-header"><h3>Flow 14: Automatic Journal Entry</h3></div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id happy">TC 14.1</span><span class="tc-name">First Entry After Execution</span></div>
+    <div class="tc-desc">Trade journal auto-populates all fields immediately after execution.</div>
+    <div class="tc-table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Clicks "View in Journal" on S7</td><td>Trade data</td><td>S8 renders. All fields auto-populated. Message: "Your trade was logged automatically. You didn't have to do anything."</td><td>Fields: Date/Time, EUR/USD, Long, Entry, SL, TP, Risk, Size, R:R, Status, Outcome "Pending".</td></tr>
+          <tr><td>2</td><td>Adds tag (optional)</td><td>"trend-follow"</td><td>Tag saved.</td><td>Tag chip appears.</td></tr>
+          <tr><td>3</td><td>Clicks "Back to Dashboard"</td><td>—</td><td>Transition to S3. Dashboard updated.</td><td>Open Positions shows the new position.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tc-block">
+    <div class="tc-header"><span class="tc-id edge">TC 14.2</span><span class="tc-name">Journal in Empty State</span></div>
+    <div class="tc-desc">Journal opened before any trades executed.</div>
+    <div class="tc-table-wrap"><table><thead><tr><th>Step</th><th>User Action</th><th>Mock Data</th><th>Expected System Response</th><th>UI / Validation</th></tr></thead><tbody>
+      <tr><td>1</td><td>Opens Journal tab</td><td>trades = []</td><td>"No trades logged yet. Complete your first trade to see it here."</td><td>Centered text, no table.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <!-- ═══════════════ APPENDIX A ═══════════════ -->
+  <section class="section" id="appendix-a">
+    <h2 class="section-title section-anchor">Appendix A: Prototype Navigation Flows</h2>
+    <p>Three mandatory end-to-end paths for the prototype (Deliverable D4 + D5):</p>
+    <div class="scope-table">
+      <table>
+        <thead><tr><th>#</th><th>Flow Name</th><th>Path</th><th>Covers TCs</th></tr></thead>
+        <tbody>
+          <tr><td><strong>P1</strong></td><td><strong>Valid Trade</strong></td><td class="flow-path">S1 → S2 (TC 2.1) → S3 (TC 5.1) → S4 (TC 7.1) → S5 (TC 8.1) → S6 (TC 12.1) → S7 (TC 13.1) → S8 (TC 14.1) → S3</td><td>1.1, 2.1, 5.1, 6.1, 7.1, 8.1, 12.1, 13.1, 14.1</td></tr>
+          <tr><td><strong>P2</strong></td><td><strong>Blocked-to-Valid</strong></td><td class="flow-path">S4 (TC 7.1) → S5 (TC 9.6 → TC 11.1) → S6 (TC 12.1) → S7 → S8</td><td>9.1, 9.2, 9.5, 9.6, 9.7, 11.1, 12.1</td></tr>
+          <tr><td><strong>P3</strong></td><td><strong>Warning State</strong></td><td class="flow-path">S4 (TC 7.1) → S5 (TC 10.1 or 10.4) → S6 (TC 12.1) → S7 → S8</td><td>10.1, 10.4</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════ APPENDIX B ═══════════════ -->
+  <section class="section" id="appendix-b">
+    <h2 class="section-title section-anchor">Appendix B: Acceptance Sign-Off Checklist</h2>
+
+    <div class="scope-table checklist-table">
+      <table>
+        <thead><tr><th>TC ID</th><th>TC Name</th><th>Status</th><th>Signed</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag tag-green">TC 1.1</span></td><td>Successful Demo Mode Entry</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-grey">TC 1.2</span></td><td>Mobile Device</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 2.1</span></td><td>Demo Firm Preset</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-grey">TC 3.1</span></td><td>Successful Parsing <span class="tag tag-grey" style="margin-left: 4px; font-size: 10px;">DEFERRED</span></td><td style="color: var(--text-muted)">N/A — Prototype</td><td></td></tr>
+          <tr><td><span class="tag tag-grey">TC 3.2</span></td><td>Partial Parsing <span class="tag tag-grey" style="margin-left: 4px; font-size: 10px;">DEFERRED</span></td><td style="color: var(--text-muted)">N/A — Prototype</td><td></td></tr>
+          <tr><td><span class="tag tag-grey">TC 3.3</span></td><td>Empty Textarea <span class="tag tag-grey" style="margin-left: 4px; font-size: 10px;">DEFERRED</span></td><td style="color: var(--text-muted)">N/A — Prototype</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 4.1</span></td><td>Rule Staleness 30+ Days</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 5.1</span></td><td>Dashboard Empty State</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-amber">TC 5.2</span></td><td>Dashboard Amber Warning</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 5.3</span></td><td>Dashboard Daily Loss Hit</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 6.1</span></td><td>New Trade Initiation</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 7.1</span></td><td>EUR/USD Long</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 7.2</span></td><td>GBP/USD Short</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-grey">TC 7.3</span></td><td>Search with No Results</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 8.1</span></td><td>Valid Input — All Clear</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 9.1</span></td><td>Blocked: Risk Limit</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 9.2</span></td><td>Blocked: No Stop-Loss</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 9.3</span></td><td>Blocked: Daily Loss</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 9.4</span></td><td>Blocked: News Window</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 9.5</span></td><td>Blocked: Fee-Adjusted Risk</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 9.6</span></td><td>Blocked: Multiple Violations</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 9.7</span></td><td>Blocked: Overall Trailing Drawdown</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-amber">TC 10.1</span></td><td>Warning: Approaching Daily Loss Limit</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-amber">TC 10.2</span></td><td>Warning: Consistency Score</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-amber">TC 10.3</span></td><td>Warning: News Proximity</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-amber">TC 10.4</span></td><td>Warning: Day Qualification Entry</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-amber">TC 10.5</span></td><td>Warning: Day Qualification Exit</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-blue">TC 11.1</span></td><td>Blocked-to-Valid Recovery</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 12.1</span></td><td>Execute Long</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-red">TC 12.2</span></td><td>Rule Change Mid-Review</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 13.1</span></td><td>Post-Execution with Slippage</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 13.2</span></td><td>Post-Execution without Slippage</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-green">TC 14.1</span></td><td>Journal Auto-Populated</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+          <tr><td><span class="tag tag-grey">TC 14.2</span></td><td>Journal Empty State</td><td>☐ Pass / ☐ Fail</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="signoff">
+      <h3>Acceptance Sign-Off</h3>
+      <div class="signoff-line">
+        <span class="signoff-role">Client</span>
+        <span class="signoff-field"></span>
+        <span class="signoff-date">Date: ___________</span>
+      </div>
+      <div class="signoff-line">
+        <span class="signoff-role">Contractor</span>
+        <span class="signoff-field"></span>
+        <span class="signoff-date">Date: ___________</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

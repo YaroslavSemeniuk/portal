@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DESIGN INSPIRATION SYSTEM
+  ─────────────────────────
+  Extracted from UI reference screenshots:
+    [1] Voltrex — Crypto Trading Platform (dark, data-dense, neon accents)
+    [2] Auro — DeFi Lending Dashboard (deep black, purple glow, cosmic atmosphere)
+    [3-4] Digital Marketplace — Product Commerce (dual theme: dark sidebar + light content)
+
+  Intended use: Feed this to Claude Opus as a design-language reference.
+-->
+
+<DesignSystem version="1.0" intent="inspiration" source="ui-screenshots-analysis">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 1 · COLOR PALETTES                                -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <ColorPalettes>
+
+    <Palette id="voltrex" label="Crypto Trading · Deep Navy + Neon" theme="dark">
+      <Background>
+        <Base hex="#0B0F1E" role="app-bg" note="Deep navy-black, almost pure dark"/>
+        <Surface hex="#121830" role="card-bg" note="Slightly lighter panels"/>
+        <Elevated hex="#1A2240" role="input-bg, modal" note="Raised interactive surfaces"/>
+        <Border hex="#1E2A4A" role="dividers, card-stroke" opacity="0.6"/>
+      </Background>
+      <Accent>
+        <Primary hex="#F5A623" role="buy-action, CTA glow" note="Warm amber-gold"/>
+        <Secondary hex="#E91E8C" role="sell-action, bearish candles" note="Hot magenta-pink"/>
+        <Tertiary hex="#9B59B6" role="decoration, secondary glow" note="Soft purple"/>
+        <Positive hex="#4CAF50" role="price-up, gain" note="Clean green"/>
+        <Negative hex="#FF4757" role="price-down, loss" note="Alert red"/>
+      </Accent>
+      <Text>
+        <Primary hex="#FFFFFF" role="headlines, prices"/>
+        <Secondary hex="#8899BB" role="labels, captions"/>
+        <Muted hex="#4A5578" role="placeholders, disabled"/>
+      </Text>
+      <Candle>
+        <BullBody hex="#F5A623" note="Bullish candle body — amber"/>
+        <BearBody hex="#E91E8C" note="Bearish candle body — magenta"/>
+        <BullWick hex="#F5A62380" note="Bullish wick — 50% amber"/>
+        <BearWick hex="#E91E8C80" note="Bearish wick — 50% magenta"/>
+      </Candle>
+    </Palette>
+
+    <Palette id="auro" label="DeFi Lending · Cosmic Black + Purple Glow" theme="dark">
+      <Background>
+        <Base hex="#080A10" role="app-bg" note="Near-black with blue undertone"/>
+        <Surface hex="#0E1118" role="sidebar, cards"/>
+        <Elevated hex="#141820" role="table rows, hover state"/>
+        <Glow hex="#7C3AED" role="hero accent, active nav, ring effects" note="Electric violet"/>
+      </Background>
+      <Accent>
+        <Primary hex="#8B5CF6" role="CTA buttons, active states" note="Medium purple"/>
+        <Secondary hex="#A78BFA" role="highlights, tags" note="Light purple"/>
+        <Supply hex="#22C55E" role="supply APY, positive metric" note="Bright green"/>
+        <Borrow hex="#EF4444" role="borrow APY, risk metric" note="Clean red"/>
+        <Warning hex="#F59E0B" role="caution states"/>
+      </Accent>
+      <Text>
+        <Primary hex="#F1F5F9" role="headings, values"/>
+        <Secondary hex="#64748B" role="table subtext, meta"/>
+        <Muted hex="#334155" role="disabled, separators"/>
+        <OnDark hex="#CBD5E1" role="body text on dark surfaces"/>
+      </Text>
+      <Hero>
+        <GlowColor hex="#7C3AED" note="Radial glow behind 3D coin asset"/>
+        <GlowRadius value="200px" note="Large atmospheric halo"/>
+        <GlowOpacity value="0.45"/>
+      </Hero>
+    </Palette>
+
+    <Palette id="marketplace" label="Digital Marketplace · Light Content + Dark Shell" theme="hybrid">
+      <Background>
+        <Shell hex="#111318" role="sidebar, navigation" theme="dark"/>
+        <Content hex="#F8F9FC" role="main content area" theme="light"/>
+        <Card hex="#FFFFFF" role="product cards, modals" theme="light"/>
+        <ContentAlt hex="#F1F3F8" role="input fields, image placeholders" theme="light"/>
+      </Background>
+      <Accent>
+        <Primary hex="#2563EB" role="Add product CTA, primary actions" note="Bold blue"/>
+        <PrimaryHover hex="#1D4ED8" role="hover state on primary"/>
+        <Success hex="#16A34A" role="checkmarks, feature bullets" note="Deep green"/>
+        <Badge hex="#EFF6FF" role="tag backgrounds" note="Light blue tint"/>
+        <Recommended hex="#2563EB" role="recommended plan badge"/>
+      </Accent>
+      <Text>
+        <Primary hex="#0F172A" role="headings, product names" theme="light"/>
+        <Secondary hex="#475569" role="descriptions, meta" theme="light"/>
+        <Muted hex="#94A3B8" role="placeholders, timestamps" theme="light"/>
+        <SidebarPrimary hex="#F8FAFC" role="nav text" theme="dark"/>
+        <SidebarMuted hex="#64748B" role="inactive nav" theme="dark"/>
+        <SidebarActive hex="#FFFFFF" role="active nav item" theme="dark"/>
+      </Text>
+      <Pricing>
+        <BasicBg hex="#FFFFFF"/>
+        <EnterpriseBg hex="#FFFFFF"/>
+        <RecommendedBadge hex="#2563EB"/>
+        <CheckIcon hex="#16A34A"/>
+        <PercentageLarge size="48px" weight="700" note="Huge percentage display"/>
+      </Pricing>
+    </Palette>
+
+  </ColorPalettes>
+
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 2 · TYPOGRAPHY                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <Typography>
+
+    <Scale id="trading-prices">
+      <Token name="price-hero" size="36px" weight="700" tracking="-0.02em" note="BTC main price display"/>
+      <Token name="price-card" size="22px" weight="600" tracking="-0.01em" note="Asset card prices"/>
+      <Token name="label-sm" size="11px" weight="500" tracking="0.04em" case="uppercase" note="Axis labels, metadata"/>
+      <Token name="stat-value" size="18px" weight="600" note="Leverage value, stop loss %"/>
+      <Token name="tag" size="12px" weight="500" note="Percentage change badges"/>
+    </Scale>
+
+    <Scale id="defi-dashboard">
+      <Token name="hero-welcome" size="40px" weight="700" tracking="-0.03em" note="Welcome Back! heading"/>
+      <Token name="metric-large" size="24px" weight="700" note="$181.78M total supplied"/>
+      <Token name="metric-label" size="12px" weight="400" note="Total Supplied / Borrowed labels"/>
+      <Token name="table-value" size="13px" weight="500" note="Numeric table cells"/>
+      <Token name="table-label" size="13px" weight="400" note="Asset names in table"/>
+      <Token name="apy-value" size="13px" weight="600" note="APY percentages — colored"/>
+      <Token name="nav-item" size="14px" weight="500" note="Sidebar navigation"/>
+    </Scale>
+
+    <Scale id="marketplace">
+      <Token name="section-title" size="20px" weight="700" note="Planning, Dashboard titles"/>
+      <Token name="plan-name" size="24px" weight="700" note="Basic, Enterprise"/>
+      <Token name="plan-percent" size="48px" weight="800" tracking="-0.03em" note="8%, 20% — hero pricing"/>
+      <Token name="feature-item" size="13px" weight="400" note="Feature list items"/>
+      <Token name="product-title" size="16px" weight="600" note="Product card names"/>
+      <Token name="product-price" size="15px" weight="700" note="$46.99 pricing"/>
+      <Token name="table-body" size="13px" weight="400" note="Data table rows"/>
+    </Scale>
+
+  </Typography>
+
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 3 · SPACING & LAYOUT                              -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <Spacing base="4px">
+    <Token name="xs"   value="4px"/>
+    <Token name="sm"   value="8px"/>
+    <Token name="md"   value="12px"/>
+    <Token name="lg"   value="16px"/>
+    <Token name="xl"   value="20px"/>
+    <Token name="2xl"  value="24px"/>
+    <Token name="3xl"  value="32px"/>
+    <Token name="4xl"  value="48px"/>
+  </Spacing>
+
+  <Layout>
+
+    <Pattern id="trading-layout">
+      <Description>Full-width chart dominates center. Right panel (280px) stacks trade controls vertically. Bottom strip shows mini asset tickers in equal-width cards. Top nav is slim (48px).</Description>
+      <ChartArea width="calc(100% - 300px)" flex="1"/>
+      <TradePanel width="280px" position="right" overflow="scroll"/>
+      <TickerStrip height="80px" position="bottom" columns="4" gap="8px"/>
+      <TopNav height="48px" position="top"/>
+    </Pattern>
+
+    <Pattern id="defi-sidebar-layout">
+      <Description>Fixed left sidebar (160px) with icon+label nav. Hero banner spans full content width. Below hero: 4 metric cards in a row. Full-width sortable data table fills remaining height.</Description>
+      <Sidebar width="160px" position="left" fixed="true"/>
+      <ContentArea marginLeft="160px"/>
+      <HeroBanner height="180px" borderRadius="12px" overflow="hidden"/>
+      <MetricCards count="4" layout="row" gap="16px" marginTop="24px"/>
+      <DataTable marginTop="24px" fullWidth="true"/>
+    </Pattern>
+
+    <Pattern id="marketplace-layout">
+      <Description>Narrow icon sidebar (48px) can expand to 160px. Main content in light-bg panels. Multiple floating modals/drawers layered with depth. Multi-pane split views for product detail.</Description>
+      <Sidebar width="48px" expandedWidth="160px" position="left"/>
+      <ContentArea bg="light" padding="24px"/>
+      <Modal maxWidth="680px" borderRadius="16px" shadow="0 24px 64px rgba(0,0,0,0.3)"/>
+      <SplitPane gap="16px" columns="2"/>
+    </Pattern>
+
+  </Layout>
+
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 4 · COMPONENT PATTERNS                            -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <Components>
+
+    <!-- ── Candlestick Chart ─────────────────────────────────── -->
+    <Component id="candlestick-chart">
+      <Background gradient="linear-gradient(180deg, #0D1226 0%, #080B18 100%)"/>
+      <Grid color="#1E2A4A" opacity="0.5" dashArray="2,4"/>
+      <Tooltip bg="#1A2240" border="1px solid #2A3860" borderRadius="8px" padding="8px 12px"
+               shadow="0 8px 24px rgba(0,0,0,0.5)" fontSize="12px"/>
+      <CrosshairLine color="#4A5578" dashArray="3,3"/>
+      <CurrentPriceLine color="#FFFFFF" opacity="0.4" dashArray="4,4"/>
+      <PriceLabel bg="#1A2240" borderRadius="4px" padding="2px 6px"/>
+      <Candle bullColor="#F5A623" bearColor="#E91E8C" wickOpacity="0.5"/>
+      <TimeAxis color="#4A5578" fontSize="11px" tickGap="80px"/>
+      <PriceAxis position="left" color="#4A5578" fontSize="11px"/>
+      <Toolbar icons="true" gap="8px" iconSize="16px" color="#4A5578"/>
+    </Component>
+
+    <!-- ── Trade Input Panel ─────────────────────────────────── -->
+    <Component id="trade-panel">
+      <BuySellToggle>
+        <ActiveBg hex="#FFFFFF" color="#111"/>
+        <InactiveBg hex="transparent" color="#8899BB"/>
+        <BorderRadius value="8px"/>
+        <Padding value="8px 24px"/>
+      </BuySellToggle>
+      <AmountInput bg="#1A2240" border="none" borderRadius="8px" fontSize="28px" fontWeight="700"/>
+      <QuickAmountChips bg="#1A2240" borderRadius="6px" padding="4px 10px" fontSize="12px"/>
+      <LeverageSlider>
+        <Track bg="#1A2240" height="4px" borderRadius="2px"/>
+        <Fill bg="linear-gradient(90deg, #3B5BDB, #9775FA)" borderRadius="2px"/>
+        <Thumb size="14px" bg="#FFFFFF" shadow="0 0 8px rgba(255,255,255,0.4)"/>
+        <RiskBadge bg="#22C55E20" color="#22C55E" fontSize="11px" borderRadius="4px" padding="2px 6px"/>
+      </LeverageSlider>
+      <StopLossSection>
+        <Value fontSize="24px" fontWeight="700" color="#FFFFFF"/>
+        <ChipGroup gap="6px"/>
+        <Chip selected-bg="#FF4757" selected-color="#fff" default-bg="#1A2240" borderRadius="6px"/>
+      </StopLossSection>
+      <TakeProfitSection>
+        <Value fontSize="24px" fontWeight="700" color="#FFFFFF"/>
+        <Chip selected-bg="#22C55E" selected-color="#fff" default-bg="#1A2240" borderRadius="6px"/>
+      </TakeProfitSection>
+      <CTAButton bg="#FFFFFF" color="#111111" borderRadius="10px" height="48px" fontSize="15px" fontWeight="600"
+                 hover-bg="#F0F0F0" transition="all 0.15s ease"/>
+      <MetaRow fontSize="12px" color="#8899BB" justifyContent="space-between" padding="4px 0"/>
+    </Component>
+
+    <!-- ── Asset Ticker Card ─────────────────────────────────── -->
+    <Component id="ticker-card">
+      <Bg hex="#121830" borderRadius="10px" padding="12px 16px"/>
+      <Icon size="20px" borderRadius="50%"/>
+      <Pair fontSize="12px" fontWeight="600" color="#FFFFFF"/>
+      <ChangeBadge positive-color="#22C55E" negative-color="#FF4757" fontSize="11px" fontWeight="600"
+                   bg-positive="#22C55E15" bg-negative="#FF475715" borderRadius="4px" padding="2px 5px"/>
+      <Price fontSize="18px" fontWeight="700" color="#FFFFFF"/>
+      <Sparkline height="32px" positive-stroke="#22C55E" negative-stroke="#FF4757" opacity="0.8"/>
+    </Component>
+
+    <!-- ── DeFi Table Row ─────────────────────────────────────── -->
+    <Component id="defi-table-row">
+      <Row height="52px" borderBottom="1px solid #1E2535" hover-bg="#0E1118"/>
+      <AssetCell display="flex" alignItems="center" gap="10px"/>
+      <AssetIcon size="28px" borderRadius="50%"/>
+      <AssetName fontSize="13px" fontWeight="600" color="#E2E8F0"/>
+      <AssetSubtext fontSize="11px" color="#475569"/>
+      <NumericCell fontSize="13px" fontWeight="500" color="#CBD5E1" textAlign="right"/>
+      <SubNumericCell fontSize="11px" color="#475569" textAlign="right"/>
+      <APYCell positive-color="#22C55E" negative-color="#EF4444" fontSize="13px" fontWeight="600"/>
+      <ActionButton borderRadius="6px" height="28px" padding="0 16px" fontSize="12px" fontWeight="600"
+                    supply-bg="#22C55E" supply-color="#fff"
+                    borrow-bg="#1A2240" borrow-color="#EF4444" borrow-border="1px solid #EF4444"/>
+    </Component>
+
+    <!-- ── Metric Hero Card ──────────────────────────────────── -->
+    <Component id="metric-hero-card">
+      <Bg bg="rgba(255,255,255,0.04)" borderRadius="12px" border="1px solid rgba(255,255,255,0.06)" padding="16px 20px"/>
+      <Icon size="48px" note="3D rendered icon — floating, glowing"/>
+      <Value fontSize="22px" fontWeight="700" color="#F1F5F9"/>
+      <Label fontSize="12px" color="#64748B" marginTop="4px"/>
+      <ExpandButton size="24px" icon="arrow-up-right" color="#64748B"/>
+    </Component>
+
+    <!-- ── Hero Banner ───────────────────────────────────────── -->
+    <Component id="hero-banner">
+      <Bg gradient="radial-gradient(circle at 70% 50%, #3B0764 0%, #080A10 60%)" borderRadius="16px"/>
+      <Headline fontSize="36px" fontWeight="800" color="#FFFFFF"/>
+      <Subheadline fontSize="14px" color="#7C3AED"/>
+      <CTAButton bg="#7C3AED" color="#fff" borderRadius="8px" padding="10px 20px" fontWeight="600"/>
+      <IllustrationArea position="right" note="3D floating coins with purple glow ring"/>
+      <TopRightText fontSize="11px" color="#64748B" textAlign="right" maxWidth="200px"/>
+    </Component>
+
+    <!-- ── Sidebar Navigation ────────────────────────────────── -->
+    <Component id="sidebar-nav" variant="dark">
+      <Bg hex="#0E1118" width="160px" padding="16px 0"/>
+      <Logo padding="12px 16px" marginBottom="16px"/>
+      <NavItem height="40px" padding="0 16px" borderRadius="8px" gap="10px" fontSize="14px"
+               active-bg="#7C3AED20" active-color="#FFFFFF" active-leftBorder="2px solid #7C3AED"
+               inactive-color="#64748B" hover-color="#94A3B8" hover-bg="#ffffff08"/>
+      <NavIcon size="16px"/>
+      <SectionDivider margin="8px 0" border="none"/>
+      <LogoutItem marginTop="auto" color="#64748B" hover-color="#EF4444"/>
+    </Component>
+
+    <!-- ── Pricing Plan Card ─────────────────────────────────── -->
+    <Component id="pricing-card" theme="light">
+      <Bg hex="#FFFFFF" borderRadius="12px" border="1px solid #E2E8F0" padding="24px"/>
+      <PlanName fontSize="22px" fontWeight="700" color="#0F172A"/>
+      <Description fontSize="13px" color="#64748B" marginBottom="16px"/>
+      <Percentage fontSize="52px" fontWeight="800" color="#0F172A" letterSpacing="-0.04em"/>
+      <PercentageNote fontSize="12px" color="#94A3B8"/>
+      <FeatureList gap="8px" marginTop="16px"/>
+      <FeatureItem display="flex" gap="8px" alignItems="flex-start" fontSize="13px" color="#334155"/>
+      <FeatureCheck size="16px" color="#16A34A" flexShrink="0"/>
+      <RecommendedBadge bg="#2563EB" color="#fff" fontSize="12px" fontWeight="600"
+                        borderRadius="20px" padding="4px 12px" position="absolute" top="16px" right="16px"/>
+    </Component>
+
+    <!-- ── Product Card ──────────────────────────────────────── -->
+    <Component id="product-card" theme="light">
+      <Bg hex="#FFFFFF" borderRadius="10px" overflow="hidden" shadow="0 2px 8px rgba(0,0,0,0.06)"/>
+      <ImageArea aspectRatio="4/3" bg="#F1F3F8" overflow="hidden"/>
+      <Body padding="12px 14px"/>
+      <ProductName fontSize="14px" fontWeight="600" color="#0F172A"/>
+      <Price fontSize="15px" fontWeight="700" color="#0F172A"/>
+      <Author display="flex" gap="6px" alignItems="center" fontSize="12px" color="#64748B"/>
+      <AuthorAvatar size="20px" borderRadius="50%"/>
+    </Component>
+
+    <!-- ── Data Table (Light) ────────────────────────────────── -->
+    <Component id="data-table-light" theme="light">
+      <Header bg="#F8F9FC" borderBottom="1px solid #E2E8F0"/>
+      <HeaderCell fontSize="12px" fontWeight="600" color="#94A3B8" padding="10px 12px"
+                  textTransform="uppercase" letterSpacing="0.05em"/>
+      <Row hover-bg="#F8FAFF" borderBottom="1px solid #F1F3F8"/>
+      <Cell fontSize="13px" color="#334155" padding="12px"/>
+      <StatusDraft color="#94A3B8" bg="#F1F3F8" borderRadius="4px" padding="2px 8px"/>
+    </Component>
+
+    <!-- ── Notification Panel ────────────────────────────────── -->
+    <Component id="notification-panel" theme="dark">
+      <Bg hex="#111318" borderRadius="12px" border="1px solid #1E2535" padding="16px 20px"/>
+      <Header fontSize="16px" fontWeight="700" color="#FFFFFF"/>
+      <TabGroup gap="8px" marginBottom="12px"/>
+      <Tab active-bg="#1E2535" active-color="#FFFFFF" inactive-color="#64748B" borderRadius="6px"
+           padding="4px 10px" fontSize="12px"/>
+      <Item borderBottom="1px solid #1A1F2E" padding="12px 0" gap="10px"/>
+      <Avatar size="32px" borderRadius="50%"/>
+      <ItemText fontSize="13px" color="#CBD5E1" lineHeight="1.5"/>
+      <Timestamp fontSize="11px" color="#475569"/>
+      <UnreadDot size="8px" bg="#2563EB" borderRadius="50%"/>
+      <ActionIcons gap="8px" marginTop="6px" color="#475569"/>
+    </Component>
+
+    <!-- ── Top Navigation Bar ────────────────────────────────── -->
+    <Component id="top-nav">
+      <Bg hex="#0B0F1E" height="48px" borderBottom="1px solid #1E2A4A"/>
+      <Logo display="flex" alignItems="center" gap="8px" fontSize="16px" fontWeight="700"/>
+      <NavLinks gap="4px" fontSize="14px"/>
+      <NavLink active-color="#FFFFFF" active-bg="#1A2240" inactive-color="#8899BB"
+               borderRadius="6px" padding="6px 14px"/>
+      <RightSection display="flex" gap="8px" alignItems="center"/>
+      <WalletBadge bg="#1A2240" borderRadius="8px" padding="6px 12px" fontSize="12px"
+                   border="1px solid #2A3860"/>
+    </Component>
+
+    <!-- ── Search Bar ────────────────────────────────────────── -->
+    <Component id="search-bar">
+      <Bg bg="rgba(255,255,255,0.06)" borderRadius="8px" border="1px solid rgba(255,255,255,0.08)"
+          padding="8px 12px" gap="8px" display="flex" alignItems="center"/>
+      <Icon size="14px" color="#64748B"/>
+      <Input fontSize="13px" color="#CBD5E1" placeholder-color="#475569" bg="transparent" border="none"/>
+    </Component>
+
+    <!-- ── Add Product Form ──────────────────────────────────── -->
+    <Component id="add-product-form" theme="light">
+      <Bg hex="#FFFFFF" borderRadius="12px" padding="24px"/>
+      <FieldLabel fontSize="12px" fontWeight="600" color="#475569" marginBottom="6px"/>
+      <TextInput bg="#F1F3F8" border="1px solid #E2E8F0" borderRadius="8px" padding="10px 14px"
+                 fontSize="14px" color="#0F172A" focus-border="#2563EB"/>
+      <RichTextArea bg="#F8F9FC" border="1px solid #E2E8F0" borderRadius="8px" minHeight="80px"/>
+      <TagChip bg="#EFF6FF" color="#2563EB" borderRadius="6px" padding="4px 10px" fontSize="12px"
+               border="1px solid #BFDBFE"/>
+      <ImageGrid columns="3" gap="8px"/>
+      <Thumbnail borderRadius="8px" overflow="hidden" aspectRatio="1/1"/>
+      <PreviewPanel position="right" width="220px"/>
+      <PreviewCard bg="#FFFFFF" borderRadius="10px" shadow="0 4px 12px rgba(0,0,0,0.1)" overflow="hidden"/>
+    </Component>
+
+  </Components>
+
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 5 · EFFECTS & ATMOSPHERE                          -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <Effects>
+
+    <Effect id="purple-hero-glow">
+      <Type>radial-gradient + box-shadow</Type>
+      <CSS>background: radial-gradient(circle at 65% 50%, rgba(124,58,237,0.45) 0%, transparent 65%);</CSS>
+      <UseCase>DeFi hero banners, coin illustrations, featured CTAs</UseCase>
+    </Effect>
+
+    <Effect id="card-glass">
+      <Type>backdrop-filter + semi-transparent border</Type>
+      <CSS>background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(12px);</CSS>
+      <UseCase>Metric cards, overlays on dark backgrounds</UseCase>
+    </Effect>
+
+    <Effect id="neon-candle-glow">
+      <Type>drop-shadow on SVG elements</Type>
+      <CSS>filter: drop-shadow(0 0 4px rgba(245,166,35,0.6));</CSS>
+      <UseCase>Bullish candles, active price indicators</UseCase>
+    </Effect>
+
+    <Effect id="input-active-glow">
+      <Type>box-shadow on focus</Type>
+      <CSS>box-shadow: 0 0 0 2px rgba(37,99,235,0.3); border-color: #2563EB;</CSS>
+      <UseCase>Form inputs in light theme on focus</UseCase>
+    </Effect>
+
+    <Effect id="button-hover-lift">
+      <Type>transform + shadow on hover</Type>
+      <CSS>transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,58,237,0.35);</CSS>
+      <UseCase>Primary action buttons, CTA elements</UseCase>
+    </Effect>
+
+    <Effect id="modal-backdrop">
+      <Type>backdrop blur overlay</Type>
+      <CSS>background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);</CSS>
+      <UseCase>Modal and drawer overlays</UseCase>
+    </Effect>
+
+    <Effect id="sidebar-active-indicator">
+      <Type>left border accent</Type>
+      <CSS>border-left: 2px solid #7C3AED; background: rgba(124,58,237,0.12);</CSS>
+      <UseCase>Active navigation item in dark sidebar</UseCase>
+    </Effect>
+
+    <Effect id="metric-number-gradient">
+      <Type>background-clip text</Type>
+      <CSS>background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;</CSS>
+      <UseCase>Large monetary values in dark theme ($181.78M)</UseCase>
+    </Effect>
+
+    <Effect id="table-row-hover">
+      <Type>subtle background shift</Type>
+      <CSS>transition: background 0.1s ease; cursor: pointer;</CSS>
+      <DarkVariant bg="rgba(255,255,255,0.03)"/>
+      <LightVariant bg="#F8FAFF"/>
+    </Effect>
+
+    <Effect id="chart-gradient-fill">
+      <Type>SVG linearGradient under sparklines</Type>
+      <BullGradient from="#22C55E40" to="#22C55E00"/>
+      <BearGradient from="#FF475740" to="#FF475700"/>
+      <UseCase>Sparklines in ticker cards</UseCase>
+    </Effect>
+
+  </Effects>
+
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 6 · MOTION & INTERACTION                          -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <Motion>
+
+    <Timing>
+      <Token name="instant"    value="80ms"  easing="linear"       note="Hover state fills"/>
+      <Token name="fast"       value="150ms" easing="ease-out"     note="Button presses, toggles"/>
+      <Token name="normal"     value="250ms" easing="ease-in-out"  note="Panel transitions"/>
+      <Token name="slow"       value="400ms" easing="cubic-bezier(0.34,1.56,0.64,1)" note="Modal enter (spring)"/>
+      <Token name="chart-tick" value="600ms" easing="ease-out"     note="Candle appear on load"/>
+    </Timing>
+
+    <Interaction id="slider-thumb">
+      <Description>Leverage slider thumb scales up on drag, track fill animates smoothly</Description>
+      <ThumbHover>transform: scale(1.3); box-shadow: 0 0 0 6px rgba(255,255,255,0.15);</ThumbHover>
+      <TrackFill>transition: width 0.1s ease;</TrackFill>
+    </Interaction>
+
+    <Interaction id="chip-select">
+      <Description>Quick-amount chips animate between selected/unselected with background fill</Description>
+      <Duration>120ms</Duration>
+      <Easing>ease-out</Easing>
+    </Interaction>
+
+    <Interaction id="price-tick">
+      <Description>Price number flashes briefly when updating</Description>
+      <FlashUp color="#22C55E" duration="300ms"/>
+      <FlashDown color="#FF4757" duration="300ms"/>
+    </Interaction>
+
+    <Interaction id="table-sort">
+      <Description>Column header sort arrow rotates, rows fade and slide to new position</Description>
+      <ArrowRotation>transform: rotate(180deg); transition: 200ms ease;</ArrowRotation>
+    </Interaction>
+
+    <Interaction id="modal-enter">
+      <Description>Modal scales from 0.95 → 1 and fades in, backdrop blurs simultaneously</Description>
+      <CSS>animation: modalEnter 350ms cubic-bezier(0.34,1.56,0.64,1) forwards;</CSS>
+      <Keyframes>from { opacity:0; transform: scale(0.95) translateY(8px); } to { opacity:1; transform: scale(1) translateY(0); }</Keyframes>
+    </Interaction>
+
+  </Motion>
+
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 7 · DESIGN PRINCIPLES                             -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <Principles>
+
+    <Principle id="data-density-hierarchy">
+      <Statement>Present dense data without cognitive overload by using size, color, and weight to create 3 visual tiers: hero metric → secondary stat → metadata</Statement>
+      <Example>BTC price (36px bold) → % change badge (12px colored) → axis labels (10px muted)</Example>
+    </Principle>
+
+    <Principle id="color-semantics">
+      <Statement>Color must carry meaning, not decoration. Green = positive/supply, Red = negative/borrow/loss, Purple = action/brand, Amber = warning/buy, White = neutral primary value</Statement>
+    </Principle>
+
+    <Principle id="dark-depth">
+      <Statement>Dark UIs create depth through 4-step background stack, not shadows. App bg → Surface → Elevated → Input. Each step ~8–12 lightness units apart.</Statement>
+    </Principle>
+
+    <Principle id="action-contrast">
+      <Statement>Primary CTAs must maximally contrast the surface they sit on. On dark bg: white button with dark text. Destruction actions inherit semantic red.</Statement>
+    </Principle>
+
+    <Principle id="hybrid-theming">
+      <Statement>Dark shell (nav/sidebar) + light content area is a valid and effective pattern for productivity tools. The contrast boundary draws focus to content.</Statement>
+    </Principle>
+
+    <Principle id="3d-icons-as-atmosphere">
+      <Statement>3D rendered icons / coin illustrations serve as atmospheric visual anchors in hero zones. They should glow, float, and feel tactile — not flat.</Statement>
+    </Principle>
+
+    <Principle id="table-as-primary-ui">
+      <Statement>In financial/data apps, the table IS the product. Invest in hover states, sort interactions, clear numeric alignment, and inline actions per row.</Statement>
+    </Principle>
+
+    <Principle id="progressive-disclosure">
+      <Statement>Layer information: overview metric cards → sortable table → detail modal. Each layer reveals more without overwhelming the previous one.</Statement>
+    </Principle>
+
+  </Principles>
+
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!--  SECTION 8 · CSS VARIABLE TEMPLATES                        -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <CSSVariables>
+
+    <Template id="dark-trading">
+      <![CDATA[
+:root {
+  /* Backgrounds */
+  --bg-app:        #0B0F1E;
+  --bg-surface:    #121830;
+  --bg-elevated:   #1A2240;
+  --bg-input:      #1E2A4A;
+  --border-subtle: rgba(30,42,74,0.6);
+
+  /* Accent */
+  --accent-buy:      #F5A623;
+  --accent-sell:     #E91E8C;
+  --accent-purple:   #9B59B6;
+  --accent-positive: #4CAF50;
+  --accent-negative: #FF4757;
+
+  /* Text */
+  --text-primary:   #FFFFFF;
+  --text-secondary: #8899BB;
+  --text-muted:     #4A5578;
+
+  /* Candles */
+  --candle-bull: #F5A623;
+  --candle-bear: #E91E8C;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+      ]]>
+    </Template>
+
+    <Template id="defi-cosmic">
+      <![CDATA[
+:root {
+  /* Backgrounds */
+  --bg-app:        #080A10;
+  --bg-surface:    #0E1118;
+  --bg-elevated:   #141820;
+  --bg-glow:       rgba(124,58,237,0.15);
+  --border-subtle: rgba(255,255,255,0.06);
+
+  /* Accent */
+  --accent-primary:   #8B5CF6;
+  --accent-light:     #A78BFA;
+  --accent-glow:      #7C3AED;
+  --accent-supply:    #22C55E;
+  --accent-borrow:    #EF4444;
+  --accent-warning:   #F59E0B;
+
+  /* Text */
+  --text-primary:   #F1F5F9;
+  --text-secondary: #64748B;
+  --text-muted:     #334155;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+      ]]>
+    </Template>
+
+    <Template id="marketplace-hybrid">
+      <![CDATA[
+:root {
+  /* Shells (dark sidebar) */
+  --shell-bg:       #111318;
+  --shell-border:   #1E2535;
+  --nav-active-bg:  rgba(37,99,235,0.12);
+  --nav-active-fg:  #FFFFFF;
+  --nav-inactive:   #64748B;
+
+  /* Content (light area) */
+  --content-bg:     #F8F9FC;
+  --card-bg:        #FFFFFF;
+  --card-border:    #E2E8F0;
+  --input-bg:       #F1F3F8;
+  --input-border:   #E2E8F0;
+  --input-focus:    #2563EB;
+
+  /* Text (light context) */
+  --text-primary:   #0F172A;
+  --text-secondary: #475569;
+  --text-muted:     #94A3B8;
+
+  /* Actions */
+  --action-primary:  #2563EB;
+  --action-success:  #16A34A;
+  --action-danger:   #DC2626;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+      ]]>
+    </Template>
+
+  </CSSVariables>
+
+</DesignSystem>

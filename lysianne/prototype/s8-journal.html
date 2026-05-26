@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S8 · Trade Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumbs">
+  <a href="index.html">All screens</a><span class="sep">/</span><strong>S8 · Trade journal</strong><span class="sep">/</span>
+  <a class="active" href="s8-journal.html">Entry</a>
+  <a href="s8-journal-empty.html">Empty</a>
+</nav>
+
+<div class="frame">
+  <aside class="sidebar">
+    <div class="logo"><div class="logo-mark">G</div><div class="logo-text">Gatekeeper</div></div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10"/></svg></span>Dashboard</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg></span>Trade</div>
+    <div class="nav-item active"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>Journal</div>
+    <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Rules</div>
+    <div class="nav-section" style="margin-top:16px">Account</div>
+    <div class="sb-account">
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Daily allowance</span><span class="sb-acc-v">$1,443 left</span></div><div class="sb-acc-bar"><div class="sb-acc-fill" style="width:42%"></div></div></div>
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Drawdown buffer</span><span class="sb-acc-v">$5,284</span></div><div class="sb-acc-bar"><div class="sb-acc-fill" style="width:0%"></div></div></div>
+      <div class="sb-acc-row"><div class="sb-acc-head"><span class="sb-acc-l">Avg R:R (planned)</span><span class="sb-acc-v">1 : 2.00</span></div></div>
+    </div>
+    <div class="sidebar-footer"><div class="user-avatar">I</div><div class="user-info"><div class="u-name">Ivan H.</div><div class="u-mail">demo mode</div></div></div>
+  </aside>
+
+  <header class="topbar">
+    <div class="demo-badge">Demo Mode</div><div class="spacer"></div>
+    <div class="metric"><span class="metric-label">Balance</span><span class="metric-value">$52,840.00</span></div>
+    <div class="metric"><span class="metric-label">P&amp;L today</span><span class="metric-value">$0.00</span></div>
+    <div class="bar-group"><div class="bar-head"><span class="label">Daily loss</span><span class="pct">42%</span></div><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div></div>
+    <div class="bar-group"><div class="bar-head"><span class="label">Drawdown</span><span class="pct">0%</span></div><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+  </header>
+
+  <main class="main" style="grid-column: main / orderpanel">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Trade journal</div>
+        <div class="page-sub">Review and annotate your trades.</div>
+      </div>
+      <div class="page-date mono">April 15, 2026</div>
+    </div>
+
+    <div class="journal-info">
+      <div class="journal-info-ic">i</div>
+      <span>Every trade is auto-logged. Add your own notes, tags, and emotional state to improve your edge over time.</span>
+      <span class="dismiss">×</span>
+    </div>
+
+    <div class="journal-card">
+      <div class="journal-card-head">
+        <span class="journal-id">Trade #3 · EUR/USD Long</span>
+        <span class="journal-date">2026-04-15 · 14:27 UTC</span>
+      </div>
+
+      <div class="journal-grid">
+        <div class="journal-row"><span class="l">Entry</span><span class="v">1.08542</span></div>
+        <div class="journal-row"><span class="l">Exit</span><span class="v">1.08942</span></div>
+        <div class="journal-row"><span class="l">Direction</span><span class="v">Long ↗</span></div>
+        <div class="journal-row"><span class="l">P&amp;L</span><span class="v">+$2,113.60</span></div>
+        <div class="journal-row"><span class="l">Size</span><span class="v">5.28 lots</span></div>
+        <div class="journal-row"><span class="l">Risk</span><span class="v">$1,056.80 (2%)</span></div>
+        <div class="journal-row"><span class="l">SL</span><span class="v">1.08342 · 20 pips</span></div>
+        <div class="journal-row"><span class="l">TP</span><span class="v">1.08942 · 40 pips</span></div>
+        <div class="journal-row"><span class="l">Actual R:R</span><span class="v">1 : 2.00</span></div>
+        <div class="journal-row"><span class="l">Duration</span><span class="v">2h 14m</span></div>
+        <div class="journal-row"><span class="l">Slippage</span><span class="v">0 pips</span></div>
+        <div class="journal-row"><span class="l">Rules</span><span class="v">8 / 8 ✓</span></div>
+      </div>
+
+      <div class="journal-divider"></div>
+
+      <div class="journal-editable">
+        <div class="journal-editable-row"><span class="l">Emotion</span><span class="input-pill">Calm, confident</span></div>
+        <div class="journal-editable-row"><span class="l">Setup</span><span class="input-pill">Bullish engulfing at H4 demand zone</span></div>
+        <div class="journal-editable-row"><span class="l">Tags</span><span class="input-pill">trend-following, demand-zone, engulfing</span></div>
+        <div class="journal-editable-row"><span class="l">Notes</span><span class="textarea-pill">Entered on retest of H4 demand zone after bullish engulfing candle. Price moved cleanly to TP without retracing past entry. Good execution, plan followed exactly.</span></div>
+      </div>
+    </div>
+
+    <div class="journal-card">
+      <div class="journal-card-head">
+        <span class="journal-id">Trade #2 · GBP/USD Short</span>
+        <span class="journal-date">2026-04-14 · 11:18 UTC</span>
+      </div>
+
+      <div class="journal-grid">
+        <div class="journal-row"><span class="l">Entry</span><span class="v">1.26410</span></div>
+        <div class="journal-row"><span class="l">Exit</span><span class="v">1.26210</span></div>
+        <div class="journal-row"><span class="l">Direction</span><span class="v">Short ↘</span></div>
+        <div class="journal-row"><span class="l">P&amp;L</span><span class="v">+$1,058.40</span></div>
+        <div class="journal-row"><span class="l">Size</span><span class="v">4.20 lots</span></div>
+        <div class="journal-row"><span class="l">Risk</span><span class="v">$1,050.00 (2%)</span></div>
+        <div class="journal-row"><span class="l">SL</span><span class="v">1.26660 · 25 pips</span></div>
+        <div class="journal-row"><span class="l">TP</span><span class="v">1.26210 · 20 pips</span></div>
+        <div class="journal-row"><span class="l">Actual R:R</span><span class="v">1 : 0.80</span></div>
+        <div class="journal-row"><span class="l">Duration</span><span class="v">1h 42m</span></div>
+        <div class="journal-row"><span class="l">Slippage</span><span class="v">+0.2 pips</span></div>
+        <div class="journal-row"><span class="l">Rules</span><span class="v">8 / 8 ✓</span></div>
+      </div>
+
+      <div class="journal-divider"></div>
+
+      <div class="journal-editable">
+        <div class="journal-editable-row"><span class="l">Emotion</span><span class="input-pill">Focused</span></div>
+        <div class="journal-editable-row"><span class="l">Setup</span><span class="input-pill">London open reversal</span></div>
+        <div class="journal-editable-row"><span class="l">Tags</span><span class="input-pill">london-open, reversal, gbp</span></div>
+        <div class="journal-editable-row"><span class="l">Notes</span><span class="textarea-pill">Closed early at 20 pips when momentum stalled. R:R below plan but capital preserved.</span></div>
+      </div>
+    </div>
+
+    <div class="journal-card">
+      <div class="journal-card-head">
+        <span class="journal-id">Trade #1 · EUR/USD Long</span>
+        <span class="journal-date">2026-04-13 · 09:42 UTC</span>
+      </div>
+
+      <div class="journal-grid">
+        <div class="journal-row"><span class="l">Entry</span><span class="v">1.08605</span></div>
+        <div class="journal-row"><span class="l">Exit</span><span class="v">1.08405</span></div>
+        <div class="journal-row"><span class="l">Direction</span><span class="v">Long ↗</span></div>
+        <div class="journal-row"><span class="l">P&amp;L</span><span class="v">−$1,085.00</span></div>
+        <div class="journal-row"><span class="l">Size</span><span class="v">5.28 lots</span></div>
+        <div class="journal-row"><span class="l">Risk</span><span class="v">$1,056.80 (2%)</span></div>
+        <div class="journal-row"><span class="l">SL</span><span class="v">1.08405 · 20 pips · hit</span></div>
+        <div class="journal-row"><span class="l">TP</span><span class="v">1.09005 · 40 pips</span></div>
+        <div class="journal-row"><span class="l">Actual R:R</span><span class="v">1 : −1.00</span></div>
+        <div class="journal-row"><span class="l">Duration</span><span class="v">38m</span></div>
+        <div class="journal-row"><span class="l">Slippage</span><span class="v">+0.4 pips</span></div>
+        <div class="journal-row"><span class="l">Rules</span><span class="v">8 / 8 ✓</span></div>
+      </div>
+
+      <div class="journal-divider"></div>
+
+      <div class="journal-editable">
+        <div class="journal-editable-row"><span class="l">Emotion</span><span class="input-pill">Cautious</span></div>
+        <div class="journal-editable-row"><span class="l">Setup</span><span class="input-pill">Range break · false signal</span></div>
+        <div class="journal-editable-row"><span class="l">Tags</span><span class="input-pill">range-break, stopped-out</span></div>
+        <div class="journal-editable-row"><span class="l">Notes</span><span class="textarea-pill">Stop-loss hit cleanly. Wrong context for entry — chop, not trend. Plan followed; loss within budget.</span></div>
+      </div>
+    </div>
+
+    <div class="cta-row center">
+      <button class="btn btn-ghost">Export CSV</button>
+      <a class="btn btn-primary btn-lg" href="s3-default.html">+ New Trade</a>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
