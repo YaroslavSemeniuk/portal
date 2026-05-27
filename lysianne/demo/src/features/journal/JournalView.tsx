@@ -6,7 +6,6 @@ import { fmt, formatDate, pnlClass, signedFmt, winRate } from '../../lib/format'
 import { isDailyLossBlocked } from '../../lib/riskMetrics';
 import type { JournalEntry } from '../../lib/types';
 import { useGKState } from '../../hooks/useGKState';
-import { MainTopAlerts } from '../../components/layout/MainTopAlerts';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Topbar } from '../../components/layout/Topbar';
 import { PairIcon } from '../../components/ui/PairIcon';
@@ -193,7 +192,6 @@ export function JournalView(): React.ReactElement {
         <Sidebar active="journal" />
         <Topbar />
         <main className="main">
-          <MainTopAlerts showDailyLoss={false} />
           <div className="page-head">
             <div>
               <div className="page-title">Trade journal</div>

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Sim } from '../lib/sim';
-import { getState, setState } from '../lib/store';
-import { DemoSimulator } from '../components/layout/DemoSimulator';
+import { getState, isTradingBlocked, setState } from '../lib/store';
+import { ResetDemoButton } from '../components/layout/ResetDemoButton';
 import { useGKState } from '../hooks/useGKState';
 import { ToastProvider } from './toast';
 import { TradeDraftProvider } from './tradeDraft';
@@ -19,6 +19,7 @@ function RequireRules({ children }: { children: React.ReactNode }): React.ReactE
   const st = useGKState();
   if (st.sessionTerminated) return <Navigate to="/session-ended" replace />;
   if (!st.rulesConfirmed) return <Navigate to="/rules" replace />;
+  if (isTradingBlocked(st)) return <Navigate to="/rules" replace />;
   return <>{children}</>;
 }
 
@@ -55,7 +56,7 @@ function RouterBody(): React.ReactElement {
   return (
     <>
       <SimLifecycle />
-      <DemoSimulator />
+      <ResetDemoButton />
       <Routes>
         <Route path="/" element={<Navigate to={st.sessionTerminated ? '/session-ended' : st.rulesConfirmed ? '/dashboard' : '/entry'} replace />} />
         <Route path="/entry" element={<EntryView />} />

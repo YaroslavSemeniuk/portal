@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { getRulesStaleReason } from '../../lib/store';
+import { Link } from 'react-router-dom';
+import { formatShortDate } from '../../lib/format';
+import { isRulesStaleByAge } from '../../lib/store';
 import { useGKState } from '../../hooks/useGKState';
-import { RulesStaleBanner } from './RulesStaleBanner';
 
 const SESSION_NOTICE_KEY = 'gk-session-notice-dismissed';
 
@@ -13,15 +14,23 @@ export function SessionBanners(): React.ReactElement | null {
 
   if (!st.rulesConfirmed) return null;
 
-  const staleReason = getRulesStaleReason(st);
+  const stale = isRulesStaleByAge(st);
 
-  if (staleReason) {
+  if (stale) {
     return (
-      <RulesStaleBanner
-        reason={staleReason}
-        confirmedAt={st.confirmedAt}
-        className="session-banner"
-      />
+      <div className="banner banner-stale session-banner" role="alert">
+        <div className="banner-icon">!</div>
+        <div className="banner-body">
+          <div className="stale-title">Your rule set is 30+ days old</div>
+          <div className="banner-text">
+            Verify your firm&apos;s current rules before proceeding. Trading is blocked until you re-confirm.
+            {st.confirmedAt ? ` Last verified: ${formatShortDate(st.confirmedAt)}.` : ''}
+          </div>
+        </div>
+        <Link className="btn btn-primary btn-sm" to="/rules">
+          Re-confirm current rules
+        </Link>
+      </div>
     );
   }
 

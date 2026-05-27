@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 function isMobile(): boolean {
-  return window.innerWidth < 1024;
+  return window.innerWidth < 1440;
 }
 
 export function MobileGate({ children }: { children: React.ReactNode }): React.ReactElement {
@@ -23,7 +23,7 @@ export function MobileGate({ children }: { children: React.ReactNode }): React.R
             This platform is designed for desktop use. A mobile companion is planned for Phase 2.
           </div>
           <div className="mobile-gate-hint">
-            Please continue on a desktop browser at 1024px or wider.
+            Please continue on a desktop browser at 1440px or wider.
           </div>
         </div>
       </div>

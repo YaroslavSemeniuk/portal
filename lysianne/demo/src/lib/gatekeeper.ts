@@ -1,6 +1,5 @@
 import { isInsideNewsBlock, newsProximityMinutesUntilBlock, formatNewsTime, newsBlockEndTime } from './news';
-import { dailyLossBlockMessage, dailyLossWarnMessage } from './dailyLossAlert';
-import { DAILY_LOSS_WARN_USAGE_PCT, remainingDailyLossUsd } from './riskMetrics';
+import { nextDailyLossResetLabel, remainingDailyLossUsd } from './riskMetrics';
 import type { GkCheck, GkResult, GKState } from './types';
 
 export interface OrderForm {
@@ -54,9 +53,8 @@ export function evaluate(form: OrderForm, state: GKState, now = Date.now()): GkR
 
   const dailyLossPct = dailyPnL < 0 ? (Math.abs(dailyPnL) / balance) * 100 : 0;
   const dailyLossUsage = dailyLossPct / rules.dailyLoss;
-  const dailyUsagePct = dailyLossUsage * 100;
-  const dailySev =
-    dailyUsagePct >= 100 ? 'block' : dailyUsagePct >= DAILY_LOSS_WARN_USAGE_PCT ? 'warn' : 'pass';
+  const dailySev = dailyLossUsage >= 1 ? 'block' : dailyLossUsage >= 0.7 ? 'warn' : 'pass';
+  const resetLabel = nextDailyLossResetLabel(now);
   checks.push({
     id: 'dailyLoss',
     label: `Daily loss cap ${rules.dailyLoss}%`,
@@ -65,9 +63,9 @@ export function evaluate(form: OrderForm, state: GKState, now = Date.now()): GkR
     val: `${dailyLossPct.toFixed(2)}%`,
     message:
       dailySev === 'block'
-        ? dailyLossBlockMessage(state)
+        ? `Daily loss limit reached. You have used 100% of your daily allowance. Trading is locked until your daily limit resets at ${resetLabel} (demo: use Reset demo).`
         : dailySev === 'warn'
-          ? dailyLossWarnMessage(state)
+          ? `Approaching daily loss limit — you have used ${(dailyLossUsage * 100).toFixed(0)}% of your daily allowance. ${Math.max(0, 100 - dailyLossUsage * 100).toFixed(0)}% remaining.`
           : null,
   });
 
@@ -178,13 +176,7 @@ export function evaluate(form: OrderForm, state: GKState, now = Date.now()): GkR
 
   if (blockers.length) {
     severity = 'block';
-    if (blockers.length === 1) {
-      const id = blockers[0].id;
-      title =
-        id === 'dailyLoss' || id === 'newsWindow' ? '1 Rule preventing execution' : 'Order blocked';
-    } else {
-      title = `${blockers.length} rules block this order`;
-    }
+    title = blockers.length > 1 ? `${blockers.length} rules block this order` : 'Order blocked';
     text = blockers.map((b) => b.message).filter(Boolean).join(' ');
   } else if (softblocks.length) {
     severity = 'softblock';

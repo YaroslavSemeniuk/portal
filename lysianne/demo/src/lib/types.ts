@@ -89,9 +89,8 @@ export interface GKState {
   selected: { symbol: string; direction: Direction | null };
   lastTrade: Position | null;
   rulesConfirmed: boolean;
+  demoState: string;
   confirmedAt: number | null;
-  /** When the current ruleset (rulesEpoch) was published to the account */
-  rulesLoadedAt: number | null;
   /** Bumped when firm ruleset changes; must re-confirm when > confirmedRulesEpoch */
   rulesEpoch: number;
   confirmedRulesEpoch: number;

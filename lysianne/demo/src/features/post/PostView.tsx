@@ -4,7 +4,6 @@ import { computeUnrealized, fmt, pnlClass, signedFmt } from '../../lib/format';
 import { closePositionAtMarket } from '../../lib/positionActions';
 import { Sim } from '../../lib/sim';
 import { useGKState } from '../../hooks/useGKState';
-import { MainTopAlerts } from '../../components/layout/MainTopAlerts';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Topbar } from '../../components/layout/Topbar';
 import { CloseConfirmModal } from '../../components/ui/CloseConfirmModal';
@@ -39,7 +38,6 @@ export function PostView(): React.ReactElement {
           <Sidebar active="" />
           <Topbar />
           <main className="main">
-            <MainTopAlerts />
             <div className="empty" style={{ padding: '80px 20px' }}>
               <div className="empty-illu">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -115,7 +113,6 @@ export function PostView(): React.ReactElement {
         <Sidebar active="" />
         <Topbar />
         <main className="main">
-          <MainTopAlerts />
           <div className="page-head">
             <div>
               <div className="stepper" style={{ marginBottom: 12 }}>

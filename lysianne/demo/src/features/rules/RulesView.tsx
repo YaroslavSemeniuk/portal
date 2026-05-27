@@ -2,35 +2,41 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SEED_RULES } from '../../lib/data';
 import { formatShortDate } from '../../lib/format';
 import { Sim } from '../../lib/sim';
-import { getRulesStaleReason, setState } from '../../lib/store';
+import { isRulesStaleByAge, rulesNeedReconfirm, setState } from '../../lib/store';
 import { useToast } from '../../app/toast';
 import { useGKState } from '../../hooks/useGKState';
-import { RulesStaleBanner } from '../../components/layout/RulesStaleBanner';
 
 export function RulesView(): React.ReactElement {
   const st = useGKState();
   const navigate = useNavigate();
   const toast = useToast();
-  const staleReason = getRulesStaleReason(st);
-  const epochStale = staleReason === 'epoch';
-  const ageStale = staleReason === 'age';
-  const stale = staleReason != null;
+  const epochStale = rulesNeedReconfirm(st);
+  const ageStale = isRulesStaleByAge(st);
+  const stale = epochStale || ageStale;
   const locked = st.rulesConfirmed && !stale;
   const lastVerified =
     st.confirmedAt != null ? formatShortDate(st.confirmedAt) : formatShortDate();
 
   const confirm = () => {
     if (locked && !stale) return;
-    const now = Date.now();
     setState({
       rulesConfirmed: true,
-      confirmedAt: now,
+      confirmedAt: Date.now(),
       confirmedRulesEpoch: st.rulesEpoch,
-      rulesLoadedAt: st.rulesLoadedAt ?? now,
     });
     Sim.start();
     toast(stale ? 'Rules re-confirmed. Trading enabled.' : 'Rules confirmed. Trading enabled.', 'success');
     navigate('/dashboard', { replace: true });
+  };
+
+  const simulateFirmUpdate = () => {
+    setState({ rulesEpoch: st.rulesEpoch + 1 });
+    toast('Demo: firm published a ruleset update — re-confirm to continue trading.', 'info');
+  };
+
+  const simulateAgeStale = () => {
+    setState({ confirmedAt: Date.now() - 31 * 86400000 });
+    toast('Demo: rules marked as 31+ days old.', 'info');
   };
 
   return (
@@ -42,7 +48,7 @@ export function RulesView(): React.ReactElement {
               <div className="page-title">Confirm your prop-firm rules</div>
               <div className="page-sub">
                 {locked && !stale
-                  ? `Rules are locked for this evaluation session. ${st.confirmedAt ? `Rules loaded on ${formatShortDate(st.confirmedAt)}.` : ''} Re-confirm on this screen if a stale-rules banner appears.`
+                  ? `Rules are locked for this evaluation session. ${st.confirmedAt ? `Rules loaded on ${formatShortDate(st.confirmedAt)}.` : ''} Use the demo controls below only to simulate updates.`
                   : ageStale
                     ? 'Your rule set is 30+ days old. Verify your firm’s current rules and re-confirm to resume trading.'
                     : epochStale
@@ -52,13 +58,16 @@ export function RulesView(): React.ReactElement {
             </div>
           </div>
 
-          {staleReason ? (
-            <RulesStaleBanner
-              reason={staleReason}
-              confirmedAt={st.confirmedAt}
-              showCta={false}
-              className="rules-stale-banner"
-            />
+          {ageStale ? (
+            <div className="banner banner-stale" role="alert" style={{ marginBottom: 16 }}>
+              <div className="banner-icon">!</div>
+              <div className="banner-body">
+                <div className="stale-title">Your rule set is 30+ days old</div>
+                <div className="banner-text">
+                  Verify your firm&apos;s current rules before proceeding. Trading is blocked until you re-confirm.
+                </div>
+              </div>
+            </div>
           ) : null}
 
           <div style={{ display: 'grid', gap: 20, width: '100%', minWidth: 0, boxSizing: 'border-box' }}>
@@ -114,19 +123,23 @@ export function RulesView(): React.ReactElement {
             </div>
 
             <div className="cta-row" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-              {locked && !stale ? (
-                <Link className="btn btn-ghost" to="/dashboard">
-                  ← Dashboard
-                </Link>
-              ) : (
-                <Link className="btn btn-ghost" to="/entry">
-                  ← Back
-                </Link>
-              )}
+              <Link className="btn btn-ghost" to="/entry">
+                ← Back
+              </Link>
               <div className="cta-row" style={{ flexWrap: 'wrap', gap: 8 }}>
+                {st.rulesConfirmed ? (
+                  <>
+                    <button type="button" className="btn btn-outline" onClick={simulateFirmUpdate}>
+                      Simulate firm rules update (demo)
+                    </button>
+                    <button type="button" className="btn btn-outline" onClick={simulateAgeStale}>
+                      Simulate 31-day-old rules (demo)
+                    </button>
+                  </>
+                ) : null}
                 {!locked || stale ? (
                   <button type="button" className="btn btn-primary btn-lg" onClick={confirm}>
-                    Confirm rules
+                    {stale ? 'Re-confirm current rules' : 'Confirm & Continue'}
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                       <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>

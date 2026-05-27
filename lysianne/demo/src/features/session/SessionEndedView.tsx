@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { resetDemoSession } from '../../lib/demoScenarios';
+import { resetStore } from '../../lib/store';
 
 export function SessionEndedView(): React.ReactElement {
   return (
@@ -21,14 +21,8 @@ export function SessionEndedView(): React.ReactElement {
               type="button"
               className="btn btn-primary btn-lg"
               onClick={() => {
-                if (
-                  !window.confirm(
-                    'Reset all demo state? Journal, balance and rules will revert to seed values.',
-                  )
-                ) {
-                  return;
-                }
-                resetDemoSession(() => {});
+                resetStore();
+                window.location.href = '/entry';
               }}
             >
               Reset demo

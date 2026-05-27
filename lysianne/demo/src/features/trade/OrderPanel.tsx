@@ -2,17 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { INSTRUMENTS } from '../../lib/data';
 import { evaluate } from '../../lib/gatekeeper';
-import { probeGatekeeper } from '../../lib/rulesStatus';
 import { computeOrder } from '../../lib/orderCalc';
 import { fmt } from '../../lib/format';
 import { Sim } from '../../lib/sim';
 import type { GkResult, GKState } from '../../lib/types';
 import type { TradeDraft } from '../../lib/tradeDraft';
-import { DailyLossGkBar } from '../../components/daily-loss/DailyLossGkBar';
 import { PairIcon } from '../../components/ui/PairIcon';
-import { shouldShowAccountDailyLossBar } from '../../lib/dailyLossAlert';
-import { isDailyLossBlocked } from '../../lib/riskMetrics';
-import { isTradingBlocked } from '../../lib/store';
 
 function escapeHtml(s: string): string {
   return String(s || '').replace(/[&<>"']/g, (c) => (({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as const)[c as '&' | '<' | '>' | '"' | "'"]) || c);
@@ -48,16 +43,8 @@ function GkBar({ g }: { g: GkResult }): React.ReactElement {
   );
 }
 
-function GkWarningsList({
-  checks,
-  hideDailyLoss,
-}: {
-  checks: GkResult['checks'];
-  hideDailyLoss?: boolean;
-}): React.ReactElement | null {
-  const warns = checks.filter(
-    (c) => c.severity === 'warn' && c.message && (!hideDailyLoss || c.id !== 'dailyLoss'),
-  );
+function GkWarningsList({ checks }: { checks: GkResult['checks'] }): React.ReactElement | null {
+  const warns = checks.filter((c) => c.severity === 'warn' && c.message);
   if (!warns.length) return null;
   return (
     <ul className="gk-warnings" aria-label="Rule warnings">
@@ -70,29 +57,7 @@ function GkWarningsList({
   );
 }
 
-function OpGkPanel({
-  gk,
-  accountDailyLossBar,
-  dailyBlocked,
-}: {
-  gk: GkResult;
-  accountDailyLossBar: boolean;
-  dailyBlocked: boolean;
-}): React.ReactElement {
-  const blockers = gk.checks.filter((c) => c.severity === 'block');
-  const onlyDailyBlocks = blockers.length > 0 && blockers.every((c) => c.id === 'dailyLoss');
-  const showDailyBarFirst = dailyBlocked || onlyDailyBlocks;
-
-  return (
-    <div id="op-gk" className="op-gk-stack">
-      {showDailyBarFirst && accountDailyLossBar ? <DailyLossGkBar /> : null}
-      <GkStatusBlock gk={gk} hideDailyLossWarn={accountDailyLossBar} />
-      {!showDailyBarFirst && accountDailyLossBar ? <DailyLossGkBar /> : null}
-    </div>
-  );
-}
-
-function GkStatusBlock({ gk, hideDailyLossWarn }: { gk: GkResult; hideDailyLossWarn?: boolean }): React.ReactElement {
+function GkStatusBlock({ gk }: { gk: GkResult }): React.ReactElement {
   if (gk.severity === 'clear') {
     return (
       <>
@@ -103,18 +68,9 @@ function GkStatusBlock({ gk, hideDailyLossWarn }: { gk: GkResult; hideDailyLossW
             <div className="gk-text">{gk.text}</div>
           </div>
         </div>
-        <GkWarningsList checks={gk.checks} hideDailyLoss={hideDailyLossWarn} />
+        <GkWarningsList checks={gk.checks} />
       </>
     );
-  }
-  const blockers = gk.checks.filter((c) => c.severity === 'block');
-  if (
-    hideDailyLossWarn &&
-    gk.severity === 'block' &&
-    blockers.length > 0 &&
-    blockers.every((c) => c.id === 'dailyLoss')
-  ) {
-    return <></>;
   }
   return <GkBar g={gk} />;
 }
@@ -176,17 +132,12 @@ export function OrderPanel({
     [q],
   );
 
-  const accountDailyLossBar = shouldShowAccountDailyLossBar(st);
-  const dailyBlocked = isDailyLossBlocked(st);
-  const rulesBlocked = isTradingBlocked(st);
-
   const [gkTick, setGkTick] = useState(0);
   useEffect(() => {
+    if (draft.step < 2) return;
     const id = window.setInterval(() => setGkTick((x) => x + 1), 1000);
     return () => window.clearInterval(id);
-  }, []);
-
-  const probeGk = useMemo(() => probeGatekeeper(st), [st, gkTick]);
+  }, [draft.step]);
 
   const calc = useMemo(() => computeOrder(draft, st.balance), [draft, st.balance]);
   const gk = useMemo(
@@ -217,23 +168,17 @@ export function OrderPanel({
     ],
   );
 
-  const panelGk = gk ?? probeGk;
-  const showGkPanel =
-    panelGk.severity === 'block' || panelGk.severity === 'warn' || panelGk.severity === 'softblock' || accountDailyLossBar;
-  const orderBlocked = panelGk.severity === 'block' || dailyBlocked || rulesBlocked;
-
   if (draft.step === 1) {
     const quote = draft.symbol ? Sim.getQuote(draft.symbol) : null;
     const symbolSelected = !!draft.symbol && !!meta;
     const dirDisabled = !symbolSelected || matches.length === 0;
-    const continueDisabled = !draft.direction || dirDisabled || orderBlocked;
+    const continueDisabled = !draft.direction || dirDisabled;
     return (
       <>
         <div className="op-head">
           <div className="op-title">{draft.symbol ? `Order entry · ${draft.symbol}` : 'Order entry'}</div>
           <div className="op-step">Step 1 of 4</div>
         </div>
-        {showGkPanel ? <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} /> : null}
         <div className="op-section">
           <div className="op-section-label">Instrument</div>
           <div className="op-search">
@@ -310,7 +255,7 @@ export function OrderPanel({
             </div>
           </div>
         ) : null}
-        {draft.symbol && continueDisabled && !showGkPanel ? (
+        {draft.symbol && continueDisabled ? (
           <div className="gk-bar neutral">
             <div className="gk-icon gk-icon-svg">
               <GkHintIcon />
@@ -371,7 +316,6 @@ export function OrderPanel({
           <div className="op-title">Order entry · {draft.symbol}</div>
           <div className="op-step">Step 2 of 4</div>
         </div>
-        {showGkPanel ? <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} /> : null}
         <div className="op-section op-risk-mode">
           <div className="op-section-label">Risk mode</div>
           <div className="op-seg">
@@ -416,39 +360,11 @@ export function OrderPanel({
           </div>
           <div className="op-risk-estimate">≈ ${fmt(riskUsdNow, 2)}</div>
         </div>
-        <div className="op-trade-fields">
-          <div className="op-field-row op-trade-fields-primary">
-            <div className="op-field">
-              <span className="op-field-label">Stop loss</span>
-              <input
-                className="op-field-input"
-                type="number"
-                step={meta.pip}
-                value={draft.sl.toFixed(meta.decimals)}
-                onChange={(e) => {
-                  const v = parseFloat(e.target.value);
-                  if (!Number.isNaN(v) && v > 0) setDraft({ sl: v });
-                }}
-              />
-            </div>
-            <div className="op-field">
-              <span className="op-field-label">Take profit</span>
-              <input
-                className="op-field-input"
-                type="number"
-                step={meta.pip}
-                value={draft.tp.toFixed(meta.decimals)}
-                onChange={(e) => {
-                  const v = parseFloat(e.target.value);
-                  if (!Number.isNaN(v) && v > 0) setDraft({ tp: v });
-                }}
-              />
-            </div>
-          </div>
-          <div className="op-field op-trade-fields-entry">
+        <div className="op-field-row op-trade-fields">
+          <div className="op-field">
             <span className="op-field-label">Entry</span>
             <input
-              className="op-field-input op-field-input-secondary"
+              className="op-field-input"
               type="number"
               step={meta.pip}
               value={draft.entry.toFixed(meta.decimals)}
@@ -458,6 +374,32 @@ export function OrderPanel({
               }}
             />
             <span className="op-lots-secondary">{lotsLabel}</span>
+          </div>
+          <div className="op-field">
+            <span className="op-field-label">Stop loss</span>
+            <input
+              className="op-field-input"
+              type="number"
+              step={meta.pip}
+              value={draft.sl.toFixed(meta.decimals)}
+              onChange={(e) => {
+                const v = parseFloat(e.target.value);
+                if (!Number.isNaN(v) && v > 0) setDraft({ sl: v });
+              }}
+            />
+          </div>
+          <div className="op-field">
+            <span className="op-field-label">Take profit</span>
+            <input
+              className="op-field-input"
+              type="number"
+              step={meta.pip}
+              value={draft.tp.toFixed(meta.decimals)}
+              onChange={(e) => {
+                const v = parseFloat(e.target.value);
+                if (!Number.isNaN(v) && v > 0) setDraft({ tp: v });
+              }}
+            />
           </div>
         </div>
         <div className="op-kpi-list op-summary-card">
@@ -484,6 +426,9 @@ export function OrderPanel({
             </span>
           </div>
         </div>
+        <div id="op-gk">
+          <GkStatusBlock gk={gk} />
+        </div>
         <div className="op-cta">
           <div className="op-cta-row">
             <button type="button" className="btn btn-outline" onClick={() => setDraft({ step: 1, entry: null, sl: null, tp: null })}>
@@ -491,8 +436,8 @@ export function OrderPanel({
             </button>
             <button
               type="button"
-              className={`btn btn-full ${orderBlocked ? 'btn-disabled' : 'btn-primary'}`}
-              disabled={orderBlocked}
+              className={`btn btn-full ${gk.severity === 'block' ? 'btn-disabled' : 'btn-primary'}`}
+              disabled={gk.severity === 'block'}
               onClick={() => setDraft({ step: 3 })}
             >
               Continue
@@ -510,7 +455,6 @@ export function OrderPanel({
           <div className="op-title">Review &amp; Confirm</div>
           <div className="op-step">Step 3 of 4</div>
         </div>
-        {showGkPanel ? <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} /> : null}
         <div className="op-review-head">
           <PairIcon iconClass={meta.iconClass} label={meta.short} />
           <div className="op-review-head-meta">
@@ -548,6 +492,7 @@ export function OrderPanel({
             <span className="review-row-v">{calc.rr > 0 ? `1 : ${calc.rr.toFixed(2)}` : '—'}</span>
           </div>
         </div>
+        <GkStatusBlock gk={gk} />
         <div className="review-disclaimer">
           Demo execution simulates broker latency (~200ms), fills with slippage between 0 and 1.5 pips where applicable, and
           applies the stated commission model. No live accounts or real funds are involved; this screen is for training and
@@ -560,8 +505,8 @@ export function OrderPanel({
             </button>
             <button
               type="button"
-              className={`btn btn-full ${orderBlocked ? 'btn-disabled' : 'btn-success'}`}
-              disabled={orderBlocked}
+              className={`btn btn-full ${gk.severity === 'block' ? 'btn-disabled' : 'btn-success'}`}
+              disabled={gk.severity === 'block'}
               onClick={onExecute}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
