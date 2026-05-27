@@ -74,6 +74,7 @@ function normalize(loaded: GKState): GKState {
     ),
     rulesEpoch: loaded.rulesEpoch ?? base.rulesEpoch,
     confirmedRulesEpoch: loaded.confirmedRulesEpoch ?? (loaded.rulesConfirmed ? loaded.rulesEpoch ?? 1 : 0),
+    rulesLoadedAt: loaded.rulesLoadedAt ?? loaded.confirmedAt ?? null,
     nextImpactNewsAt:
       loaded.nextImpactNewsAt != null && loaded.nextImpactNewsAt > Date.now() - 86400000
         ? loaded.nextImpactNewsAt
@@ -143,6 +144,15 @@ export function isRulesStaleByAge(s: GKState): boolean {
   return Date.now() - s.confirmedAt > STALE_DAYS * MS_PER_DAY;
 }
 
+export type RulesStaleReason = 'epoch' | 'age';
+
+/** Primary stale reason for banners — firm update takes precedence over age. */
+export function getRulesStaleReason(s: GKState): RulesStaleReason | null {
+  if (rulesNeedReconfirm(s)) return 'epoch';
+  if (isRulesStaleByAge(s)) return 'age';
+  return null;
+}
+
 export function isTradingBlocked(s: GKState): boolean {
-  return isRulesStaleByAge(s) || rulesNeedReconfirm(s);
+  return getRulesStaleReason(s) != null;
 }

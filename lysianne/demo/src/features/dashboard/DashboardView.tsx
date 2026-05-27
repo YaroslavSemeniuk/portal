@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { INSTRUMENTS, SEED_RULES } from '../../lib/data';
-import { computeUnrealized, fmt, formatDate, formatShortDate, getGreeting, pnlClass, signedFmt } from '../../lib/format';
+import { INSTRUMENTS } from '../../lib/data';
+import { computeUnrealized, fmt, formatDateTime, formatShortDate, getGreeting, pnlClass, signedFmt } from '../../lib/format';
 import { formatNewsCountdown } from '../../lib/news';
-import { dailyLossUsagePct, isDailyLossBlocked } from '../../lib/riskMetrics';
+import { isDailyLossBlocked } from '../../lib/riskMetrics';
+import { isTradingBlocked } from '../../lib/store';
+import { formatRulesActiveSubtitle, getRulesActiveSummary } from '../../lib/rulesStatus';
 import { closePositionAtMarket } from '../../lib/positionActions';
 import { Sim } from '../../lib/sim';
 import { useGKState } from '../../hooks/useGKState';
-import { SessionBanners } from '../../components/layout/SessionBanners';
+import { MainTopAlerts } from '../../components/layout/MainTopAlerts';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Topbar } from '../../components/layout/Topbar';
 import { Sparkline } from '../../components/ui/Sparkline';
@@ -97,7 +99,15 @@ function QuickPairRow({ sym }: { sym: string }): React.ReactElement {
   );
 }
 
-function OpenRow({ p, onClose }: { p: Position; onClose: () => void }): React.ReactElement {
+function OpenRow({
+  p,
+  onClose,
+  closeDisabled,
+}: {
+  p: Position;
+  onClose: () => void;
+  closeDisabled?: boolean;
+}): React.ReactElement {
   useLiveQuotes([p.symbol]);
   const meta = Sim.getMeta(p.symbol);
   const q = Sim.getQuote(p.symbol);
@@ -136,7 +146,13 @@ function OpenRow({ p, onClose }: { p: Position; onClose: () => void }): React.Re
         <span className="pc-l">Unrealized</span>
         <span className={`pc-v mono ${pnlClass(pnl)}`}>{signedFmt(pnl, 2)}</span>
       </div>
-      <button type="button" className="pos-action" onClick={onClose}>
+      <button
+        type="button"
+        className={`pos-action${closeDisabled ? ' pos-action-disabled' : ''}`}
+        onClick={onClose}
+        disabled={closeDisabled}
+        title={closeDisabled ? 'Re-confirm your rules to manage positions' : undefined}
+      >
         Close
       </button>
     </div>
@@ -156,14 +172,15 @@ export function DashboardView(): React.ReactElement {
     return () => window.clearInterval(id);
   }, []);
 
-  const dailyUsage = dailyLossUsagePct(st);
   const dailyBlocked = isDailyLossBlocked(st);
+  const rulesBlocked = isTradingBlocked(st);
+  const tradeLocked = dailyBlocked || rulesBlocked;
+  const rulesSummary = useMemo(() => getRulesActiveSummary(st), [st]);
+  const rulesActiveLine = formatRulesActiveSubtitle(rulesSummary);
   const newsCountdown = formatNewsCountdown(st);
   void newsTick;
-  const rulesSub =
-    st.confirmedAt != null
-      ? `Rules loaded on ${formatShortDate(st.confirmedAt)}`
-      : 'Rules active for this session';
+  const rulesAccepted =
+    st.rulesConfirmed && st.confirmedRulesEpoch === st.rulesEpoch && st.confirmedAt != null;
 
   const pnlPct = st.balance > 0 ? (st.dailyPnL / st.balance) * 100 : 0;
   const profitTarget = st.startingBalance * 0.08;
@@ -205,20 +222,49 @@ export function DashboardView(): React.ReactElement {
         <Sidebar active="dashboard" />
         <Topbar />
         <main className="main">
-          <div className="page-head">
-            <div>
+          <MainTopAlerts />
+          <div className="page-head page-head--dash">
+            <div className="page-head-top">
               <div className="page-title" id="dash-greeting">
                 {getGreeting('Alex')}
               </div>
               <div className="page-sub">
                 {st.positions.length
                   ? `${st.positions.length} open position${st.positions.length > 1 ? 's' : ''}`
-                  : `${SEED_RULES.length} of ${SEED_RULES.length} rules active — checked on every order`}
+                  : rulesActiveLine}
               </div>
             </div>
-            <div className="page-date" id="dash-date">
-              {formatDate()}
-            </div>
+            {!st.positions.length ? (
+              <div className="dash-rules-compact">
+                <p className="dash-rules-summary">
+                  All preset rules are loaded and enforced on every order. View full details on the{' '}
+                  <Link to="/rules">Rules</Link> tab.
+                  {st.confirmedAt ? ` Last verified: ${formatShortDate(st.confirmedAt)}.` : ''}
+                </p>
+                {newsCountdown ? (
+                  <p className="dash-rules-news">
+                    <span className="dash-rules-news-label">Next news</span>
+                    <span className="dash-rules-news-value">{newsCountdown}</span>
+                  </p>
+                ) : null}
+                <dl className="dash-rules-times">
+                  <div className="dash-rules-time">
+                    <dt>Rules added</dt>
+                    <dd>{st.rulesLoadedAt != null ? formatDateTime(st.rulesLoadedAt) : '—'}</dd>
+                  </div>
+                  <div className="dash-rules-time">
+                    <dt>Rules accepted</dt>
+                    <dd>
+                      {rulesAccepted
+                        ? formatDateTime(st.confirmedAt!)
+                        : st.confirmedAt != null
+                          ? `Pending · last ${formatDateTime(st.confirmedAt)}`
+                          : 'Not yet accepted'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            ) : null}
           </div>
 
           <section className="hero">
@@ -259,52 +305,6 @@ export function DashboardView(): React.ReactElement {
             </div>
           </section>
 
-          <SessionBanners />
-
-          {dailyBlocked ? (
-            <div className="banner block" role="alert">
-              <div className="banner-icon">✕</div>
-              <div className="banner-body">
-                <div className="banner-title">Daily loss limit reached</div>
-                <div className="banner-text">No new trades today. Trading resumes when your daily limit resets.</div>
-              </div>
-            </div>
-          ) : dailyUsage >= 90 ? (
-            <div className="banner warn" role="alert">
-              <div className="banner-icon">!</div>
-              <div className="banner-body">
-                <div className="banner-title">Approaching daily loss limit</div>
-                <div className="banner-text">
-                  You have used {dailyUsage.toFixed(0)}% of your daily allowance. {Math.max(0, 100 - dailyUsage).toFixed(0)}%
-                  remaining.
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          <section className="panel">
-            <div className="panel-head">
-              <div>
-                <div className="panel-title">Rules status</div>
-                <div className="panel-sub">
-                  {SEED_RULES.length} of {SEED_RULES.length} rules active — checked on every order
-                </div>
-              </div>
-              {newsCountdown ? (
-                <div className="panel-meta status-line live">
-                  Next news: {newsCountdown}
-                </div>
-              ) : (
-                <div className="panel-meta">{rulesSub}</div>
-              )}
-            </div>
-            <p className="dash-rules-summary">
-              All preset rules are loaded and enforced on every order. View full details on the{' '}
-              <Link to="/rules">Rules</Link> tab.
-              {st.confirmedAt ? ` Last verified: ${formatShortDate(st.confirmedAt)}.` : ''}
-            </p>
-          </section>
-
           <section className="panel">
             <div className="panel-head">
               <div>
@@ -314,16 +314,22 @@ export function DashboardView(): React.ReactElement {
               <div className="panel-meta status-line live">Tick simulator active</div>
             </div>
             <div className="rules" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
-              {LIVE_SYMS.map((s) => (
-                <Link
-                  key={s}
-                  to="/trade"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                  onClick={() => setDraft({ symbol: s, step: 1, direction: null, entry: null, sl: null, tp: null })}
-                >
-                  <PairCard sym={s} layout="col" />
-                </Link>
-              ))}
+              {LIVE_SYMS.map((s) =>
+                tradeLocked ? (
+                  <div key={s} style={{ opacity: 0.55, cursor: 'not-allowed' }} title="Re-confirm your rules to trade">
+                    <PairCard sym={s} layout="col" />
+                  </div>
+                ) : (
+                  <Link
+                    key={s}
+                    to="/trade"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                    onClick={() => setDraft({ symbol: s, step: 1, direction: null, entry: null, sl: null, tp: null })}
+                  >
+                    <PairCard sym={s} layout="col" />
+                  </Link>
+                ),
+              )}
             </div>
           </section>
 
@@ -337,7 +343,9 @@ export function DashboardView(): React.ReactElement {
               ) : null}
             </div>
             {st.positions.length ? (
-              st.positions.map((p) => <OpenRow key={p.id} p={p} onClose={() => setClosePos(p)} />)
+              st.positions.map((p) => (
+                <OpenRow key={p.id} p={p} onClose={() => setClosePos(p)} closeDisabled={rulesBlocked} />
+              ))
             ) : (
               <div className="empty">
                 <div className="empty-illu">
@@ -360,11 +368,15 @@ export function DashboardView(): React.ReactElement {
           </div>
           <div className="op-section">
             <div className="op-section-label">Quick start</div>
-            {dailyBlocked ? (
+            {tradeLocked ? (
               <span
                 className="btn btn-primary btn-full btn-lg btn-disabled"
                 aria-disabled="true"
-                title="Daily loss limit reached."
+                title={
+                  rulesBlocked
+                    ? 'Re-confirm your rules on the Rules tab to resume trading.'
+                    : 'Daily loss limit reached.'
+                }
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                   <path d="M12 5v14M5 12h14" strokeLinecap="round" />
@@ -383,16 +395,22 @@ export function DashboardView(): React.ReactElement {
           <div className="op-section">
             <div className="op-section-label">Quick pairs</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {QUICK_SYMS.map((s) => (
-                <Link
-                  key={s}
-                  to="/trade"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                  onClick={() => setDraft({ symbol: s, step: 1, direction: null, entry: null, sl: null, tp: null })}
-                >
-                  <QuickPairRow sym={s} />
-                </Link>
-              ))}
+              {QUICK_SYMS.map((s) =>
+                tradeLocked ? (
+                  <div key={s} style={{ opacity: 0.55, cursor: 'not-allowed' }} title="Re-confirm your rules to trade">
+                    <QuickPairRow sym={s} />
+                  </div>
+                ) : (
+                  <Link
+                    key={s}
+                    to="/trade"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                    onClick={() => setDraft({ symbol: s, step: 1, direction: null, entry: null, sl: null, tp: null })}
+                  >
+                    <QuickPairRow sym={s} />
+                  </Link>
+                ),
+              )}
             </div>
           </div>
           <div className="op-footer-hint" style={{ marginTop: 'auto' }}>
