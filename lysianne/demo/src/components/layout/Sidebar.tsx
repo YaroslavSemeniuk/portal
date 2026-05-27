@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { fmt } from '../../lib/format';
 import {
@@ -5,9 +6,8 @@ import {
   dailyLossBarTier,
   dailyLossUsagePct,
   dailyLossValueClass,
-  isDailyLossBlocked,
 } from '../../lib/riskMetrics';
-import { isRulesStaleByAge, isTradingBlocked } from '../../lib/store';
+import { getRulesStaleReason, isTradingBlocked } from '../../lib/store';
 import { useGKState } from '../../hooks/useGKState';
 
 function NavIcon({ id }: { id: string }): React.ReactElement {
@@ -44,6 +44,103 @@ const NAV = [
   { id: 'rules', to: '/rules', label: 'Rules' },
 ] as const;
 
+function InfoIcon(): React.ReactElement {
+  return (
+    <svg className="sb-acc-info-svg" viewBox="0 0 24 24" width={14} height={14} aria-hidden="true">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.5" opacity={0.4} />
+      <path
+        d="M12 16.5v-5M12 7.75h.01"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function DrawdownCushionRow({
+  peak,
+  ddFloor,
+  ddCushion,
+  ddPct,
+  drawdownLim,
+}: {
+  peak: number;
+  ddFloor: number;
+  ddCushion: number;
+  ddPct: number;
+  drawdownLim: number;
+}): React.ReactElement {
+  const [open, setOpen] = useState(false);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const usageOfLimit = drawdownLim > 0 ? Math.min(100, (ddPct / drawdownLim) * 100) : 0;
+  const barWarn = ddPct >= 0.85 * drawdownLim;
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (!rowRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div ref={rowRef} className={`sb-acc-row sb-acc-row-dd ${open ? 'is-open' : ''}`}>
+      <div className="sb-acc-head">
+        <span className="sb-acc-l">Drawdown cushion</span>
+        <span className="sb-acc-v">${fmt(ddCushion, 0)} left</span>
+      </div>
+      <div className="sb-acc-bar">
+        <div className={`sb-acc-fill ${barWarn ? 'warn' : ''}`} style={{ width: `${usageOfLimit}%` }} />
+      </div>
+      <div className="sb-acc-dd-foot">
+        <span className="sb-acc-sub">
+          Floor ${fmt(ddFloor, 0)} · {ddPct.toFixed(1)}% of {drawdownLim}% limit
+        </span>
+        <button
+          type="button"
+          className="sb-acc-info-btn"
+          aria-label="Show drawdown details"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <InfoIcon />
+        </button>
+      </div>
+      {open ? (
+        <div className="sb-acc-dd-popover" role="dialog" aria-label="Drawdown cushion details">
+          <dl className="sb-acc-dd-grid">
+            <div className="sb-acc-dd-stat">
+              <dt>Peak equity</dt>
+              <dd>${fmt(peak, 0)}</dd>
+            </div>
+            <div className="sb-acc-dd-stat">
+              <dt>Min balance</dt>
+              <dd>${fmt(ddFloor, 0)}</dd>
+            </div>
+            <div className="sb-acc-dd-stat">
+              <dt>Cushion</dt>
+              <dd>${fmt(ddCushion, 0)}</dd>
+            </div>
+          </dl>
+          <p className="sb-acc-dd-note">
+            Trailing {drawdownLim}% from peak. Balance must stay above the floor or the account fails evaluation.
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function Sidebar({ active }: { active?: string }): React.ReactElement {
   const st = useGKState();
   const loc = useLocation();
@@ -56,9 +153,9 @@ export function Sidebar({ active }: { active?: string }): React.ReactElement {
   const lossValClass = dailyLossValueClass(lossTier);
   const peak = Math.max(st.equityHighWaterMark ?? st.startingBalance, st.balance);
   const ddPct = peak > 0 ? Math.max(0, ((peak - st.balance) / peak) * 100) : 0;
-  const ddRoom = Math.max(0, peak * (1 - st.rules.drawdownLim / 100) - (peak - st.balance));
+  const ddFloor = peak * (1 - st.rules.drawdownLim / 100);
+  const ddCushion = Math.max(0, st.balance - ddFloor);
   const tradingBlocked = isTradingBlocked(st);
-  const ddTooltip = `Dollar cushion before your ${st.rules.drawdownLim}% trailing drawdown limit from peak equity.`;
 
   return (
     <aside className="sidebar">
@@ -114,25 +211,13 @@ export function Sidebar({ active }: { active?: string }): React.ReactElement {
             <div className={`sb-acc-fill ${lossClass}`} style={{ width: `${dailyUsage}%` }} />
           </div>
         </div>
-        <div className="sb-acc-row">
-          <div className="sb-acc-head">
-            <span
-              className="sb-acc-l"
-              title={ddTooltip}
-            >
-              Trailing drawdown room
-            </span>
-            <span className="sb-acc-v" title={ddTooltip}>
-              ${fmt(ddRoom, 0)}
-            </span>
-          </div>
-          <div className="sb-acc-bar">
-            <div
-              className={`sb-acc-fill ${ddPct >= 0.85 * st.rules.drawdownLim ? 'warn' : ''}`}
-              style={{ width: `${Math.min(100, (ddPct / st.rules.drawdownLim) * 100)}%` }}
-            />
-          </div>
-        </div>
+        <DrawdownCushionRow
+          peak={peak}
+          ddFloor={ddFloor}
+          ddCushion={ddCushion}
+          ddPct={ddPct}
+          drawdownLim={st.rules.drawdownLim}
+        />
         <div className="sb-acc-row">
           <div className="sb-acc-head">
             <span className="sb-acc-l">Trading days</span>
@@ -147,11 +232,12 @@ export function Sidebar({ active }: { active?: string }): React.ReactElement {
             />
           </div>
         </div>
-        {isRulesStaleByAge(st) ? (
-          <p className="sb-stale-hint">Rules 30+ days old — re-confirm on Rules tab.</p>
-        ) : null}
-        {isDailyLossBlocked(st) ? (
-          <p className="sb-stale-hint">Daily loss limit reached — no new trades today.</p>
+        {tradingBlocked ? (
+          <p className="sb-stale-hint">
+            {getRulesStaleReason(st) === 'epoch'
+              ? 'Firm rules updated — re-confirm on Rules tab.'
+              : 'Rules 30+ days old — re-confirm on Rules tab.'}
+          </p>
         ) : null}
       </div>
       <div className="sidebar-footer">

@@ -7,6 +7,7 @@ import type { JournalEntry, Position } from '../../lib/types';
 import { useGKState } from '../../hooks/useGKState';
 import { useTradeDraft } from '../../app/tradeDraft';
 import { useToast } from '../../app/toast';
+import { MainTopAlerts } from '../../components/layout/MainTopAlerts';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Topbar } from '../../components/layout/Topbar';
 import { TradeChart } from '../../components/trade/TradeChart';
@@ -89,6 +90,7 @@ export function TradeView(): React.ReactElement {
         <Sidebar active="trade" />
         <Topbar />
         <main className="main">
+          <MainTopAlerts />
           <div className="page-head">
             <div>
               <div className="page-title">New trade</div>

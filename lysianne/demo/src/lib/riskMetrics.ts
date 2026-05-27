@@ -1,5 +1,8 @@
 import type { GKState } from './types';
 
+/** % of daily cap used before account-level warning UI (matches prototype). */
+export const DAILY_LOSS_WARN_USAGE_PCT = 85;
+
 /** Daily loss used as % of the daily loss cap (0–100+). */
 export function dailyLossUsagePct(state: GKState): number {
   const { balance, dailyPnL, rules } = state;
@@ -30,17 +33,42 @@ export function isDailyLossBlocked(state: GKState): boolean {
   return dailyLossUsagePct(state) >= 100;
 }
 
+export function isDailyLossWarning(state: GKState): boolean {
+  const u = dailyLossUsagePct(state);
+  return u >= DAILY_LOSS_WARN_USAGE_PCT && u < 100;
+}
+
+export function dailyLossAllowanceUsd(state: GKState): number {
+  return state.balance * (state.rules.dailyLoss / 100);
+}
+
+export function msUntilDailyLossResetUtc(now = Date.now()): number {
+  const d = new Date(now);
+  const next = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1, 0, 0, 0, 0);
+  return Math.max(0, next - now);
+}
+
+export function formatDailyLossResetCountdown(now = Date.now()): string {
+  const totalSec = Math.floor(msUntilDailyLossResetUtc(now) / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+export function dailyLossResetUtcLabel(): string {
+  return '00:00 UTC';
+}
+
 export function remainingDailyLossUsd(state: GKState): number {
   const cap = state.balance * (state.rules.dailyLoss / 100);
   const used = Math.abs(Math.min(0, state.dailyPnL));
   return Math.max(0, cap - used);
 }
 
-/** Demo: next calendar-day reset at local midnight. */
-export function nextDailyLossResetLabel(now = Date.now()): string {
-  const d = new Date(now);
-  d.setHours(24, 0, 0, 0);
-  return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+/** @deprecated Use dailyLossResetUtcLabel + formatDailyLossResetCountdown */
+export function nextDailyLossResetLabel(): string {
+  return dailyLossResetUtcLabel();
 }
 
 export function drawdownUsagePct(state: GKState): number {
