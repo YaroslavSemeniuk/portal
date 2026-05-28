@@ -1,20 +1,25 @@
+import { useState } from 'react';
 import { fmt, pnlClass, signedFmt } from '../../lib/format';
 import {
   dailyLossBarClass,
   dailyLossBarTier,
   dailyLossUsagePct,
   dailyLossValueClass,
+  trailingDrawdownSnapshot,
 } from '../../lib/riskMetrics';
 import { useGKState } from '../../hooks/useGKState';
+import { DrawdownInfoPopover } from './DrawdownInfoPopover';
 
 export function Topbar(): React.ReactElement {
   const st = useGKState();
+  const [ddOpen, setDdOpen] = useState(false);
   const dailyUsage = dailyLossUsagePct(st);
   const lossTier = dailyLossBarTier(dailyUsage);
   const lossFillClass = dailyLossBarClass(lossTier);
   const lossPctClass = dailyLossValueClass(lossTier);
-  const peak = Math.max(st.equityHighWaterMark ?? st.startingBalance, st.balance);
-  const ddPct = peak > 0 ? Math.max(0, ((peak - st.balance) / peak) * 100) : 0;
+  const { peak, ddPct, ddFloor, drawdownLim } = trailingDrawdownSnapshot(st);
+  const ddUsageOfLimit = drawdownLim > 0 ? Math.min(100, (ddPct / drawdownLim) * 100) : 0;
+  const ddBarWarn = ddPct >= 0.85 * drawdownLim;
 
   return (
     <header className="topbar">
@@ -43,13 +48,24 @@ export function Topbar(): React.ReactElement {
           <div className={`bar-fill ${lossFillClass}`} id="tb-loss-fill" style={{ width: `${dailyUsage}%` }} />
         </div>
       </div>
-      <div className="bar-group">
-        <div className="bar-head">
+      <div className={`bar-group bar-group-dd ${ddOpen ? 'is-open' : ''}`}>
+        <div className="bar-head bar-head-dd">
           <span className="label">Drawdown</span>
           <span className="pct">{ddPct.toFixed(1)}%</span>
+          <DrawdownInfoPopover
+            peak={peak}
+            ddPct={ddPct}
+            ddFloor={ddFloor}
+            drawdownLim={drawdownLim}
+            ddUsageOfLimit={ddUsageOfLimit}
+            onOpenChange={setDdOpen}
+          />
         </div>
         <div className="bar-track">
-          <div className="bar-fill" style={{ width: `${Math.min(100, (ddPct / st.rules.drawdownLim) * 100)}%` }} />
+          <div
+            className={`bar-fill ${ddBarWarn ? 'warn' : ''}`}
+            style={{ width: `${ddUsageOfLimit}%` }}
+          />
         </div>
       </div>
     </header>

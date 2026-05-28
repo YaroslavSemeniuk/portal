@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { INSTRUMENTS } from '../../lib/data';
 import { computeUnrealized, fmt, formatDateTime, formatShortDate, getGreeting, pnlClass, signedFmt } from '../../lib/format';
 import { formatNewsCountdown } from '../../lib/news';
-import { isDailyLossBlocked } from '../../lib/riskMetrics';
 import { isTradingBlocked } from '../../lib/store';
+import { getNewTradeBlockTitle, isNewTradeBlocked } from '../../lib/tradeAccess';
 import { formatRulesActiveSubtitle, getRulesActiveSummary } from '../../lib/rulesStatus';
 import { closePositionAtMarket } from '../../lib/positionActions';
 import { Sim } from '../../lib/sim';
@@ -172,9 +172,9 @@ export function DashboardView(): React.ReactElement {
     return () => window.clearInterval(id);
   }, []);
 
-  const dailyBlocked = isDailyLossBlocked(st);
   const rulesBlocked = isTradingBlocked(st);
-  const tradeLocked = dailyBlocked || rulesBlocked;
+  const tradeLocked = isNewTradeBlocked(st);
+  const tradeLockTitle = getNewTradeBlockTitle(st);
   const rulesSummary = useMemo(() => getRulesActiveSummary(st), [st]);
   const rulesActiveLine = formatRulesActiveSubtitle(rulesSummary);
   const newsCountdown = formatNewsCountdown(st);
@@ -316,7 +316,7 @@ export function DashboardView(): React.ReactElement {
             <div className="rules" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
               {LIVE_SYMS.map((s) =>
                 tradeLocked ? (
-                  <div key={s} style={{ opacity: 0.55, cursor: 'not-allowed' }} title="Re-confirm your rules to trade">
+                  <div key={s} style={{ opacity: 0.55, cursor: 'not-allowed' }} title={tradeLockTitle}>
                     <PairCard sym={s} layout="col" />
                   </div>
                 ) : (
@@ -372,11 +372,7 @@ export function DashboardView(): React.ReactElement {
               <span
                 className="btn btn-primary btn-full btn-lg btn-disabled"
                 aria-disabled="true"
-                title={
-                  rulesBlocked
-                    ? 'Re-confirm your rules on the Rules tab to resume trading.'
-                    : 'Daily loss limit reached.'
-                }
+                title={tradeLockTitle}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                   <path d="M12 5v14M5 12h14" strokeLinecap="round" />
@@ -397,7 +393,7 @@ export function DashboardView(): React.ReactElement {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {QUICK_SYMS.map((s) =>
                 tradeLocked ? (
-                  <div key={s} style={{ opacity: 0.55, cursor: 'not-allowed' }} title="Re-confirm your rules to trade">
+                  <div key={s} style={{ opacity: 0.55, cursor: 'not-allowed' }} title={tradeLockTitle}>
                     <QuickPairRow sym={s} />
                   </div>
                 ) : (

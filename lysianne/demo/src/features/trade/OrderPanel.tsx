@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { INSTRUMENTS } from '../../lib/data';
 import { evaluate } from '../../lib/gatekeeper';
 import { probeGatekeeper } from '../../lib/rulesStatus';
 import { computeOrder } from '../../lib/orderCalc';
-import { fmt } from '../../lib/format';
+import { entryPriceSuffix, fmt } from '../../lib/format';
 import { Sim } from '../../lib/sim';
 import type { GkResult, GKState } from '../../lib/types';
 import type { TradeDraft } from '../../lib/tradeDraft';
@@ -119,6 +119,60 @@ function GkStatusBlock({ gk, hideDailyLossWarn }: { gk: GkResult; hideDailyLossW
   return <GkBar g={gk} />;
 }
 
+function formatPriceLevel(value: number, decimals: number): string {
+  return value.toFixed(decimals);
+}
+
+function parsePriceInput(raw: string): number | null {
+  const trimmed = raw.trim();
+  if (!trimmed || trimmed === '.' || trimmed.endsWith('.')) return null;
+  const v = parseFloat(trimmed);
+  if (Number.isNaN(v) || v <= 0) return null;
+  return v;
+}
+
+/** Local string while typing; commits to draft on input (live) and formats on blur. */
+function usePriceFieldInput(value: number | null | undefined, decimals: number, enabled: boolean) {
+  const [input, setInput] = useState('');
+  const focusedRef = useRef(false);
+
+  useEffect(() => {
+    if (!enabled || value == null) return;
+    if (focusedRef.current) return;
+    setInput(formatPriceLevel(value, decimals));
+  }, [enabled, value, decimals]);
+
+  const focus = () => {
+    focusedRef.current = true;
+  };
+
+  const change = (raw: string, onCommit: (v: number) => void, isValid?: (v: number) => boolean) => {
+    setInput(raw);
+    const v = parsePriceInput(raw);
+    if (v == null) return;
+    if (isValid && !isValid(v)) return;
+    onCommit(v);
+  };
+
+  const blur = (onCommit: (v: number) => void, isValid?: (v: number) => boolean) => {
+    focusedRef.current = false;
+    const trimmed = input.trim();
+    if (!trimmed) {
+      if (value != null) setInput(formatPriceLevel(value, decimals));
+      return;
+    }
+    const v = parseFloat(trimmed);
+    if (Number.isNaN(v) || v <= 0 || (isValid && !isValid(v))) {
+      if (value != null) setInput(formatPriceLevel(value, decimals));
+      return;
+    }
+    onCommit(v);
+    setInput(formatPriceLevel(v, decimals));
+  };
+
+  return { input, focus, change, blur };
+}
+
 function PairRow({
   sym,
   selected,
@@ -169,6 +223,12 @@ export function OrderPanel({
   const meta = draft.symbol ? Sim.getMeta(draft.symbol) : undefined;
 
   const [riskInput, setRiskInput] = useState<string>(String(draft.riskPct));
+  const priceFieldsEnabled =
+    draft.step === 2 && draft.entry != null && draft.sl != null && draft.tp != null && meta != null;
+  const priceDecimals = meta?.decimals ?? 5;
+  const slField = usePriceFieldInput(draft.sl, priceDecimals, priceFieldsEnabled);
+  const tpField = usePriceFieldInput(draft.tp, priceDecimals, priceFieldsEnabled);
+  const entryField = usePriceFieldInput(draft.entry, priceDecimals, priceFieldsEnabled);
 
   const q = (draft.search || '').toLowerCase().trim();
   const matches = useMemo(
@@ -357,6 +417,7 @@ export function OrderPanel({
     const riskUsdNow = (st.balance * draft.riskPct) / 100;
     const positionLots = calc.units / 100000;
     const lotsLabel = `${fmt(positionLots, 2)} lots`;
+    const priceSuffix = entryPriceSuffix(draft.symbol);
     const projectedDayPct =
       st.balance > 0 ? ((st.dailyPnL + calc.tpProfit) / st.balance) * 100 : 0;
     const dayQualifies = calc.tpProfit <= 0 || projectedDayPct >= st.rules.minDailyGain - 0.0001;
@@ -417,46 +478,88 @@ export function OrderPanel({
           <div className="op-risk-estimate">≈ ${fmt(riskUsdNow, 2)}</div>
         </div>
         <div className="op-trade-fields">
+          <p className="op-field-hint" style={{ marginBottom: 8 }}>
+            Price levels for {draft.symbol}
+          </p>
           <div className="op-field-row op-trade-fields-primary">
             <div className="op-field">
               <span className="op-field-label">Stop loss</span>
               <input
                 className="op-field-input"
-                type="number"
-                step={meta.pip}
-                value={draft.sl.toFixed(meta.decimals)}
-                onChange={(e) => {
-                  const v = parseFloat(e.target.value);
-                  if (!Number.isNaN(v) && v > 0) setDraft({ sl: v });
-                }}
+                type="text"
+                inputMode="decimal"
+                value={slField.input}
+                onFocus={slField.focus}
+                onChange={(e) =>
+                  slField.change(
+                    e.target.value,
+                    (v) => setDraft({ sl: v }),
+                    (v) =>
+                      draft.direction === 'long'
+                        ? v < (draft.entry ?? 0)
+                        : v > (draft.entry ?? 0),
+                  )
+                }
+                onBlur={() =>
+                  slField.blur(
+                    (v) => setDraft({ sl: v }),
+                    (v) =>
+                      draft.direction === 'long'
+                        ? v < (draft.entry ?? 0)
+                        : v > (draft.entry ?? 0),
+                  )
+                }
               />
             </div>
             <div className="op-field">
               <span className="op-field-label">Take profit</span>
               <input
                 className="op-field-input"
-                type="number"
-                step={meta.pip}
-                value={draft.tp.toFixed(meta.decimals)}
-                onChange={(e) => {
-                  const v = parseFloat(e.target.value);
-                  if (!Number.isNaN(v) && v > 0) setDraft({ tp: v });
-                }}
+                type="text"
+                inputMode="decimal"
+                value={tpField.input}
+                onFocus={tpField.focus}
+                onChange={(e) =>
+                  tpField.change(
+                    e.target.value,
+                    (v) => setDraft({ tp: v }),
+                    (v) =>
+                      draft.direction === 'long'
+                        ? v > (draft.entry ?? 0)
+                        : v < (draft.entry ?? 0),
+                  )
+                }
+                onBlur={() =>
+                  tpField.blur(
+                    (v) => setDraft({ tp: v }),
+                    (v) =>
+                      draft.direction === 'long'
+                        ? v > (draft.entry ?? 0)
+                        : v < (draft.entry ?? 0),
+                  )
+                }
               />
             </div>
           </div>
           <div className="op-field op-trade-fields-entry">
-            <span className="op-field-label">Entry</span>
-            <input
-              className="op-field-input op-field-input-secondary"
-              type="number"
-              step={meta.pip}
-              value={draft.entry.toFixed(meta.decimals)}
-              onChange={(e) => {
-                const v = parseFloat(e.target.value);
-                if (!Number.isNaN(v) && v > 0) setDraft({ entry: v });
-              }}
-            />
+            <span className="op-field-label">Entry price</span>
+            <div className="op-entry-price-card">
+              <input
+                className="op-entry-price-input"
+                type="text"
+                inputMode="decimal"
+                value={entryField.input}
+                onFocus={entryField.focus}
+                onChange={(e) => entryField.change(e.target.value, (v) => setDraft({ entry: v }))}
+                onBlur={() => entryField.blur((v) => setDraft({ entry: v }))}
+                aria-label={`Entry price${priceSuffix ? ` in ${priceSuffix === '$' ? 'USD' : priceSuffix}` : ''}`}
+              />
+              {priceSuffix ? (
+                <span className="op-entry-price-suffix" aria-hidden="true">
+                  {priceSuffix}
+                </span>
+              ) : null}
+            </div>
             <span className="op-lots-secondary">{lotsLabel}</span>
           </div>
         </div>
