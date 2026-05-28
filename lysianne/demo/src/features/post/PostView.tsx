@@ -138,7 +138,7 @@ export function PostView(): React.ReactElement {
               </div>
             </div>
             <div className="cta-row">
-              <Link className="btn btn-ghost" to="/dashboard">
+              <Link className="btn btn-ghost" to="/">
                 ← Dashboard
               </Link>
               {!isClosed ? (
@@ -291,7 +291,7 @@ export function PostView(): React.ReactElement {
                 <Link className="btn btn-ghost" to="/journal">
                   View in Journal
                 </Link>
-                <Link className="btn btn-primary btn-lg" to="/dashboard">
+                <Link className="btn btn-primary btn-lg" to="/">
                   Back to Dashboard
                 </Link>
               </div>

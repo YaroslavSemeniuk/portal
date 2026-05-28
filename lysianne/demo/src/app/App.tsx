@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Sim } from '../lib/sim';
 import { getState, setState } from '../lib/store';
 import { DemoSimulator } from '../components/layout/DemoSimulator';
@@ -49,26 +49,24 @@ function SimLifecycle(): null {
   return null;
 }
 
-function RouterBody(): React.ReactElement {
+function HomeRoute(): React.ReactElement {
   const st = useGKState();
+  if (st.sessionTerminated) return <Navigate to="/session-ended" replace />;
+  if (!st.rulesConfirmed) return <Navigate to="/entry" replace />;
+  return <DashboardView />;
+}
 
+function RouterBody(): React.ReactElement {
   return (
     <>
       <SimLifecycle />
       <DemoSimulator />
       <Routes>
-        <Route path="/" element={<Navigate to={st.sessionTerminated ? '/session-ended' : st.rulesConfirmed ? '/dashboard' : '/entry'} replace />} />
+        <Route path="/" element={<HomeRoute />} />
+        <Route path="/dashboard" element={<Navigate to="/" replace />} />
         <Route path="/entry" element={<EntryView />} />
         <Route path="/rules" element={<RulesView />} />
         <Route path="/session-ended" element={<SessionEndedView />} />
-        <Route
-          path="/dashboard"
-          element={
-            <RequireRules>
-              <DashboardView />
-            </RequireRules>
-          }
-        />
         <Route
           path="/trade"
           element={
@@ -103,13 +101,13 @@ export function App(): React.ReactElement {
   return (
     <MobileGate>
       <div id="app">
-        <BrowserRouter>
+        <HashRouter>
           <ToastProvider>
             <TradeDraftProvider>
               <RouterBody />
             </TradeDraftProvider>
           </ToastProvider>
-        </BrowserRouter>
+        </HashRouter>
       </div>
     </MobileGate>
   );

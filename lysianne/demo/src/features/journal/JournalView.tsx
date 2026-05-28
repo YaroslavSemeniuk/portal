@@ -176,7 +176,7 @@ export function JournalView(): React.ReactElement {
   const [infoHidden, setInfoHidden] = useState(false);
 
   const rows = useMemo(() => {
-    let list = st.journal.slice().reverse();
+    let list = st.journal.slice().sort((a, b) => b.ts - a.ts);
     if (filter === 'wins') list = list.filter((r) => r.outcome === 'win');
     if (filter === 'losses') list = list.filter((r) => r.outcome === 'loss');
     return list;

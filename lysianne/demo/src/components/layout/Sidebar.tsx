@@ -40,7 +40,7 @@ function NavIcon({ id }: { id: string }): React.ReactElement {
 }
 
 const NAV = [
-  { id: 'dashboard', to: '/dashboard', label: 'Dashboard' },
+  { id: 'dashboard', to: '/', label: 'Dashboard' },
   { id: 'trade', to: '/trade', label: 'Trade' },
   { id: 'journal', to: '/journal', label: 'Journal' },
   { id: 'rules', to: '/rules', label: 'Rules' },

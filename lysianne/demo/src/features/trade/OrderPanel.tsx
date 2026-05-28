@@ -395,7 +395,7 @@ export function OrderPanel({
         ) : null}
         <div className="op-cta">
           <div className="op-cta-row">
-            <Link className="btn btn-outline" to="/dashboard">
+            <Link className="btn btn-outline" to="/">
               Cancel
             </Link>
             <button
