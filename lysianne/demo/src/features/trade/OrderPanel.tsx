@@ -123,8 +123,18 @@ function formatPriceLevel(value: number, decimals: number): string {
   return value.toFixed(decimals);
 }
 
+/** Digits and at most one decimal point (strips letters and other symbols). */
+function sanitizePriceInput(raw: string): string {
+  let s = raw.replace(/[^\d.]/g, '');
+  const dot = s.indexOf('.');
+  if (dot >= 0) {
+    s = s.slice(0, dot + 1) + s.slice(dot + 1).replace(/\./g, '');
+  }
+  return s;
+}
+
 function parsePriceInput(raw: string): number | null {
-  const trimmed = raw.trim();
+  const trimmed = sanitizePriceInput(raw.trim());
   if (!trimmed || trimmed === '.' || trimmed.endsWith('.')) return null;
   const v = parseFloat(trimmed);
   if (Number.isNaN(v) || v <= 0) return null;
@@ -147,8 +157,9 @@ function usePriceFieldInput(value: number | null | undefined, decimals: number, 
   };
 
   const change = (raw: string, onCommit: (v: number) => void, isValid?: (v: number) => boolean) => {
-    setInput(raw);
-    const v = parsePriceInput(raw);
+    const sanitized = sanitizePriceInput(raw);
+    setInput(sanitized);
+    const v = parsePriceInput(sanitized);
     if (v == null) return;
     if (isValid && !isValid(v)) return;
     onCommit(v);
@@ -156,7 +167,7 @@ function usePriceFieldInput(value: number | null | undefined, decimals: number, 
 
   const blur = (onCommit: (v: number) => void, isValid?: (v: number) => boolean) => {
     focusedRef.current = false;
-    const trimmed = input.trim();
+    const trimmed = sanitizePriceInput(input.trim());
     if (!trimmed) {
       if (value != null) setInput(formatPriceLevel(value, decimals));
       return;
