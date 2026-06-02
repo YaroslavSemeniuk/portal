@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { PLATFORM_TAGLINE } from '../../lib/branding';
 import { fmt } from '../../lib/format';
 import {
   dailyLossBarClass,
@@ -123,7 +124,7 @@ export function Sidebar({ active }: { active?: string }): React.ReactElement {
         <div className="logo-mark">P</div>
         <div>
           <div className="logo-text">[Platform]</div>
-          <div className="logo-tagline">Trade with Discipline</div>
+          <div className="logo-tagline">{PLATFORM_TAGLINE}</div>
         </div>
       </div>
       <div className="sidebar-main">

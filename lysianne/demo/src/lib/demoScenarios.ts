@@ -30,15 +30,14 @@ export interface DemoScenarioHelpers {
   toast: (msg: string, kind?: 'success' | 'error' | 'info') => void;
 }
 
-const ENTRY_PATH = '/entry';
-
 /** Clears demo state and opens the pre-rules landing screen (Enter Demo). */
 export function resetDemoSession(resetDraft: () => void): void {
   Sim.stop();
   resetStore();
   resetDraft();
   sessionStorage.removeItem('gk-session-notice-dismissed');
-  window.location.replace(ENTRY_PATH);
+  const entryUrl = `${import.meta.env.BASE_URL}#/entry`;
+  window.location.replace(entryUrl);
 }
 
 export const DEMO_SCENARIO_GROUPS: DemoScenarioGroup[] = [

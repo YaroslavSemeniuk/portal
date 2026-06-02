@@ -6,7 +6,7 @@ import { probeGatekeeper } from '../../lib/rulesStatus';
 import { computeOrder } from '../../lib/orderCalc';
 import { entryPriceSuffix, fmt } from '../../lib/format';
 import { Sim } from '../../lib/sim';
-import type { GkResult, GKState } from '../../lib/types';
+import type { GkCheck, GkResult, GKState } from '../../lib/types';
 import type { TradeDraft } from '../../lib/tradeDraft';
 import { DailyLossGkBar } from '../../components/daily-loss/DailyLossGkBar';
 import { PairIcon } from '../../components/ui/PairIcon';
@@ -43,6 +43,72 @@ function GkBar({ g }: { g: GkResult }): React.ReactElement {
       <div className="gk-content">
         <div className="gk-title">{g.title}</div>
         <div className="gk-text">{g.text}</div>
+      </div>
+    </div>
+  );
+}
+
+function buildStep2Considerations(
+  checks: GkCheck[],
+  minDailyGainPct: number,
+  suppressAccountDailyLoss: boolean,
+): string[] {
+  const byId = (id: string) => checks.find((c) => c.id === id);
+  const items: string[] = [];
+
+  const tradeShare = byId('dailyLossTradeShare');
+  if (tradeShare?.severity === 'warn') {
+    const pct = (tradeShare.val || '0').replace(/%/g, '').trim();
+    items.push(`Daily loss: this trade would use ${pct}% of your remaining allowance`);
+  } else if (!suppressAccountDailyLoss) {
+    const accountDl = byId('dailyLoss');
+    if (accountDl?.severity === 'warn' && accountDl.message) {
+      items.push(`Daily loss: ${accountDl.message}`);
+    }
+  }
+
+  const news = byId('newsProximity');
+  if (news?.severity === 'warn') {
+    const min = (news.val || '').replace(/\D/g, '') || '0';
+    items.push(`News window: high-impact EUR/USD news in ${min} min`);
+  }
+
+  const dayQual = byId('minDailyGain');
+  if (dayQual?.severity === 'warn') {
+    items.push(
+      `Day qualification: TP doesn't meet ${minDailyGainPct}% minimum — adjust or accept this day won't count`,
+    );
+  }
+
+  return items;
+}
+
+function OpGkConsiderationsPanel({
+  gk,
+  minDailyGainPct,
+}: {
+  gk: GkResult;
+  minDailyGainPct: number;
+}): React.ReactElement {
+  const hasTradeShare = gk.checks.some((c) => c.id === 'dailyLossTradeShare' && c.severity === 'warn');
+  const lines = buildStep2Considerations(gk.checks, minDailyGainPct, hasTradeShare);
+  const n = lines.length;
+  const header =
+    n === 0
+      ? 'Within rules — ready to proceed'
+      : `Within rules — ${n} consideration${n === 1 ? '' : 's'} before you proceed`;
+
+  return (
+    <div id="op-gk" className="op-gk-stack">
+      <div className="gk-considerations" role="status">
+        <div className="gk-considerations-head">{header}</div>
+        {n > 0 ? (
+          <ul className="gk-considerations-list" aria-label="Trade considerations">
+            {lines.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </div>
   );
@@ -429,9 +495,6 @@ export function OrderPanel({
     const positionLots = calc.units / 100000;
     const lotsLabel = `${fmt(positionLots, 2)} lots`;
     const priceSuffix = entryPriceSuffix(draft.symbol);
-    const projectedDayPct =
-      st.balance > 0 ? ((st.dailyPnL + calc.tpProfit) / st.balance) * 100 : 0;
-    const dayQualifies = calc.tpProfit <= 0 || projectedDayPct >= st.rules.minDailyGain - 0.0001;
     const slPipsRounded = Math.round(calc.slDistPips * 100) / 100;
     const slPipsText =
       Math.abs(slPipsRounded - Math.round(slPipsRounded)) < 0.001
@@ -443,7 +506,11 @@ export function OrderPanel({
           <div className="op-title">Order entry · {draft.symbol}</div>
           <div className="op-step">Step 2 of 4</div>
         </div>
-        {showGkPanel ? <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} /> : null}
+        {panelGk.severity === 'clear' ? (
+          <OpGkConsiderationsPanel gk={panelGk} minDailyGainPct={st.rules.minDailyGain} />
+        ) : showGkPanel ? (
+          <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} />
+        ) : null}
         <div className="op-section op-risk-mode">
           <div className="op-section-label">Risk mode</div>
           <div className="op-seg">
@@ -590,12 +657,6 @@ export function OrderPanel({
           <div className="op-kpi">
             <span className="op-kpi-l">Risk : reward</span>
             <span className="op-kpi-v">{calc.rr > 0 ? `1 : ${calc.rr.toFixed(2)}` : '—'}</span>
-          </div>
-          <div className="op-kpi">
-            <span className="op-kpi-l">Day qualification</span>
-            <span className={`op-kpi-v ${dayQualifies ? 'success' : 'warn'}`}>
-              {dayQualifies ? 'Qualifies' : 'Does not qualify'}
-            </span>
           </div>
         </div>
         <div className="op-cta">
