@@ -30,7 +30,7 @@ export function RulesView(): React.ReactElement {
     });
     Sim.start();
     toast(stale ? 'Rules re-confirmed. Trading enabled.' : 'Rules confirmed. Trading enabled.', 'success');
-    navigate('/dashboard', { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (
@@ -115,7 +115,7 @@ export function RulesView(): React.ReactElement {
 
             <div className="cta-row" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               {locked && !stale ? (
-                <Link className="btn btn-ghost" to="/dashboard">
+                <Link className="btn btn-ghost" to="/">
                   ← Dashboard
                 </Link>
               ) : (

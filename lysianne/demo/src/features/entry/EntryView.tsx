@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PLATFORM_TAGLINE } from '../../lib/branding';
 
 const MOBILE_MQ = '(max-width: 1023px)';
 
@@ -26,7 +27,7 @@ export function EntryView(): React.ReactElement {
         <div className="center-stage">
           <div className="cs-logo">P</div>
           <div className="cs-product-name">[Platform]</div>
-          <div className="cs-tagline">Trade with Discipline</div>
+          <div className="cs-tagline">{PLATFORM_TAGLINE}</div>
           <div className="cs-tag">
             <span className="dot" /> Live demo · No real funds
           </div>

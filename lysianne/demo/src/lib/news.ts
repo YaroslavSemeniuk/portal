@@ -45,7 +45,7 @@ export function formatNewsCountdown(state: GKState, now = Date.now()): string | 
   if (diff <= 0) {
     if (isInsideNewsBlock(state, now)) {
       const end = newsBlockEndTime(state);
-      return end ? `In news window · resumes ${formatNewsTime(end)}` : 'In news window';
+      return end ? `Resumes ${formatNewsTime(end)}` : null;
     }
     return null;
   }

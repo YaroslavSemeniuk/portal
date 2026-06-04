@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { PLATFORM_TAGLINE } from '../../lib/branding';
 import { fmt } from '../../lib/format';
 import {
   dailyLossBarClass,
   dailyLossBarTier,
   dailyLossUsagePct,
   dailyLossValueClass,
+  trailingDrawdownSnapshot,
 } from '../../lib/riskMetrics';
+import { DrawdownDetailsContent, DrawdownInfoButton } from './DrawdownInfoPopover';
 import { getRulesStaleReason, isTradingBlocked } from '../../lib/store';
 import { useGKState } from '../../hooks/useGKState';
 
@@ -38,26 +41,11 @@ function NavIcon({ id }: { id: string }): React.ReactElement {
 }
 
 const NAV = [
-  { id: 'dashboard', to: '/dashboard', label: 'Dashboard' },
+  { id: 'dashboard', to: '/', label: 'Dashboard' },
   { id: 'trade', to: '/trade', label: 'Trade' },
   { id: 'journal', to: '/journal', label: 'Journal' },
   { id: 'rules', to: '/rules', label: 'Rules' },
 ] as const;
-
-function InfoIcon(): React.ReactElement {
-  return (
-    <svg className="sb-acc-info-svg" viewBox="0 0 24 24" width={14} height={14} aria-hidden="true">
-      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.5" opacity={0.4} />
-      <path
-        d="M12 16.5v-5M12 7.75h.01"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
 
 function DrawdownCushionRow({
   peak,
@@ -106,35 +94,11 @@ function DrawdownCushionRow({
         <span className="sb-acc-sub">
           Floor ${fmt(ddFloor, 0)} · {ddPct.toFixed(1)}% of {drawdownLim}% limit
         </span>
-        <button
-          type="button"
-          className="sb-acc-info-btn"
-          aria-label="Show drawdown details"
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <InfoIcon />
-        </button>
+        <DrawdownInfoButton open={open} onToggle={() => setOpen((v) => !v)} />
       </div>
       {open ? (
         <div className="sb-acc-dd-popover" role="dialog" aria-label="Drawdown cushion details">
-          <dl className="sb-acc-dd-grid">
-            <div className="sb-acc-dd-stat">
-              <dt>Peak equity</dt>
-              <dd>${fmt(peak, 0)}</dd>
-            </div>
-            <div className="sb-acc-dd-stat">
-              <dt>Min balance</dt>
-              <dd>${fmt(ddFloor, 0)}</dd>
-            </div>
-            <div className="sb-acc-dd-stat">
-              <dt>Cushion</dt>
-              <dd>${fmt(ddCushion, 0)}</dd>
-            </div>
-          </dl>
-          <p className="sb-acc-dd-note">
-            Trailing {drawdownLim}% from peak. Balance must stay above the floor or the account fails evaluation.
-          </p>
+          <DrawdownDetailsContent peak={peak} ddFloor={ddFloor} ddCushion={ddCushion} drawdownLim={drawdownLim} />
         </div>
       ) : null}
     </div>
@@ -151,10 +115,7 @@ export function Sidebar({ active }: { active?: string }): React.ReactElement {
   const lossTier = dailyLossBarTier(dailyUsage);
   const lossClass = dailyLossBarClass(lossTier);
   const lossValClass = dailyLossValueClass(lossTier);
-  const peak = Math.max(st.equityHighWaterMark ?? st.startingBalance, st.balance);
-  const ddPct = peak > 0 ? Math.max(0, ((peak - st.balance) / peak) * 100) : 0;
-  const ddFloor = peak * (1 - st.rules.drawdownLim / 100);
-  const ddCushion = Math.max(0, st.balance - ddFloor);
+  const { peak, ddPct, ddFloor, ddCushion, drawdownLim } = trailingDrawdownSnapshot(st);
   const tradingBlocked = isTradingBlocked(st);
 
   return (
@@ -163,7 +124,7 @@ export function Sidebar({ active }: { active?: string }): React.ReactElement {
         <div className="logo-mark">P</div>
         <div>
           <div className="logo-text">[Platform]</div>
-          <div className="logo-tagline">Trade with Discipline</div>
+          <div className="logo-tagline">{PLATFORM_TAGLINE}</div>
         </div>
       </div>
       <div className="sidebar-main">
@@ -216,7 +177,7 @@ export function Sidebar({ active }: { active?: string }): React.ReactElement {
           ddFloor={ddFloor}
           ddCushion={ddCushion}
           ddPct={ddPct}
-          drawdownLim={st.rules.drawdownLim}
+          drawdownLim={drawdownLim}
         />
         <div className="sb-acc-row">
           <div className="sb-acc-head">

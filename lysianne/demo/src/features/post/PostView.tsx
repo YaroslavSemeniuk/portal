@@ -9,6 +9,7 @@ import { Sidebar } from '../../components/layout/Sidebar';
 import { Topbar } from '../../components/layout/Topbar';
 import { CloseConfirmModal } from '../../components/ui/CloseConfirmModal';
 import { PairIcon } from '../../components/ui/PairIcon';
+import { NewTradeButton } from '../../components/ui/NewTradeButton';
 import { useToast } from '../../app/toast';
 export function PostView(): React.ReactElement {
   const st = useGKState();
@@ -50,9 +51,7 @@ export function PostView(): React.ReactElement {
               <div className="empty-title">No active or recent position</div>
               <div className="empty-sub">Open a new trade to see it here.</div>
               <div style={{ marginTop: 16 }}>
-                <Link className="btn btn-primary" to="/trade">
-                  + New trade
-                </Link>
+                <NewTradeButton className="btn btn-primary">+ New trade</NewTradeButton>
               </div>
             </div>
           </main>
@@ -62,9 +61,7 @@ export function PostView(): React.ReactElement {
               <div className="op-step">Ready</div>
             </div>
             <div className="op-section">
-              <Link className="btn btn-primary btn-full btn-lg" to="/trade">
-                + New Trade
-              </Link>
+              <NewTradeButton />
             </div>
           </aside>
         </div>
@@ -141,7 +138,7 @@ export function PostView(): React.ReactElement {
               </div>
             </div>
             <div className="cta-row">
-              <Link className="btn btn-ghost" to="/dashboard">
+              <Link className="btn btn-ghost" to="/">
                 ← Dashboard
               </Link>
               {!isClosed ? (
@@ -149,9 +146,7 @@ export function PostView(): React.ReactElement {
                   Close at market
                 </button>
               ) : (
-                <Link className="btn btn-primary" to="/trade">
-                  + New trade
-                </Link>
+                <NewTradeButton className="btn btn-primary">+ New trade</NewTradeButton>
               )}
             </div>
           </div>
@@ -296,7 +291,7 @@ export function PostView(): React.ReactElement {
                 <Link className="btn btn-ghost" to="/journal">
                   View in Journal
                 </Link>
-                <Link className="btn btn-primary btn-lg" to="/dashboard">
+                <Link className="btn btn-primary btn-lg" to="/">
                   Back to Dashboard
                 </Link>
               </div>
@@ -354,9 +349,7 @@ export function PostView(): React.ReactElement {
           ) : (
             <div className="op-section">
               <div className="op-section-label">Quick start</div>
-              <Link className="btn btn-primary btn-full btn-lg" to="/trade">
-                + New Trade
-              </Link>
+              <NewTradeButton />
             </div>
           )}
           <div className="op-footer-hint" style={{ marginTop: 'auto' }}>

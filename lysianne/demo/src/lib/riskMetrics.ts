@@ -72,8 +72,16 @@ export function nextDailyLossResetLabel(): string {
 }
 
 export function drawdownUsagePct(state: GKState): number {
+  const { ddPct, drawdownLim } = trailingDrawdownSnapshot(state);
+  if (drawdownLim <= 0) return 0;
+  return Math.min(100, (ddPct / drawdownLim) * 100);
+}
+
+export function trailingDrawdownSnapshot(state: GKState) {
   const peak = Math.max(state.equityHighWaterMark ?? state.startingBalance, state.balance);
-  if (peak <= 0) return 0;
-  const ddPct = Math.max(0, ((peak - state.balance) / peak) * 100);
-  return Math.min(100, (ddPct / state.rules.drawdownLim) * 100);
+  const drawdownLim = state.rules.drawdownLim;
+  const ddPct = peak > 0 ? Math.max(0, ((peak - state.balance) / peak) * 100) : 0;
+  const ddFloor = peak * (1 - drawdownLim / 100);
+  const ddCushion = Math.max(0, state.balance - ddFloor);
+  return { peak, ddPct, ddFloor, ddCushion, drawdownLim };
 }

@@ -111,6 +111,16 @@ export function pipValuePerUnit(meta: Instrument): number {
   return meta.pipValue / 100000;
 }
 
+/** Entry price field suffix: $ when quote is USD, otherwise the quote currency code (e.g. EUR, USDT). */
+export function entryPriceSuffix(symbol: string | null | undefined): string {
+  if (!symbol) return '';
+  const slash = symbol.indexOf('/');
+  if (slash < 0) return '';
+  const quote = symbol.slice(slash + 1).trim().toUpperCase();
+  if (quote === 'USD') return '$';
+  return quote;
+}
+
 export function formatBucketLabel(t: number, tfMin: number): string {
   const d = new Date(t * 1000);
   const dd = String(d.getDate()).padStart(2, '0');

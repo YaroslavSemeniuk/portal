@@ -1,9 +1,8 @@
 import { useMemo, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { Sim } from '../../lib/sim';
 import { getState, setState } from '../../lib/store';
 import { fmt, formatDate, pnlClass, signedFmt, winRate } from '../../lib/format';
-import { isDailyLossBlocked } from '../../lib/riskMetrics';
+import { NewTradeButton } from '../../components/ui/NewTradeButton';
 import type { JournalEntry } from '../../lib/types';
 import { useGKState } from '../../hooks/useGKState';
 import { MainTopAlerts } from '../../components/layout/MainTopAlerts';
@@ -177,7 +176,7 @@ export function JournalView(): React.ReactElement {
   const [infoHidden, setInfoHidden] = useState(false);
 
   const rows = useMemo(() => {
-    let list = st.journal.slice().reverse();
+    let list = st.journal.slice().sort((a, b) => b.ts - a.ts);
     if (filter === 'wins') list = list.filter((r) => r.outcome === 'win');
     if (filter === 'losses') list = list.filter((r) => r.outcome === 'loss');
     return list;
@@ -271,19 +270,7 @@ export function JournalView(): React.ReactElement {
           </div>
           <div className="op-section">
             <div className="op-section-label">Quick start</div>
-            {isDailyLossBlocked(st) ? (
-              <span
-                className="btn btn-primary btn-full btn-lg btn-disabled"
-                aria-disabled="true"
-                title="Daily loss limit reached."
-              >
-                + New Trade
-              </span>
-            ) : (
-              <Link className="btn btn-primary btn-full btn-lg" to="/trade">
-                + New Trade
-              </Link>
-            )}
+            <NewTradeButton />
           </div>
           <div className="op-footer-hint" style={{ marginTop: 'auto' }}>
             Click any note field below to edit. Changes are saved automatically.
