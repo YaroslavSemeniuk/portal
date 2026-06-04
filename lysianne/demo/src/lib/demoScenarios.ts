@@ -1,6 +1,7 @@
 import { DAILY_LOSS_WARN_USAGE_PCT } from './riskMetrics';
 import { Sim } from './sim';
 import { getState, resetStore, setState } from './store';
+import type { TradeDraft } from './tradeDraft';
 import type { GKState } from './types';
 
 export type DemoScenarioId =
@@ -12,7 +13,9 @@ export type DemoScenarioId =
   | 'rulesFirmUpdate'
   | 'rulesAgeStale'
   | 'rulesOk'
-  | 'newsSoon';
+  | 'newsSoon'
+  | 'step2Considerations'
+  | 'step2ConsiderationsReady';
 
 export interface DemoScenarioGroup {
   label: string;
@@ -27,6 +30,7 @@ export interface DemoScenarioDef {
 
 export interface DemoScenarioHelpers {
   resetDraft: () => void;
+  setDraft: (patch: Partial<TradeDraft> | ((d: TradeDraft) => TradeDraft)) => void;
   toast: (msg: string, kind?: 'success' | 'error' | 'info') => void;
 }
 
@@ -62,6 +66,13 @@ export const DEMO_SCENARIO_GROUPS: DemoScenarioGroup[] = [
     label: 'News',
     scenarios: [{ id: 'newsSoon', label: 'News in ~22m', requiresRules: true }],
   },
+  {
+    label: 'Step 2',
+    scenarios: [
+      { id: 'step2Considerations', label: '3 considerations', requiresRules: true },
+      { id: 'step2ConsiderationsReady', label: 'Ready to proceed', requiresRules: true },
+    ],
+  },
 ];
 
 function dailyCapUsd(st: GKState): number {
@@ -74,8 +85,37 @@ function applyDailyPnL(usageFraction: number): void {
   setState({ dailyPnL: usageFraction <= 0 ? 0 : -cap * usageFraction });
 }
 
+/** Prefill EUR/USD long at Step 2 (same geometry as Continue on Step 1). */
+function seedStep2EurUsdLong(setDraft: DemoScenarioHelpers['setDraft'], riskPct: number): boolean {
+  const sym = 'EUR/USD';
+  const meta = Sim.getMeta(sym);
+  const quote = Sim.getQuote(sym);
+  if (!meta || !quote) return false;
+  const entry = quote.last;
+  const slDist = meta.pip * 13;
+  const sl = entry - slDist;
+  const tpDist = meta.pip * 26;
+  const tp = entry + tpDist;
+  const balance = getState().balance;
+  const riskUsd = (balance * riskPct) / 100;
+  setState({ selected: { symbol: sym, direction: 'long' } });
+  setDraft({
+    step: 2,
+    symbol: sym,
+    direction: 'long',
+    riskMode: 'percent',
+    riskPct,
+    riskUsd,
+    entry,
+    sl,
+    tp,
+    search: '',
+  });
+  return true;
+}
+
 export function applyDemoScenario(id: DemoScenarioId, helpers: DemoScenarioHelpers): void {
-  const { resetDraft, toast } = helpers;
+  const { resetDraft, setDraft, toast } = helpers;
 
   if (id === 'reset') {
     if (!window.confirm('Reset all demo state? Journal, balance and rules will revert to seed values.')) return;
@@ -120,6 +160,24 @@ export function applyDemoScenario(id: DemoScenarioId, helpers: DemoScenarioHelpe
     case 'newsSoon':
       setState({ nextImpactNewsAt: Date.now() + 22 * 60 * 1000 });
       toast('Demo: high-impact news in ~22 minutes.', 'info');
+      break;
+    case 'step2Considerations':
+      applyDailyPnL(0.88);
+      setState({ nextImpactNewsAt: Date.now() + 22 * 60 * 1000 });
+      if (seedStep2EurUsdLong(setDraft, 2)) {
+        toast('Demo: Step 2 preset — open Trade to see 3 considerations.', 'info');
+      } else {
+        toast('Demo: daily + news set — open Trade → EUR/USD → Step 2.', 'info');
+      }
+      break;
+    case 'step2ConsiderationsReady':
+      applyDailyPnL(0);
+      setState({ nextImpactNewsAt: Date.now() + 7 * 24 * 60 * 60 * 1000 });
+      if (seedStep2EurUsdLong(setDraft, 1)) {
+        toast('Demo: Step 2 preset — open Trade for “ready to proceed”.', 'info');
+      } else {
+        toast('Demo: cleared warnings — open Trade → Step 2.', 'info');
+      }
       break;
     default:
       break;

@@ -25,7 +25,7 @@ export function DemoSimulator(): React.ReactElement | null {
   const loc = useLocation();
   const toast = useToast();
   const st = useGKState();
-  const { resetDraft } = useTradeDraft();
+  const { resetDraft, setDraft } = useTradeDraft();
   const [open, setOpen] = useState(false);
 
   if (loc.pathname === '/entry' || loc.pathname === '/session-ended') return null;
@@ -33,7 +33,7 @@ export function DemoSimulator(): React.ReactElement | null {
   const hint = activeScenarioHint(st);
 
   const run = (id: DemoScenarioId) => {
-    applyDemoScenario(id, { resetDraft, toast });
+    applyDemoScenario(id, { resetDraft, setDraft, toast });
     if (id !== 'reset') setOpen(false);
   };
 
