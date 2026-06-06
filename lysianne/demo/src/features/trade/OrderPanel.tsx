@@ -370,7 +370,11 @@ export function OrderPanel({
           <div className="op-title">{draft.symbol ? `Order entry · ${draft.symbol}` : 'Order entry'}</div>
           <div className="op-step">Step 1 of 4</div>
         </div>
-        {showGkPanel ? <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} /> : null}
+        {panelGk.severity === 'clear' ? (
+          <OpGkConsiderationsPanel gk={panelGk} minDailyGainPct={st.rules.minDailyGain} />
+        ) : showGkPanel ? (
+          <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} />
+        ) : null}
         <div className="op-section">
           <div className="op-section-label">Instrument</div>
           <div className="op-search">
@@ -685,7 +689,11 @@ export function OrderPanel({
           <div className="op-title">Review &amp; Confirm</div>
           <div className="op-step">Step 3 of 4</div>
         </div>
-        {showGkPanel ? <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} /> : null}
+        {panelGk.severity === 'clear' ? (
+          <OpGkConsiderationsPanel gk={panelGk} minDailyGainPct={st.rules.minDailyGain} />
+        ) : showGkPanel ? (
+          <OpGkPanel gk={panelGk} accountDailyLossBar={accountDailyLossBar} dailyBlocked={dailyBlocked} />
+        ) : null}
         <div className="op-review-head">
           <PairIcon iconClass={meta.iconClass} label={meta.short} />
           <div className="op-review-head-meta">
