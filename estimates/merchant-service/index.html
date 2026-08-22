@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merchant Service — Design Estimate · YARSY</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Design estimate for the Merchant Cabinet: delivery plan, scope breakdown, assumptions and terms.">
+<style>
+  /* ── Apple HIG token set ─────────────────────────────────────────── */
+  :root {
+    --bg: #f2f2f7;
+    --card: #ffffff;
+    --fill-quaternary: rgba(116, 116, 128, 0.08);
+    --fill-tertiary: rgba(116, 116, 128, 0.12);
+
+    --label: #000000;
+    --label-secondary: rgba(60, 60, 67, 0.6);
+    --label-tertiary: rgba(60, 60, 67, 0.3);
+
+    --separator: rgba(60, 60, 67, 0.29);
+
+    --accent: #0071e3;
+    --accent-soft: rgba(0, 113, 227, 0.12);
+
+    --radius-group: 12px;
+    --radius-card: 18px;
+    --inset: 16px;
+
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #000000;
+      --card: #1c1c1e;
+      --fill-quaternary: rgba(118, 118, 128, 0.18);
+      --fill-tertiary: rgba(118, 118, 128, 0.24);
+
+      --label: #ffffff;
+      --label-secondary: rgba(235, 235, 245, 0.6);
+      --label-tertiary: rgba(235, 235, 245, 0.3);
+
+      --separator: rgba(84, 84, 88, 0.65);
+
+      --accent: #0a84ff;
+      --accent-soft: rgba(10, 132, 255, 0.18);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #000000;
+    --card: #1c1c1e;
+    --fill-quaternary: rgba(118, 118, 128, 0.18);
+    --fill-tertiary: rgba(118, 118, 128, 0.24);
+
+    --label: #ffffff;
+    --label-secondary: rgba(235, 235, 245, 0.6);
+    --label-tertiary: rgba(235, 235, 245, 0.3);
+
+    --separator: rgba(84, 84, 88, 0.65);
+
+    --accent: #0a84ff;
+    --accent-soft: rgba(10, 132, 255, 0.18);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--label);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+                 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.47;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding:
+      calc(28px + env(safe-area-inset-top)) calc(var(--inset) + env(safe-area-inset-right))
+      calc(40px + env(safe-area-inset-bottom)) calc(var(--inset) + env(safe-area-inset-left));
+  }
+
+  /* ── Large Title ─────────────────────────────────────────────────── */
+  .titlebar { padding: 8px 4px 22px; }
+
+  .eyebrow {
+    margin: 0 0 6px;
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+  }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: 34px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.026em;
+    text-wrap: balance;
+  }
+
+  .lede {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--label-secondary);
+    max-width: 60ch;
+  }
+  .lede + .lede { margin-top: 10px; }
+
+  /* ── Summary card ────────────────────────────────────────────────── */
+  .summary {
+    background: var(--card);
+    border-radius: var(--radius-card);
+    padding: 20px var(--inset);
+    margin-bottom: 32px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+  }
+
+  .metric { padding: 0 12px; position: relative; }
+  .metric:first-child { padding-left: 0; }
+  .metric:last-child { padding-right: 0; }
+  .metric + .metric::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 2px; bottom: 2px;
+    width: 1px;
+    background: var(--separator);
+  }
+
+  .metric .k {
+    display: block;
+    font-size: 11.5px;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--label-secondary);
+    margin-bottom: 5px;
+  }
+  .metric .v {
+    display: block;
+    font-size: clamp(19px, 4.4vw, 23px);
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric .u {
+    font-size: 0.66em;
+    font-weight: 500;
+    color: var(--label-secondary);
+    letter-spacing: 0;
+  }
+  .metric.total .v { color: var(--accent); }
+
+  /* ── Section headers ─────────────────────────────────────────────── */
+  .group-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0;
+    padding: 0 var(--inset) 7px;
+    font-size: 13px;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--label-secondary);
+  }
+  .group-header .hint {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--label-secondary);
+  }
+
+  .section-intro {
+    margin: 0 0 12px;
+    padding: 0 var(--inset);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+  }
+
+  .group {
+    background: var(--card);
+    border-radius: var(--radius-group);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .group-footnote {
+    margin: 0 0 32px;
+    padding: 0 var(--inset);
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--label-secondary);
+  }
+  .group:has(+ .group-footnote) { margin-bottom: 8px; }
+
+  /* ── Stages ──────────────────────────────────────────────────────── */
+  .stages { padding: 4px 0; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    column-gap: 14px;
+    padding: 14px var(--inset);
+    position: relative;
+  }
+  .stage + .stage { border-top: 1px solid var(--separator); }
+
+  .stage .no {
+    grid-row: 1;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    margin-top: 1px;
+  }
+  .stage .no.ongoing {
+    background: transparent;
+    border: 1.5px dashed var(--accent);
+    color: var(--accent);
+  }
+
+  .stage.sub { padding-left: calc(var(--inset) + 16px); }
+
+  .stage.sub .connector {
+    grid-row: 1;
+    width: 28px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .stage.sub .connector::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    margin-left: -0.75px;
+    width: 1.5px;
+    height: 26px;
+    background: var(--separator);
+  }
+  .stage.sub .connector i {
+    position: relative;
+    flex: none;
+    margin-top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--accent);
+  }
+
+  .gate-pill {
+    display: inline-block;
+    vertical-align: 2px;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .stage .body { grid-column: 2; grid-row: 1; }
+
+  .stage .alloc {
+    grid-column: 3;
+    grid-row: 1;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
+    color: var(--label-secondary);
+    margin-top: 2px;
+  }
+
+  .stage h3 {
+    margin: 0 0 3px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+  .stage .goal {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+  }
+  .stage .out {
+    margin: 8px 0 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .stage .out svg { width: 13px; height: 13px; flex: none; }
+
+  /* ── Disclosure rows ─────────────────────────────────────────────── */
+  .row { border-top: 1px solid var(--separator); }
+  .row:first-child { border-top: 0; }
+
+  .row > summary {
+    display: grid;
+    grid-template-columns: 1fr auto 16px;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 56px;
+    padding: 11px var(--inset);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 180ms var(--ease);
+  }
+  .row > summary::-webkit-details-marker { display: none; }
+  .row > summary:hover { background: var(--fill-quaternary); }
+  .row > summary:active { background: var(--fill-tertiary); }
+  .row > summary:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: -3px;
+    border-radius: 4px;
+  }
+
+  .row .name {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .bar {
+    grid-column: 1;
+    grid-row: 2;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--fill-tertiary);
+    margin-top: 8px;
+    max-width: 240px;
+    overflow: hidden;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+
+  .figures {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .figures .hours {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .figures .cost {
+    display: block;
+    font-size: 13px;
+    color: var(--label-secondary);
+    margin-top: 1px;
+  }
+
+  .chev {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    width: 13px;
+    height: 13px;
+    justify-self: end;
+    color: var(--label-tertiary);
+    transition: transform 250ms var(--ease);
+  }
+  .row[open] .chev { transform: rotate(90deg); }
+
+  .row .detail { padding: 0 var(--inset) 20px; }
+  .row .detail p.lead {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--label);
+  }
+  .row .detail ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .row .detail li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+  }
+  .row .detail li b {
+    color: var(--label);
+    font-weight: 600;
+  }
+  .row .detail li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 9px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--label-tertiary);
+  }
+
+  .row[open] .detail { animation: reveal 280ms var(--ease); }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ── Total row ───────────────────────────────────────────────────── */
+  .total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+    padding: 12px var(--inset);
+    background: var(--accent-soft);
+    border-top: 1px solid var(--separator);
+  }
+  .total-row .lbl { font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .total-row .val {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .total-row .val b {
+    display: block;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .total-row .val span {
+    display: block;
+    font-size: 13px;
+    color: var(--label-secondary);
+  }
+
+  /* ── Plain list (icon + title + description) ─────────────────────── */
+  .plain { margin: 0; padding: 0; list-style: none; }
+  .plain li {
+    display: grid;
+    grid-template-columns: 17px 1fr;
+    gap: 4px 11px;
+    padding: 13px var(--inset);
+    border-top: 1px solid var(--separator);
+  }
+  .plain li:first-child { border-top: 0; }
+  .plain svg {
+    width: 17px; height: 17px;
+    margin-top: 3px;
+    color: var(--label-tertiary);
+  }
+  .plain .t {
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--label);
+  }
+  .plain .d {
+    grid-column: 2;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--label-secondary);
+  }
+  .plain.affirm svg { color: var(--accent); }
+
+  /* ── Key–value terms list ────────────────────────────────────────── */
+  .terms { margin: 0; padding: 0; }
+  .terms > div {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 4px 16px;
+    padding: 13px var(--inset);
+    border-top: 1px solid var(--separator);
+  }
+  .terms > div:first-child { border-top: 0; }
+  .terms dt {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--label);
+  }
+  .terms dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.47;
+    color: var(--label-secondary);
+  }
+  .terms dd b {
+    color: var(--label);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Footer ──────────────────────────────────────────────────────── */
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 10px;
+    padding: 4px var(--inset) 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+    text-align: center;
+  }
+  footer span::after {
+    content: "·";
+    margin-left: 10px;
+    color: var(--label-tertiary);
+  }
+  footer span:last-child::after { content: none; }
+
+  @media (min-width: 768px) {
+    :root { --inset: 24px; }
+    .titlebar { padding-left: 8px; padding-right: 8px; }
+    h1 { font-size: 40px; }
+    .bar { max-width: 320px; }
+    .lede { max-width: 68ch; }
+    .row .detail li { max-width: 68ch; }
+    .row .detail p.lead { max-width: 66ch; }
+    .stage .goal { max-width: 62ch; }
+  }
+
+  @media (max-width: 560px) {
+    .summary-grid { grid-template-columns: 1fr 1fr; row-gap: 0; }
+    .metric { padding: 0 0 0 12px; }
+    .metric:nth-child(odd) { padding-left: 0; }
+    .metric:nth-child(-n+2) { padding-bottom: 16px; }
+    .metric:nth-child(n+3) {
+      padding-top: 16px;
+      border-top: 1px solid var(--separator);
+    }
+    .metric:nth-child(3)::before { display: none; }
+    .terms > div { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 400px) {
+    .stage { grid-template-columns: 30px 1fr; }
+    .stage .alloc {
+      grid-column: 2;
+      grid-row: 2;
+      text-align: left;
+      margin-top: 8px;
+    }
+    .stage.sub { padding-left: calc(var(--inset) + 10px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { max-width: 100%; padding: 0; }
+    .group, .summary { border: 1px solid #d0d0d5; border-radius: 8px; }
+    .row, .stage, .plain li, .terms > div { break-inside: avoid; }
+    .chev, .group-header .hint { display: none; }
+    .row > summary { min-height: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="titlebar">
+    <p class="eyebrow">Design Estimate</p>
+    <h1>Merchant Cabinet</h1>
+    <p class="lede">A self-service cabinet for business clients who accept payments through the service. The merchant registers, creates shops, obtains integration keys, and tracks operations and balances without contacting support — which is the commercial point of the product: every task the merchant completes alone is a support ticket that never gets opened.</p>
+    <p class="lede">Interface language is English. This is a web cabinet with desktop as the primary platform, and the scope requires it to work fully on mobile as well. Rather than drawing every screen twice, the mobile effort is concentrated where the task is genuinely mobile — checking balances, scanning operations, opening a password link from an email — while forms simply reflow into a single column.</p>
+  </div>
+
+  <section class="summary" aria-label="Estimate summary">
+    <div class="summary-grid">
+      <div class="metric">
+        <span class="k">Scope</span>
+        <span class="v">200<span class="u"> h</span></span>
+      </div>
+      <div class="metric">
+        <span class="k">Rate</span>
+        <span class="v">$30<span class="u">/h</span></span>
+      </div>
+      <div class="metric">
+        <span class="k">Duration</span>
+        <span class="v">7<span class="u"> weeks</span></span>
+      </div>
+      <div class="metric total">
+        <span class="k">Total</span>
+        <span class="v">$6,000</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stages ─────────────────────────────────────────────────── -->
+  <h2 class="group-header">
+    <span>Delivery plan</span>
+    <span class="hint">Indicative allocation</span>
+  </h2>
+  <p class="section-intro">Three stages separated by approval gates. Each stage starts only once the previous one is signed off, which keeps rework out of the budget: the expensive scenario is a flow change discovered after all states are drawn, and the gates exist to prevent exactly that.</p>
+
+  <section class="group stages">
+
+    <div class="stage">
+      <div class="no">1</div>
+      <div class="body">
+        <h3>Screencast and flow audit</h3>
+        <p class="goal">A recorded walkthrough of the current cabinet across every screen in scope, annotated against the specification. It captures how the system behaves today — screen order, transitions, states, and the outcome of each step — and flags where the live product and the written scope diverge. The discussion then starts from evidence rather than assumptions.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: documented as-is flow
+        </p>
+      </div>
+      <div class="alloc">20 h</div>
+    </div>
+
+    <div class="stage sub">
+      <div class="connector" aria-hidden="true"><i></i></div>
+      <div class="body">
+        <h3>Screencast approval <span class="gate-pill">Gate 1.1</span></h3>
+        <p class="goal">The client walks the flow and confirms which scenario is replicated, where changes are required, and what replaces them. This gate is the entry point for the entire design phase — once it closes, the screen list is fixed and every later change becomes a change request.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: agreed to-be flow
+        </p>
+      </div>
+      <div class="alloc">included</div>
+    </div>
+
+    <div class="stage">
+      <div class="no">2</div>
+      <div class="body">
+        <h3>Merchant core features</h3>
+        <p class="goal">The key functionality is integrated into DPay so the client evaluates it inside the actual product rather than on standalone mockups. Covers the design system, sign-in, shops and integration, and operations — the four blocks that carry the commercial risk. Sign-off here removes the question mark from the remaining scope.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: core screens in DPay context
+        </p>
+      </div>
+      <div class="alloc">100 h</div>
+    </div>
+
+    <div class="stage">
+      <div class="no">3</div>
+      <div class="body">
+        <h3>Remaining flows and states</h3>
+        <p class="goal">Operations export, merchant, profile, the documentation section and email templates are completed, followed by every screen state and edge case: empty lists, errors, loading, expired links, warnings ahead of irreversible actions, and behaviour on narrow viewports. This is the work that determines whether the cabinet holds up in production.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: full set of screens and states
+        </p>
+      </div>
+      <div class="alloc">58 h</div>
+    </div>
+
+    <div class="stage">
+      <div class="no ongoing" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 3v5h-5"/></svg>
+      </div>
+      <div class="body">
+        <h3>Reviews, QA and handoff</h3>
+        <p class="goal">Runs across all three stages rather than at the end: internal reviews before each client showing, revision cycles after each gate, visual consistency checks, and file preparation for development.</p>
+      </div>
+      <div class="alloc">22 h</div>
+    </div>
+
+  </section>
+
+  <!-- ── Scope ──────────────────────────────────────────────────── -->
+  <h2 class="group-header">
+    <span>Scope of work</span>
+    <span class="hint">Tap a block for details</span>
+  </h2>
+  <p class="section-intro">Every screen in the cabinet plus four email templates, each in desktop and mobile states. The exact screen list is settled at the stage 1.1 gate, which is what the flow audit exists to produce. The two heaviest blocks account for 38% of the estimate.</p>
+
+  <section class="group">
+
+    <details class="row">
+      <summary>
+        <span class="name">Screencast and flow audit</span>
+        <span class="bar" aria-hidden="true"><i style="width:50%"></i></span>
+        <span class="figures"><span class="hours">20 h</span><span class="cost">$600</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The opening block and the reference point for everything after it. The current cabinet is walked screen by screen and recorded, then annotated against the written scope. The value is not the recording itself but what it surfaces: the places where the live product and the specification disagree, and the transitions nobody documented. Resolving those before design starts is what makes the stage 1.1 gate meaningful.</p>
+        <ul>
+          <li><b>Full walkthrough of the live cabinet</b> — every screen in scope, in the order a merchant meets them</li>
+          <li><b>Annotated recording</b> — transitions, states, and the outcome of each step captured as they behave today</li>
+          <li><b>Gap list</b> — where the running product diverges from the scope document, and which behaviour is intentional</li>
+          <li><b>Basis for the approval gate</b> — the artefact the client reviews to confirm what is replicated and what changes</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">UI Kit / Design System</span>
+        <span class="bar" aria-hidden="true"><i style="width:40%"></i></span>
+        <span class="figures"><span class="hours">16 h</span><span class="cost">$480</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The foundation every other screen is assembled from. The cabinet is predominantly tables, forms, and cards, so the components are defined once and the interface is composed from them rather than drawn screen by screen. The work extends the existing DPay design system: components the cabinet needs but the system does not yet carry are added and folded back in, so the system grows with the project instead of forking away from it.</p>
+        <ul>
+          <li><b>Colour palette and type scale</b> — inherited from DPay, extended where the cabinet requires it</li>
+          <li><b>New and missing components</b> — inputs, buttons, tabs, tables, cards, tooltips; whatever the current system lacks is built to its conventions, each in desktop and mobile variants</li>
+          <li><b>Element states</b> — default, hover, disabled, error, loading, empty. Routinely omitted at estimate stage and the most expensive category to retrofit</li>
+          <li><b>Iconography</b> — base set in a single style and stroke weight</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Sign-in and registration</span>
+        <span class="bar" aria-hidden="true"><i style="width:20%"></i></span>
+        <span class="figures"><span class="hours">8 h</span><span class="cost">$240</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The front door, and the point where acquisition either completes or drops off. The underlying logic is not trivial: a single registration submit creates both the user and the merchant at once, after which the user lands on the merchant details screen. Access to the cabinet stays blocked until the merchant is configured, so that forced step has to read as onboarding rather than as an error.</p>
+        <ul>
+          <li><b>Sign in</b> — email and password, with links to password recovery and registration</li>
+          <li><b>Registration</b> — email, password, confirmation, terms checkbox, and a link to the offer document</li>
+          <li><b>Merchant creation</b> — a required step immediately after registration; technically it edits an already-created merchant, and the interface conceals that</li>
+          <li><b>Password reset request</b> — the confirmation message appears even for unknown addresses, as protection against address enumeration; wording carries the security requirement</li>
+          <li><b>New password</b> — opened from the email link, with a separate state for an expired link and a path to request a new one</li>
+          <li><b>Service unavailable</b> — a clear page in place of a technical error during scheduled maintenance</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Shops and integration</span>
+        <span class="bar" aria-hidden="true"><i style="width:100%"></i></span>
+        <span class="figures"><span class="hours">40 h</span><span class="cost">$1,200</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The heaviest block alongside Operations, and the one that determines time-to-first-payment. Merchants connect on their own here, which is also where most of the risk sits: a newly created shop cannot accept payments until keys are issued and currencies are enabled. If the interface fails to communicate that, the merchant contacts support instead of going live. Two irreversible actions additionally need explicit guardrails.</p>
+        <ul>
+          <li><b>Shop list</b> — search by name, identifier, and status, with pagination; both the shop card and shop creation start here</li>
+          <li><b>Shop creation</b> — name, description, website. A connection checklist appears immediately after creation, because the shop is not yet able to take payments</li>
+          <li><b>Shop card — General tab</b> — name, description, website</li>
+          <li><b>Currencies tab</b> — a toggle per currency available in the service. Enabling one opens a real account for the shop, so the action carries a warning</li>
+          <li><b>API settings tab</b> — signature algorithm, keys, and the allowed IP addresses</li>
+          <li><b>Keys and signature</b> — shop identifier, four keys with copy-to-clipboard, the selected signature algorithm, and concise instructions for signing requests</li>
+          <li><b>Key regeneration</b> — affects both key pairs and is irreversible; the interface warns ahead of confirmation</li>
+          <li><b>IP whitelist editing</b> — adding, validating and removing allowed addresses. Only the addresses listed here can reach the service, so deleting the wrong one silently breaks a live shop; removal is confirmed before it applies</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Operations</span>
+        <span class="bar" aria-hidden="true"><i style="width:90%"></i></span>
+        <span class="figures"><span class="hours">36 h</span><span class="cost">$1,080</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The reason a merchant opens the cabinet daily: where the money is and what happened to a given payment. The difficulty is data density — payments and payouts share one table of roughly a dozen columns, and all of it must remain readable on a phone. Filters are a discipline of their own: they either close the "find this one operation" scenario or the merchant escalates to support.</p>
+        <ul>
+          <li><b>Dashboard</b> — the landing screen after sign-in: balances, turnover for the period, recent operations, and shop connection status. It sets the first impression and answers the primary questions without navigation</li>
+          <li><b>Operations log</b> — payments and payouts in a single table: identifiers, shop, type, status, amount, currency, creation and processing dates</li>
+          <li><b>Log filters</b> — by shop, status, type, operation number, and period, with pagination</li>
+          <li><b>The log on mobile</b> — eight data columns do not compress, so on a phone the log becomes a list of cards rather than a squeezed table. In practice this is a second design of the same screen, and it is where most of the mobile effort in this estimate goes</li>
+          <li><b>Operation card</b> — the full record of a single payment: type and status, amounts and currencies, client account, description, dates, data passed by the shop, and return and notification URLs</li>
+          <li><b>Account balances</b> — per shop currency: account number, available amount, balance, holds and blocks</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Operations export</span>
+        <span class="bar" aria-hidden="true"><i style="width:20%"></i></span>
+        <span class="figures"><span class="hours">8 h</span><span class="cost">$240</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">Export is a flow, not a button. The merchant orders a file, waits while it is prepared, gets told when it is ready, and collects it on a separate page. Because the wait can be long and the merchant leaves the screen in between, the waiting and notification states are where the design work sits.</p>
+        <ul>
+          <li><b>Export request</b> — format and period, ordered from the operations log</li>
+          <li><b>In-progress state</b> — what the merchant sees between ordering and readiness, so the request does not look lost</li>
+          <li><b>Ready notification</b> — how the merchant learns the file is available, including when they have navigated away</li>
+          <li><b>Exports page</b> — a separate screen listing requested exports with their status and download action</li>
+          <li><b>Empty and unavailable states</b> — before the first export is ordered, and while the feature is still being rolled out</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Merchant</span>
+        <span class="bar" aria-hidden="true"><i style="width:50%"></i></span>
+        <span class="figures"><span class="hours">20 h</span><span class="cost">$600</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The legal-entity layer that shops and accounts belong to. At this stage a user holds exactly one merchant, and neither creating another nor inviting a user to one is available. The design nevertheless accommodates multiple merchants from day one, so the navigation does not require rebuilding when that capability ships — the dropdown switcher is planned in now at a fraction of the later cost.</p>
+        <ul>
+          <li><b>Merchant list</b> — currently displays the active merchant only, with a structure ready for several</li>
+          <li><b>Merchant switcher</b> — a dropdown that sets the context for the entire cabinet</li>
+          <li><b>Merchant card</b> — details: name, legal name, contact phone, email, and address</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Profile</span>
+        <span class="bar" aria-hidden="true"><i style="width:30%"></i></span>
+        <span class="figures"><span class="hours">12 h</span><span class="cost">$360</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">Personal data for the individual user, as distinct from the Merchant block, which describes the company. The defining detail: changes are confirmed with the current password, so the form carries an additional verification step that cannot be presented as a plain "Save" without breaking the user's expectation.</p>
+        <ul>
+          <li><b>User profile</b> — email, phone, first name, last name, middle name, display name</li>
+          <li><b>Password confirmation</b> — a separate step ahead of saving</li>
+          <li><b>Sign out</b> — located here, visually separated from the remaining actions</li>
+          <li><b>Change password</b> — current, new, and confirmation; a notification email follows the change</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Documentation section</span>
+        <span class="bar" aria-hidden="true"><i style="width:20%"></i></span>
+        <span class="figures"><span class="hours">8 h</span><span class="cost">$240</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The integration reference, placed inside the cabinet so whoever connects a shop never has to leave it. Two screens carry it: a contents list and a single article. The text is written by the client — the design work is the reading experience around it: how a merchant finds the right page, keeps their place, and follows a long technical article on a phone.</p>
+        <ul>
+          <li><b>Contents navigation</b> — the section list, kept visible alongside the article being read</li>
+          <li><b>Article view</b> — long-form technical content laid out to stay readable: procedures, code samples and reference tables</li>
+          <li><b>Mobile navigation</b> — contents collapse on narrow viewports so the article keeps the screen</li>
+          <li><b>Loading and partial states</b> — the content is still being written, so a half-filled section has to read as work in progress rather than as a broken page</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Email templates</span>
+        <span class="bar" aria-hidden="true"><i style="width:25%"></i></span>
+        <span class="figures"><span class="hours">10 h</span><span class="cost">$300</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">Transactional email in English — the cabinet extending beyond its own walls, and often the only brand contact a merchant has between sessions. No marketing campaigns or unsubscribe flows are planned, so the templates stay simple, but they belong to the same visual system as the cabinet and must render correctly across email clients.</p>
+        <ul>
+          <li><b>Password reset</b> — on user request, carrying the password change link</li>
+          <li><b>Welcome</b> — after registration; states what to do next: create a shop, obtain keys, enable payment acceptance</li>
+          <li><b>Password changed</b> — the fact and the time of the change</li>
+          <li><b>Keys regenerated</b> — which shop, when, and a warning that the previous keys no longer work</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Reviews, QA, handoff</span>
+        <span class="bar" aria-hidden="true"><i style="width:55%"></i></span>
+        <span class="figures"><span class="hours">22 h</span><span class="cost">$660</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">A cross-cutting block spanning all three stages rather than a closing phase. It absorbs the revision cycles after each approval gate, verifies that every screen is built from the same components, and prepares files so development proceeds without clarification rounds.</p>
+        <ul>
+          <li><b>Internal design reviews</b> — ahead of every client showing</li>
+          <li><b>Feedback revisions</b> — cycles following the approvals at stages 1.1 and 2</li>
+          <li><b>Visual consistency QA</b> — spacing, states, typography, and behaviour across all breakpoints</li>
+          <li><b>Design file preparation and handoff</b> — structured layouts, state specifications, asset export</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="total-row">
+      <span class="lbl">Total</span>
+      <span class="val"><b>$6,000</b><span>200 h × $30</span></span>
+    </div>
+
+  </section>
+
+  <!-- ── Deliverables ───────────────────────────────────────────── -->
+  <h2 class="group-header"><span>What the client receives</span></h2>
+
+  <section class="group">
+    <ul class="plain affirm">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Screencast of the current flow</span>
+        <span class="d">A recorded walkthrough of the as-is cabinet, used as the reference for the approval gate at stage 1.1.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Extended DPay design system</span>
+        <span class="d">The new components built for the cabinet, delivered inside the existing system with tokens and states — an asset that stays useful beyond this project.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">The full cabinet in desktop and mobile</span>
+        <span class="d">Every screen in the agreed flow, with its empty, loading and error states. The list is fixed at the stage 1.1 gate rather than guessed up front.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Four transactional email templates</span>
+        <span class="d">Designed in the same visual system as the cabinet.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Developer handoff package</span>
+        <span class="d">Structured layouts, state specifications, and exported assets, prepared so implementation starts without a clarification round.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── Assumptions ────────────────────────────────────────────── -->
+  <h2 class="group-header"><span>Assumptions</span></h2>
+  <p class="section-intro">The figures hold while these remain true. A change to any one of them changes the estimate, and each is stated here so it can be confirmed or corrected before work begins.</p>
+
+  <section class="group">
+    <ul class="plain">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Scope is fixed at the stage 1.1 gate</span>
+        <span class="d">The figures are based on the scope document as written. The flow audit produces the definitive screen list — if it comes out materially larger than the document implies, the estimate is revisited at the gate rather than absorbed. Once the flow is approved the list is locked, and anything added after that is quoted separately.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">The DPay design system is extended, not replaced</span>
+        <span class="d">The cabinet is built on the existing DPay design system. The UI Kit allocation covers adding the components the current system lacks — tables, filters, key management, and the states the cabinet needs — and folding them back into the system so it grows rather than forks.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Interface copy and legal text are supplied by the client</span>
+        <span class="d">The offer document, terms, and email copy are provided as finished text. Copywriting is not included in the 200 hours.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Documentation and export are designed from a described flow</span>
+        <span class="d">Neither feature is running yet, so those screens follow the flow as the client described it rather than a working product. If the flow turns out differently once it is built, reworking the affected screens is quoted separately.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Feedback arrives within two business days per gate</span>
+        <span class="d">The six-week duration assumes that response time. Slower turnaround extends the calendar without changing the hours.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Design only — no frontend implementation</span>
+        <span class="d">The estimate covers design and handoff. Building the cabinet in code is a separate scope.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Refunds and test mode carry no design work</span>
+        <span class="d">Confirmed by the client: refunds and operation cancellation are not planned for the product, and a full test mode is deferred. Neither is designed here. If either returns, it is quoted as a separate line.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── Terms ──────────────────────────────────────────────────── -->
+  <h2 class="group-header"><span>Engagement terms</span></h2>
+
+  <section class="group">
+    <dl class="terms">
+      <div>
+        <dt>Rate</dt>
+        <dd><b>$30</b> per hour, billed against tracked time.</dd>
+      </div>
+      <div>
+        <dt>Total</dt>
+        <dd><b>$6,000</b> for the 200 hours described above.</dd>
+      </div>
+      <div>
+        <dt>Duration</dt>
+        <dd>Approximately <b>7 working weeks</b> with one designer at 30 hours per week.</dd>
+      </div>
+      <div>
+        <dt>Revision rounds</dt>
+        <dd>Two rounds per stage are included in the reviews allocation. Further rounds are billed at the hourly rate.</dd>
+      </div>
+      <div>
+        <dt>Change requests</dt>
+        <dd>Work outside the agreed scope is estimated separately and starts only after written approval.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <footer>
+    <span>Merchant Service — design estimate</span>
+    <span>v1.0</span>
+    <span>23 August 2026</span>
+  </footer>
+
+</div>
+
+<script>
+  let openedForPrint = [];
+  window.addEventListener("beforeprint", () => {
+    openedForPrint = [...document.querySelectorAll("details:not([open])")];
+    openedForPrint.forEach(d => d.setAttribute("open", ""));
+  });
+  window.addEventListener("afterprint", () => {
+    openedForPrint.forEach(d => d.removeAttribute("open"));
+    openedForPrint = [];
+  });
+</script>
+</body>
+</html>
