@@ -23,9 +23,6 @@
     --accent: #0071e3;
     --accent-soft: rgba(0, 113, 227, 0.12);
 
-    --alert: #d70015;
-    --alert-soft: rgba(215, 0, 21, 0.10);
-
     --radius-group: 12px;
     --radius-card: 18px;
     --inset: 16px;
@@ -48,9 +45,6 @@
 
       --accent: #0a84ff;
       --accent-soft: rgba(10, 132, 255, 0.18);
-
-      --alert: #ff453a;
-      --alert-soft: rgba(255, 69, 58, 0.18);
     }
   }
 
@@ -68,9 +62,6 @@
 
     --accent: #0a84ff;
     --accent-soft: rgba(10, 132, 255, 0.18);
-
-    --alert: #ff453a;
-    --alert-soft: rgba(255, 69, 58, 0.18);
   }
 
   * { box-sizing: border-box; }
@@ -533,7 +524,7 @@
   .callout {
     background: var(--card);
     border-radius: var(--radius-group);
-    border-left: 4px solid var(--alert);
+    border-left: 4px solid var(--accent);
     padding: 18px var(--inset) 20px;
     margin-bottom: 32px;
   }
@@ -544,8 +535,8 @@
     margin-bottom: 10px;
     padding: 3px 9px;
     border-radius: 100px;
-    background: var(--alert-soft);
-    color: var(--alert);
+    background: var(--accent-soft);
+    color: var(--accent);
     font-size: 11.5px;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -817,7 +808,7 @@
         <p class="lead">The foundation every other screen is assembled from. The cabinet is predominantly tables, forms, and cards, so the components are defined once and the interface is composed from them rather than drawn screen by screen. The work extends the existing DPay design system: components the cabinet needs but the system does not yet carry are added and folded back in, so the system grows with the project instead of forking away from it.</p>
         <ul>
           <li><b>Colour palette and type scale</b> — inherited from DPay, extended where the cabinet requires it</li>
-          <li><b>New and missing components</b> — inputs, buttons, tabs, tables, cards, tooltips, a date range picker with presets, and a markdown element set; whatever the current system lacks is built to its conventions, each in desktop and mobile variants</li>
+          <li><b>New and missing components</b> — inputs, buttons, tabs, tables, cards, tooltips, a date range picker with presets, a currency switcher, and a markdown element set; whatever the current system lacks is built to its conventions, each in desktop and mobile variants</li>
           <li><b>Element states</b> — default, hover, disabled, error, loading, empty. Routinely omitted at estimate stage and the most expensive category to retrofit</li>
           <li><b>Iconography</b> — base set in a single style and stroke weight</li>
         </ul>
@@ -875,7 +866,7 @@
         <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
       </summary>
       <div class="detail">
-        <p class="lead">Originally scoped as a four-part summary inside Operations. The backend now serves nine indicators, which turns the landing screen into a proper analytics view — a chart, two breakdown tables, a metric grid and a connection checklist, each with a mobile counterpart. It is carried as its own line because it no longer behaves like part of the operations journal.</p>
+        <p class="lead">Originally scoped as a four-part summary inside Operations. The backend now serves nine indicators, which turns the landing screen into a proper analytics view — a chart, two breakdown tables, a metric grid and a connection checklist, each with a mobile counterpart. It is carried as its own line because it no longer behaves like part of the operations journal. With the currency question settled, the layout is fixed rather than variable, which is what holds the figure steady.</p>
         <ul>
           <li><b>Turnover metrics</b> — seven and thirty days, split between incoming payments and payouts</li>
           <li><b>Turnover chart</b> — daily figures across the month, the one visual element on the screen</li>
@@ -883,7 +874,7 @@
           <li><b>Health indicators</b> — share of successful operations for the period, average ticket, average processing time</li>
           <li><b>Latest ten operations</b> — the shortcut into the journal</li>
           <li><b>Connection checklist</b> — shops missing keys or enabled currencies; the screen's main job is to stop those becoming support tickets</li>
-          <li><b>Per-currency layout</b> — money figures arrive as one row per currency with no combined total, since the cabinet holds no exchange rates. This is the structural problem of the screen and is called out separately below</li>
+          <li><b>Currency switcher</b> — monetary figures carry no combined total, so the screen shows one currency at a time from a switcher with a default selection. It sits alongside the merchant switcher, and the two together set the context for everything below them</li>
         </ul>
       </div>
     </details>
@@ -1024,18 +1015,18 @@
   </section>
 
   <!-- ── Blocking question ──────────────────────────────────────── -->
-  <h2 class="group-header"><span>Open question that affects the figure</span></h2>
+  <h2 class="group-header"><span>Decision on record</span></h2>
 
   <section class="callout">
     <span class="tag">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
-      Needs a decision
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+      Resolved
     </span>
-    <h3>How money is shown across several currencies</h3>
-    <p>The cabinet holds no exchange rates, so no money figure can be reduced to a single number. Every monetary indicator arrives as <b>one row per currency, with no combined total</b> — on the dashboard and on account balances alike.</p>
-    <p>On the dashboard this compounds. Turnover is measured over two periods, split between incoming payments and payouts — four figures. Multiplied by the currencies a shop has enabled, a single metric tile stops being a tile and becomes a table of variable height. A merchant with one currency and a merchant with six need visibly different layouts from the same screen.</p>
-    <p><b>This, rather than the number of indicators, is what drives the dashboard estimate.</b> Trimming nine metrics to seven saves the design of two tiles. Deciding how four monetary metrics are presented across an unknown number of currencies is the actual work, and it changes the shape of the screen.</p>
-    <p class="ask">The 20 hours carried for the dashboard assume this is resolved early, at the stage 1.1 gate. Until the presentation is agreed — a currency switcher, a default currency, grouped rows, or something else — the dashboard figure is an estimate rather than a commitment, and it is the one line in this document that can still move materially.</p>
+    <h3>Money across several currencies</h3>
+    <p>The cabinet holds no exchange rates, so no monetary figure can be reduced to a single number. Left open, this was the one item capable of moving the dashboard estimate: turnover is measured over two periods and split between incoming payments and payouts, and multiplying those four figures by an unknown number of currencies turns every metric tile into a table of variable height.</p>
+    <p><b>Agreed approach: a currency switcher on the dashboard, with a default currency.</b> Every monetary indicator then shows one currency at a time, and the screen keeps a fixed layout regardless of how many currencies a shop has enabled.</p>
+    <p>This is what makes the dashboard figure firm rather than provisional. Two details are settled during design rather than now: which currency opens by default, and how the switcher presents itself to a merchant with only one currency — a dropdown holding a single option is a control that does nothing.</p>
+    <p class="ask">Account balances are unaffected and stay one row per currency: listing every currency side by side is the purpose of that screen, not a workaround for a missing total.</p>
   </section>
 
   <!-- ── Deliverables ───────────────────────────────────────────── -->
