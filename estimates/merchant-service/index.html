@@ -520,6 +520,52 @@
   }
   .plain.affirm svg { color: var(--accent); }
 
+  /* ── Blocking-question callout ───────────────────────────────────── */
+  .callout {
+    background: var(--card);
+    border-radius: var(--radius-group);
+    border-left: 4px solid var(--accent);
+    padding: 18px var(--inset) 20px;
+    margin-bottom: 32px;
+  }
+  .callout .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .callout .tag svg { width: 13px; height: 13px; flex: none; }
+  .callout h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+  .callout p {
+    margin: 0 0 10px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--label-secondary);
+  }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout p b { color: var(--label); font-weight: 600; }
+  .callout .ask {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--separator);
+    color: var(--label);
+    font-weight: 500;
+  }
+
   /* ── Key–value terms list ────────────────────────────────────────── */
   .terms { margin: 0; padding: 0; }
   .terms > div {
@@ -633,7 +679,7 @@
     <div class="summary-grid">
       <div class="metric">
         <span class="k">Scope</span>
-        <span class="v">200<span class="u"> h</span></span>
+        <span class="v">216<span class="u"> h</span></span>
       </div>
       <div class="metric">
         <span class="k">Rate</span>
@@ -645,7 +691,7 @@
       </div>
       <div class="metric total">
         <span class="k">Total</span>
-        <span class="v">$6,000</span>
+        <span class="v">$6,480</span>
       </div>
     </div>
   </section>
@@ -695,7 +741,7 @@
           Deliverable: core screens in DPay context
         </p>
       </div>
-      <div class="alloc">100 h</div>
+      <div class="alloc">112 h</div>
     </div>
 
     <div class="stage">
@@ -708,7 +754,7 @@
           Deliverable: full set of screens and states
         </p>
       </div>
-      <div class="alloc">58 h</div>
+      <div class="alloc">62 h</div>
     </div>
 
     <div class="stage">
@@ -729,7 +775,7 @@
     <span>Scope of work</span>
     <span class="hint">Tap a block for details</span>
   </h2>
-  <p class="section-intro">Every screen in the cabinet plus four email templates, each in desktop and mobile states. The exact screen list is settled at the stage 1.1 gate, which is what the flow audit exists to produce. The two heaviest blocks account for 38% of the estimate.</p>
+  <p class="section-intro">Every screen in the cabinet plus four email templates, each in desktop and mobile states. The exact screen list is settled at the stage 1.1 gate, which is what the flow audit exists to produce. The two heaviest blocks account for 31% of the estimate.</p>
 
   <section class="group">
 
@@ -762,7 +808,7 @@
         <p class="lead">The foundation every other screen is assembled from. The cabinet is predominantly tables, forms, and cards, so the components are defined once and the interface is composed from them rather than drawn screen by screen. The work extends the existing DPay design system: components the cabinet needs but the system does not yet carry are added and folded back in, so the system grows with the project instead of forking away from it.</p>
         <ul>
           <li><b>Colour palette and type scale</b> — inherited from DPay, extended where the cabinet requires it</li>
-          <li><b>New and missing components</b> — inputs, buttons, tabs, tables, cards, tooltips; whatever the current system lacks is built to its conventions, each in desktop and mobile variants</li>
+          <li><b>New and missing components</b> — inputs, buttons, tabs, tables, cards, tooltips, a date range picker with presets, and a markdown element set; whatever the current system lacks is built to its conventions, each in desktop and mobile variants</li>
           <li><b>Element states</b> — default, hover, disabled, error, loading, empty. Routinely omitted at estimate stage and the most expensive category to retrofit</li>
           <li><b>Iconography</b> — base set in a single style and stroke weight</li>
         </ul>
@@ -784,6 +830,7 @@
           <li><b>Merchant creation</b> — a required step immediately after registration; technically it edits an already-created merchant, and the interface conceals that</li>
           <li><b>Password reset request</b> — the confirmation message appears even for unknown addresses, as protection against address enumeration; wording carries the security requirement</li>
           <li><b>New password</b> — opened from the email link, with a separate state for an expired link and a path to request a new one</li>
+          <li><b>Expired session</b> — sessions end without warning because they cannot be extended, so Sign in carries a short "your session expired, sign in again" state. A state of the existing screen, not a new one</li>
           <li><b>Service unavailable</b> — a clear page in place of a technical error during scheduled maintenance</li>
         </ul>
       </div>
@@ -802,10 +849,10 @@
           <li><b>Shop list</b> — search by name, identifier, and status, with pagination; both the shop card and shop creation start here</li>
           <li><b>Shop creation</b> — name, description, website. A connection checklist appears immediately after creation, because the shop is not yet able to take payments</li>
           <li><b>Shop card — General tab</b> — name, description, website</li>
-          <li><b>Currencies tab</b> — a toggle per currency available in the service. Enabling one opens a real account for the shop, so the action carries a warning</li>
+          <li><b>Currencies tab</b> — enabling a currency opens a real account for the shop and cannot be undone, so a toggle would be a control that lies. Each currency is a row with an explicit Enable action and a confirmation naming the consequence; once enabled, the row becomes a status without a control</li>
           <li><b>API settings tab</b> — signature algorithm, keys, and the allowed IP addresses</li>
           <li><b>Keys and signature</b> — shop identifier, four keys with copy-to-clipboard, the selected signature algorithm, and concise instructions for signing requests</li>
-          <li><b>Key regeneration</b> — affects both key pairs and is irreversible; the interface warns ahead of confirmation</li>
+          <li><b>Key regeneration</b> — affects both key pairs and is irreversible. The confirmation dialog asks for the current password before it proceeds, and states plainly that the previous keys stop working</li>
           <li><b>IP whitelist editing</b> — adding, validating and removing allowed addresses. Only the addresses listed here can reach the service, so deleting the wrong one silently breaks a live shop; removal is confirmed before it applies</li>
         </ul>
       </div>
@@ -813,20 +860,40 @@
 
     <details class="row">
       <summary>
+        <span class="name">Dashboard</span>
+        <span class="bar" aria-hidden="true"><i style="width:50%"></i></span>
+        <span class="figures"><span class="hours">20 h</span><span class="cost">$600</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">Originally scoped as a four-part summary inside Operations. The backend now serves nine indicators, which turns the landing screen into a proper analytics view — a chart, two breakdown tables, a metric grid and a connection checklist, each with a mobile counterpart. It is carried as its own line because it no longer behaves like part of the operations journal.</p>
+        <ul>
+          <li><b>Turnover metrics</b> — seven and thirty days, split between incoming payments and payouts</li>
+          <li><b>Turnover chart</b> — daily figures across the month, the one visual element on the screen</li>
+          <li><b>Breakdown by payment system</b> — a compact table alongside the chart</li>
+          <li><b>Health indicators</b> — share of successful operations for the period, average ticket, average processing time</li>
+          <li><b>Latest ten operations</b> — the shortcut into the journal</li>
+          <li><b>Connection checklist</b> — shops missing keys or enabled currencies; the screen's main job is to stop those becoming support tickets</li>
+          <li><b>Per-currency layout</b> — money figures arrive as one row per currency with no combined total, since the cabinet holds no exchange rates. This is the structural problem of the screen and is called out separately below</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
         <span class="name">Operations</span>
-        <span class="bar" aria-hidden="true"><i style="width:90%"></i></span>
-        <span class="figures"><span class="hours">36 h</span><span class="cost">$1,080</span></span>
+        <span class="bar" aria-hidden="true"><i style="width:70%"></i></span>
+        <span class="figures"><span class="hours">28 h</span><span class="cost">$840</span></span>
         <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
       </summary>
       <div class="detail">
         <p class="lead">The reason a merchant opens the cabinet daily: where the money is and what happened to a given payment. The difficulty is data density — payments and payouts share one table of roughly a dozen columns, and all of it must remain readable on a phone. Filters are a discipline of their own: they either close the "find this one operation" scenario or the merchant escalates to support.</p>
         <ul>
-          <li><b>Dashboard</b> — the landing screen after sign-in: balances, turnover for the period, recent operations, and shop connection status. It sets the first impression and answers the primary questions without navigation</li>
           <li><b>Operations log</b> — payments and payouts in a single table: identifiers, shop, type, status, amount, currency, creation and processing dates</li>
-          <li><b>Log filters</b> — by shop, status, type, operation number, and period, with pagination</li>
+          <li><b>Log filters</b> — by shop, status, type and operation number, plus a date range picker with day, week and month presets and free selection of a start and end date</li>
           <li><b>The log on mobile</b> — eight data columns do not compress, so on a phone the log becomes a list of cards rather than a squeezed table. In practice this is a second design of the same screen, and it is where most of the mobile effort in this estimate goes</li>
           <li><b>Operation card</b> — the full record of a single payment: type and status, amounts and currencies, client account, description, dates, data passed by the shop, and return and notification URLs</li>
-          <li><b>Account balances</b> — per shop currency: account number, available amount, balance, holds and blocks</li>
+          <li><b>Account balances</b> — per shop currency: available amount, balance, holds, blocks, overdraft and rolling reserve. No account number and no combined total, so the screen is a set of per-currency rows rather than a summary</li>
         </ul>
       </div>
     </details>
@@ -834,17 +901,18 @@
     <details class="row">
       <summary>
         <span class="name">Operations export</span>
-        <span class="bar" aria-hidden="true"><i style="width:20%"></i></span>
-        <span class="figures"><span class="hours">8 h</span><span class="cost">$240</span></span>
+        <span class="bar" aria-hidden="true"><i style="width:30%"></i></span>
+        <span class="figures"><span class="hours">12 h</span><span class="cost">$360</span></span>
         <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
       </summary>
       <div class="detail">
-        <p class="lead">Export is a flow, not a button. The merchant orders a file, waits while it is prepared, gets told when it is ready, and collects it on a separate page. Because the wait can be long and the merchant leaves the screen in between, the waiting and notification states are where the design work sits.</p>
+        <p class="lead">Export is a flow, not a button. The merchant orders a file, waits while it is prepared, and collects it on a separate page. No new screens appear beyond those two — the work is in the states inside them. There is no push notification: the exports page polls and updates its own status, so the page has to make progress visible on its own.</p>
         <ul>
-          <li><b>Export request</b> — format and period, ordered from the operations log</li>
-          <li><b>In-progress state</b> — what the merchant sees between ordering and readiness, so the request does not look lost</li>
-          <li><b>Ready notification</b> — how the merchant learns the file is available, including when they have navigated away</li>
-          <li><b>Exports page</b> — a separate screen listing requested exports with their status and download action</li>
+          <li><b>Export request</b> — format and period, ordered from the operations log. Two formats, CSV and XLSX</li>
+          <li><b>Five statuses</b> — queued, preparing, ready, failed with a reason, and expired, each legible at a glance in the list</li>
+          <li><b>Self-updating page</b> — status advances without a manual refresh, and the transition has to read as progress rather than as the page reloading under the merchant</li>
+          <li><b>Exports page</b> — a separate screen listing requested exports with their status and download action. Files are kept seven days, after which the row turns to expired</li>
+          <li><b>Validation and limits</b> — period capped at three months and ten files per shop, both surfaced on the form before the request is sent</li>
           <li><b>Empty and unavailable states</b> — before the first export is ordered, and while the feature is still being rolled out</li>
         </ul>
       </div>
@@ -862,7 +930,7 @@
         <ul>
           <li><b>Merchant list</b> — currently displays the active merchant only, with a structure ready for several</li>
           <li><b>Merchant switcher</b> — a dropdown that sets the context for the entire cabinet</li>
-          <li><b>Merchant card</b> — details: name, legal name, contact phone, email, and address</li>
+          <li><b>Merchant card</b> — details: name, legal name, contact phone, email, and address. The merchant name cannot be changed after creation, so it is drawn read-only — visibly different from a disabled field a merchant could expect to unlock</li>
         </ul>
       </div>
     </details>
@@ -896,7 +964,7 @@
         <p class="lead">The integration reference, placed inside the cabinet so whoever connects a shop never has to leave it. Two screens carry it: a contents list and a single article. The text is written by the client — the design work is the reading experience around it: how a merchant finds the right page, keeps their place, and follows a long technical article on a phone.</p>
         <ul>
           <li><b>Contents navigation</b> — the section list, kept visible alongside the article being read</li>
-          <li><b>Article view</b> — long-form technical content laid out to stay readable: procedures, code samples and reference tables</li>
+          <li><b>Article view</b> — content arrives as markdown, so the design supplies a hierarchy for its elements rather than bespoke page layouts: headings, body, lists, code blocks and inline code, tables, quotes and links, all inheriting the type scale and colours already defined in the UI Kit</li>
           <li><b>Mobile navigation</b> — contents collapse on narrow viewports so the article keeps the screen</li>
           <li><b>Loading and partial states</b> — the content is still being written, so a half-filled section has to read as work in progress rather than as a broken page</li>
         </ul>
@@ -941,9 +1009,24 @@
 
     <div class="total-row">
       <span class="lbl">Total</span>
-      <span class="val"><b>$6,000</b><span>200 h × $30</span></span>
+      <span class="val"><b>$6,480</b><span>216 h × $30</span></span>
     </div>
 
+  </section>
+
+  <!-- ── Blocking question ──────────────────────────────────────── -->
+  <h2 class="group-header"><span>Open question that affects the figure</span></h2>
+
+  <section class="callout">
+    <span class="tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+      Needs a decision
+    </span>
+    <h3>How money is shown across several currencies</h3>
+    <p>The cabinet holds no exchange rates, so no money figure can be reduced to a single number. Every monetary indicator arrives as <b>one row per currency, with no combined total</b> — on the dashboard and on account balances alike.</p>
+    <p>On the dashboard this compounds. Turnover is measured over two periods, split between incoming payments and payouts — four figures. Multiplied by the currencies a shop has enabled, a single metric tile stops being a tile and becomes a table of variable height. A merchant with one currency and a merchant with six need visibly different layouts from the same screen.</p>
+    <p><b>This, rather than the number of indicators, is what drives the dashboard estimate.</b> Trimming nine metrics to seven saves the design of two tiles. Deciding how four monetary metrics are presented across an unknown number of currencies is the actual work, and it changes the shape of the screen.</p>
+    <p class="ask">The 20 hours carried for the dashboard assume this is resolved early, at the stage 1.1 gate. Until the presentation is agreed — a currency switcher, a default currency, grouped rows, or something else — the dashboard figure is an estimate rather than a commitment, and it is the one line in this document that can still move materially.</p>
   </section>
 
   <!-- ── Deliverables ───────────────────────────────────────────── -->
@@ -998,7 +1081,7 @@
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
         <span class="t">Interface copy and legal text are supplied by the client</span>
-        <span class="d">The offer document, terms, and email copy are provided as finished text. Copywriting is not included in the 200 hours.</span>
+        <span class="d">The offer document, terms, and email copy are provided as finished text. Copywriting is not included in the 216 hours.</span>
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
@@ -1034,7 +1117,7 @@
       </div>
       <div>
         <dt>Total</dt>
-        <dd><b>$6,000</b> for the 200 hours described above.</dd>
+        <dd><b>$6,480</b> for the 216 hours described above.</dd>
       </div>
       <div>
         <dt>Duration</dt>
