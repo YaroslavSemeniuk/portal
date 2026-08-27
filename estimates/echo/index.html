@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echo — Design Estimate · YARSY</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Design estimate for the Echo recap app: delivery plan, scope breakdown, mascot terms, assumptions and terms.">
+<style>
+  /* ── Apple HIG token set ─────────────────────────────────────────── */
+  :root {
+    --bg: #f3f2f7;
+    --card: #ffffff;
+    --fill-quaternary: rgba(116, 116, 128, 0.08);
+    --fill-tertiary: rgba(116, 116, 128, 0.12);
+
+    --label: #000000;
+    --label-secondary: rgba(60, 60, 67, 0.6);
+    --label-tertiary: rgba(60, 60, 67, 0.3);
+
+    --separator: rgba(60, 60, 67, 0.29);
+
+    --accent: #6d34d6;
+    --accent-soft: rgba(109, 52, 214, 0.11);
+    --on-accent: #ffffff;
+
+    --radius-group: 12px;
+    --radius-card: 18px;
+    --inset: 16px;
+
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #08070b;
+      --card: #171620;
+      --fill-quaternary: rgba(118, 118, 128, 0.18);
+      --fill-tertiary: rgba(118, 118, 128, 0.24);
+
+      --label: #ffffff;
+      --label-secondary: rgba(235, 235, 245, 0.6);
+      --label-tertiary: rgba(235, 235, 245, 0.3);
+
+      --separator: rgba(84, 84, 88, 0.65);
+
+      --accent: #b39bff;
+      --accent-soft: rgba(179, 155, 255, 0.16);
+      --on-accent: #17102b;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #08070b;
+    --card: #171620;
+    --fill-quaternary: rgba(118, 118, 128, 0.18);
+    --fill-tertiary: rgba(118, 118, 128, 0.24);
+
+    --label: #ffffff;
+    --label-secondary: rgba(235, 235, 245, 0.6);
+    --label-tertiary: rgba(235, 235, 245, 0.3);
+
+    --separator: rgba(84, 84, 88, 0.65);
+
+    --accent: #b39bff;
+    --accent-soft: rgba(179, 155, 255, 0.16);
+    --on-accent: #17102b;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--label);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+                 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.47;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding:
+      calc(28px + env(safe-area-inset-top)) calc(var(--inset) + env(safe-area-inset-right))
+      calc(40px + env(safe-area-inset-bottom)) calc(var(--inset) + env(safe-area-inset-left));
+  }
+
+  /* ── Large Title ─────────────────────────────────────────────────── */
+  .titlebar { padding: 8px 4px 22px; }
+
+  .eyebrow {
+    margin: 0 0 6px;
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+  }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: 34px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.026em;
+    text-wrap: balance;
+  }
+
+  .lede {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--label-secondary);
+    max-width: 60ch;
+  }
+  .lede + .lede { margin-top: 10px; }
+
+  /* ── Summary card ────────────────────────────────────────────────── */
+  .summary {
+    background: var(--card);
+    border-radius: var(--radius-card);
+    padding: 20px var(--inset);
+    margin-bottom: 32px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+  }
+
+  .metric { padding: 0 12px; position: relative; }
+  .metric:first-child { padding-left: 0; }
+  .metric:last-child { padding-right: 0; }
+  .metric + .metric::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 2px; bottom: 2px;
+    width: 1px;
+    background: var(--separator);
+  }
+
+  .metric .k {
+    display: block;
+    font-size: 11.5px;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--label-secondary);
+    margin-bottom: 5px;
+  }
+  .metric .v {
+    display: block;
+    font-size: clamp(19px, 4.4vw, 23px);
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric .u {
+    font-size: 0.66em;
+    font-weight: 500;
+    color: var(--label-secondary);
+    letter-spacing: 0;
+  }
+  .metric.total .v { color: var(--accent); }
+
+  /* ── Section headers ─────────────────────────────────────────────── */
+  .group-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0;
+    padding: 0 var(--inset) 7px;
+    font-size: 13px;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--label-secondary);
+  }
+  .group-header .hint {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--label-secondary);
+  }
+
+  .section-intro {
+    margin: 0 0 12px;
+    padding: 0 var(--inset);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+  }
+
+  .group {
+    background: var(--card);
+    border-radius: var(--radius-group);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .group-footnote {
+    margin: 0 0 32px;
+    padding: 0 var(--inset);
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--label-secondary);
+  }
+  .group:has(+ .group-footnote) { margin-bottom: 8px; }
+
+  /* ── Stages ──────────────────────────────────────────────────────── */
+  .stages { padding: 4px 0; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    column-gap: 14px;
+    padding: 14px var(--inset);
+    position: relative;
+  }
+  .stage + .stage { border-top: 1px solid var(--separator); }
+
+  .stage .no {
+    grid-row: 1;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    margin-top: 1px;
+  }
+  .stage .no.ongoing {
+    background: transparent;
+    border: 1.5px dashed var(--accent);
+    color: var(--accent);
+  }
+
+  .stage.sub { padding-left: calc(var(--inset) + 16px); }
+
+  .stage.sub .connector {
+    grid-row: 1;
+    width: 28px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .stage.sub .connector::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    margin-left: -0.75px;
+    width: 1.5px;
+    height: 26px;
+    background: var(--separator);
+  }
+  .stage.sub .connector i {
+    position: relative;
+    flex: none;
+    margin-top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--accent);
+  }
+
+  .gate-pill {
+    display: inline-block;
+    vertical-align: 2px;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .stage .body { grid-column: 2; grid-row: 1; }
+
+  .stage .alloc {
+    grid-column: 3;
+    grid-row: 1;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
+    color: var(--label-secondary);
+    margin-top: 2px;
+  }
+
+  .stage h3 {
+    margin: 0 0 3px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+  .stage .goal {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+  }
+  .stage .out {
+    margin: 8px 0 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .stage .out svg { width: 13px; height: 13px; flex: none; }
+
+  /* ── Disclosure rows ─────────────────────────────────────────────── */
+  .row { border-top: 1px solid var(--separator); }
+  .row:first-child { border-top: 0; }
+
+  .row > summary {
+    display: grid;
+    grid-template-columns: 1fr auto 16px;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 56px;
+    padding: 11px var(--inset);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 180ms var(--ease);
+  }
+  .row > summary::-webkit-details-marker { display: none; }
+  .row > summary:hover { background: var(--fill-quaternary); }
+  .row > summary:active { background: var(--fill-tertiary); }
+  .row > summary:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: -3px;
+    border-radius: 4px;
+  }
+
+  .row .name {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .bar {
+    grid-column: 1;
+    grid-row: 2;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--fill-tertiary);
+    margin-top: 8px;
+    max-width: 240px;
+    overflow: hidden;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+
+  .figures {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .figures .hours {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .figures .cost {
+    display: block;
+    font-size: 13px;
+    color: var(--label-secondary);
+    margin-top: 1px;
+  }
+
+  .chev {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    width: 13px;
+    height: 13px;
+    justify-self: end;
+    color: var(--label-tertiary);
+    transition: transform 250ms var(--ease);
+  }
+  .row[open] .chev { transform: rotate(90deg); }
+
+  .row .detail { padding: 0 var(--inset) 20px; }
+  .row .detail p.lead {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--label);
+  }
+  .row .detail ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .row .detail li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+  }
+  .row .detail li b {
+    color: var(--label);
+    font-weight: 600;
+  }
+  .row .detail li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 9px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--label-tertiary);
+  }
+
+  .row[open] .detail { animation: reveal 280ms var(--ease); }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ── Total row ───────────────────────────────────────────────────── */
+  .total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+    padding: 12px var(--inset);
+    background: var(--accent-soft);
+    border-top: 1px solid var(--separator);
+  }
+  .total-row .lbl { font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .total-row .val {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .total-row .val b {
+    display: block;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .total-row .val span {
+    display: block;
+    font-size: 13px;
+    color: var(--label-secondary);
+  }
+
+  /* ── Plain list (icon + title + description) ─────────────────────── */
+  .plain { margin: 0; padding: 0; list-style: none; }
+  .plain li {
+    display: grid;
+    grid-template-columns: 17px 1fr;
+    gap: 4px 11px;
+    padding: 13px var(--inset);
+    border-top: 1px solid var(--separator);
+  }
+  .plain li:first-child { border-top: 0; }
+  .plain svg {
+    width: 17px; height: 17px;
+    margin-top: 3px;
+    color: var(--label-tertiary);
+  }
+  .plain .t {
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--label);
+  }
+  .plain .d {
+    grid-column: 2;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--label-secondary);
+  }
+  .plain.affirm svg { color: var(--accent); }
+
+  /* ── Blocking-question callout ───────────────────────────────────── */
+  .callout {
+    background: var(--card);
+    border-radius: var(--radius-group);
+    border-left: 4px solid var(--accent);
+    padding: 18px var(--inset) 20px;
+    margin-bottom: 32px;
+  }
+  .callout .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .callout .tag svg { width: 13px; height: 13px; flex: none; }
+  .callout h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+  .callout p {
+    margin: 0 0 10px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--label-secondary);
+  }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout p b { color: var(--label); font-weight: 600; }
+  .callout .ask {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--separator);
+    color: var(--label);
+    font-weight: 500;
+  }
+
+  /* ── Key–value terms list ────────────────────────────────────────── */
+  .terms { margin: 0; padding: 0; }
+  .terms > div {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 4px 16px;
+    padding: 13px var(--inset);
+    border-top: 1px solid var(--separator);
+  }
+  .terms > div:first-child { border-top: 0; }
+  .terms dt {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--label);
+  }
+  .terms dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.47;
+    color: var(--label-secondary);
+  }
+  .terms dd b {
+    color: var(--label);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Footer ──────────────────────────────────────────────────────── */
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 10px;
+    padding: 4px var(--inset) 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--label-secondary);
+    text-align: center;
+  }
+  footer span::after {
+    content: "·";
+    margin-left: 10px;
+    color: var(--label-tertiary);
+  }
+  footer span:last-child::after { content: none; }
+
+  @media (min-width: 768px) {
+    :root { --inset: 24px; }
+    .titlebar { padding-left: 8px; padding-right: 8px; }
+    h1 { font-size: 40px; }
+    .bar { max-width: 320px; }
+    .lede { max-width: 68ch; }
+    .row .detail li { max-width: 68ch; }
+    .row .detail p.lead { max-width: 66ch; }
+    .stage .goal { max-width: 62ch; }
+  }
+
+  @media (max-width: 560px) {
+    .summary-grid { grid-template-columns: 1fr 1fr; row-gap: 0; }
+    .metric { padding: 0 0 0 12px; }
+    .metric:nth-child(odd) { padding-left: 0; }
+    .metric:nth-child(-n+2) { padding-bottom: 16px; }
+    .metric:nth-child(n+3) {
+      padding-top: 16px;
+      border-top: 1px solid var(--separator);
+    }
+    .metric:nth-child(3)::before { display: none; }
+    .terms > div { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 400px) {
+    .stage { grid-template-columns: 30px 1fr; }
+    .stage .alloc {
+      grid-column: 2;
+      grid-row: 2;
+      text-align: left;
+      margin-top: 8px;
+    }
+    .stage.sub { padding-left: calc(var(--inset) + 10px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { max-width: 100%; padding: 0; }
+    .group, .summary { border: 1px solid #d0d0d5; border-radius: 8px; }
+    .row, .stage, .plain li, .terms > div { break-inside: avoid; }
+    .chev, .group-header .hint { display: none; }
+    .row > summary { min-height: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="titlebar">
+    <p class="eyebrow">Design Estimate</p>
+    <h1>Echo Recap</h1>
+    <p class="lede">A Spotify recap app that turns listening history into a personal echo — mood-based colours, a journey across day, week, month, season and year, and cards built to be shared. A working prototype already exists; this engagement is a redesign of it, not a first draft, so the starting point is a product whose structure can be examined rather than imagined.</p>
+    <p class="lede">The visual direction is already set by the client: dark theme, neon accents, minimalism, with Spotify as the reference point. That removes the exploratory phase most redesigns pay for, and it is why the moodboard sits inside the concept block as a short selection step rather than a stage of its own. The timeline is tied to Spotify Wrapped season — the design has to be finished with enough runway for build.</p>
+  </div>
+
+  <section class="summary" aria-label="Estimate summary">
+    <div class="summary-grid">
+      <div class="metric">
+        <span class="k">Scope</span>
+        <span class="v">144.5<span class="u"> h</span></span>
+      </div>
+      <div class="metric">
+        <span class="k">Engagement</span>
+        <span class="v">Fixed<span class="u"> price</span></span>
+      </div>
+      <div class="metric">
+        <span class="k">Duration</span>
+        <span class="v">5<span class="u"> weeks</span></span>
+      </div>
+      <div class="metric total">
+        <span class="k">Total</span>
+        <span class="v">€2,500</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stages ─────────────────────────────────────────────────── -->
+  <h2 class="group-header">
+    <span>Delivery plan</span>
+    <span class="hint">Indicative allocation</span>
+  </h2>
+  <p class="section-intro">Four blocks, with two approval gates inside the concept stage. The sequence matters: the audit finds what is structurally broken, the moodboard settles what the product should look like, and only then does the concept commit that look to real screens. Each gate closes one open question before the next stage can spend hours on it — which on a fixed-price engagement is what protects the budget. A direction change caught at hour 20 is a conversation; the same change caught at hour 110 is a rebuild.</p>
+
+  <section class="group stages">
+
+    <div class="stage">
+      <div class="no">1</div>
+      <div class="body">
+        <h3>Audit and bottlenecks</h3>
+        <p class="goal">The existing prototype is taken apart into a flow diagram and read for structural problems — the profile populated with data the onboarding never collects, the missing error states, the absent forgot-password path. This stage produces findings, not decisions about how the app should look; those come next, once it is clear what has to change.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: flow diagram and prioritised UX issue list
+        </p>
+      </div>
+      <div class="alloc">18 h</div>
+    </div>
+
+    <div class="stage">
+      <div class="no">2</div>
+      <div class="body">
+        <h3>Design concept</h3>
+        <p class="goal">One stage in two steps. First the moodboard: references collected and visual patterns proposed as options to choose between — the moodboard <em>is</em> the visual direction, so there is no separate direction document to assemble. Once the options are approved, two to three screens are drawn in the chosen style, led by the main Recap screen.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: approved moodboard, then 2–3 key screens
+        </p>
+      </div>
+      <div class="alloc">21.5 h</div>
+    </div>
+
+    <div class="stage sub">
+      <div class="connector" aria-hidden="true"><i></i></div>
+      <div class="body">
+        <h3>Moodboard approval <span class="gate-pill">Gate 2.1</span></h3>
+        <p class="goal">The client selects the options that work and rules out the ones that do not. Everything after this point is drawn to the approved direction, so this is the cheapest place in the engagement to change your mind about how Echo should look.</p>
+      </div>
+      <div class="alloc">included</div>
+    </div>
+
+    <div class="stage sub">
+      <div class="connector" aria-hidden="true"><i></i></div>
+      <div class="body">
+        <h3>Concept approval <span class="gate-pill">Gate 2.2</span></h3>
+        <p class="goal">Sign-off on the concept screens releases the full redesign. From this point the style is fixed and the screen list is locked — later changes to either are handled as change requests rather than absorbed into the fixed price.</p>
+      </div>
+      <div class="alloc">included</div>
+    </div>
+
+    <div class="stage">
+      <div class="no">3</div>
+      <div class="body">
+        <h3>Redesign — flows</h3>
+        <p class="goal">Every flow drawn out to the approved concept: Recap, Echo detail, Sessions, Year in Review, the sharing flow, and the empty and error states the prototype currently lacks. This is the body of the engagement and the reason the two gates in front of it exist. Ends with the Figma handoff.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: all flows and states, prepared for build
+        </p>
+      </div>
+      <div class="alloc">89 h</div>
+    </div>
+
+    <div class="stage">
+      <div class="no">4</div>
+      <div class="body">
+        <h3>Mascot — droplet</h3>
+        <p class="goal">Character work, priced as a discrete deliverable rather than by the hour: the droplet built as separate SVG components, a colour range covering its states, and an animation concept illustrated with short generated reference clips. It runs alongside the flows and does not block them.</p>
+        <p class="out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          Deliverable: component SVG, state palette, animation concept
+        </p>
+      </div>
+      <div class="alloc">€500 · 16 h</div>
+    </div>
+
+  </section>
+
+  <p class="group-footnote">Revisions, QA and handoff are not a separate line. The fourteen hours they represent are folded into the blocks that consume them — two into the audit, three into the concept, nine into the redesign — because that is where feedback rounds and the consistency pass actually happen.</p>
+
+  <!-- ── Scope ──────────────────────────────────────────────────── -->
+  <h2 class="group-header">
+    <span>Scope of work</span>
+    <span class="hint">Tap a block for details</span>
+  </h2>
+  <p class="section-intro">Four blocks. The redesign is 89 of the 144.5 hours — 62% of the engagement — because it carries every screen the user actually spends time in. Everything before it exists to make sure those hours are spent once. The mascot sits outside that arithmetic: it is a fixed €500 allocation, priced as a deliverable rather than drawn from the hourly pool.</p>
+
+  <section class="group">
+
+    <details class="row">
+      <summary>
+        <span class="name">Audit</span>
+        <span class="bar" aria-hidden="true"><i style="width:20%"></i></span>
+        <span class="figures"><span class="hours">18 h</span><span class="cost">€280</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The current prototype is broken down into a flow diagram and read for bottlenecks. Several are already visible: the profile screen is populated with data that onboarding never asks for, there is no error state anywhere, and there is no forgot-password path. These are structural, not cosmetic — redrawing the screens without resolving them would ship the same problems in a better-looking form.</p>
+        <ul>
+          <li><b>Flow diagram of the current app</b> — every screen and transition as it behaves today</li>
+          <li><b>Prioritised UX issue list</b> — what breaks the user, what is merely untidy, and which of the two this engagement fixes</li>
+          <li><b>Data-source check</b> — for each field on screen, where the value comes from and whether anything actually collects it</li>
+          <li><b>Review round included</b> — two of the eighteen hours cover walking the findings with the client and correcting them</li>
+          <li><b>No competitor analysis</b> — Stats.fm, Last.fm and Musicat are deliberately out. The direction is already set, so a survey would produce reading rather than decisions</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Design concept</span>
+        <span class="bar" aria-hidden="true"><i style="width:24%"></i></span>
+        <span class="figures"><span class="hours">21.5 h</span><span class="cost">€335</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">Moodboard and concept in one block, because they answer the same question at two levels of resolution. The moodboard proposes the look as references and options; the concept proves it on real screens. The client approves twice — once on the board, once on the screens — and the second approval is what releases the redesign.</p>
+        <ul>
+          <li><b>Moodboard</b> — references from Pinterest and shipped applications, plus pattern options: buttons, cards, footers, and how a neon accent behaves on a dark ground without vibrating</li>
+          <li><b>Colour range</b> — the base palette, and the room reserved for mood-based colour on Recap</li>
+          <li><b>Moodboard approval</b> — the client picks the options that carry forward. The board is the direction; nothing is restated as a separate document</li>
+          <li><b>Main Recap screen</b> — the screen the product is judged on, drawn first, where mood-driven colour has to stay readable across every mood</li>
+          <li><b>One or two supporting screens</b> — chosen at the moodboard gate for whatever the concept most needs to prove</li>
+          <li><b>Two revision rounds included</b> — three of the hours here cover feedback on the board and on the screens</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Redesign</span>
+        <span class="bar" aria-hidden="true"><i style="width:100%"></i></span>
+        <span class="figures"><span class="hours">89 h</span><span class="cost">€1,385</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">The body of the engagement. Six flows, each drawn to the approved concept, including the states the prototype is missing today. The navigation model is the hard part throughout: the app moves across day, week, month, season and year, and every level has to make its own scroll feel like one deliberate step rather than an unbounded feed.</p>
+        <ul>
+          <li><b>Recap / Echo — main screen</b> — mood-based colour and journey navigation across day, week, month, season, year</li>
+          <li><b>Echo — detail</b> — overview, tracks, artists, genres, and playlist export</li>
+          <li><b>Sessions</b> — a timeline of listening sessions with drill-down into a single session</li>
+          <li><b>Year in Review / History</b> — swipe navigation from year to season, one scroll per level</li>
+          <li><b>Sharing flow</b> — Instagram Stories cards. The client names this as the main organic channel, so the cards are designed as a distribution surface, not an afterthought export</li>
+          <li><b>Empty and error states</b> — "history not loaded", "no data yet", and the rest of what the prototype currently has no answer for</li>
+          <li><b>Consistency pass and Figma handoff</b> — nine of the eighty-nine hours cover revision rounds, the pass that catches drift across six flows drawn over four weeks, and file preparation for development</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="row">
+      <summary>
+        <span class="name">Mascot</span>
+        <span class="bar" aria-hidden="true"><i style="width:18%"></i></span>
+        <span class="figures"><span class="hours">16 h</span><span class="cost">€500</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </summary>
+      <div class="detail">
+        <p class="lead">Carried as a fixed <b>€500</b> allocation rather than an hourly line. Character work is a different discipline from interface design and is priced as a deliverable, which also means this stage can be adjusted or dropped without re-pricing anything else. Three things are delivered, and the third is a concept rather than production animation.</p>
+        <ul>
+          <li><b>Component SVG</b> — the droplet built as separate parts: body, eyes, arms and the rest, so each can be moved independently when the mascot is eventually animated</li>
+          <li><b>Colour range and states</b> — the palette across moods plus the distinct states the mascot appears in, base-painted to the echo colours so it shifts with the rest of the interface rather than sitting on top of it as a fixed illustration</li>
+          <li><b>Animation concept</b> — how the droplet should move, illustrated with short generated reference clips. These are direction, not shippable assets</li>
+          <li><b>No Lottie</b> — agreed. Production animation is a separate scope; the component SVG is structured so whoever builds it inherits a rigged character rather than a flat drawing</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="total-row">
+      <span class="lbl">Total</span>
+      <span class="val"><b>€2,500</b><span>144.5 h · fixed price</span></span>
+    </div>
+
+  </section>
+
+  <!-- ── Blocking question ──────────────────────────────────────── -->
+  <h2 class="group-header"><span>Decision on record</span></h2>
+
+  <section class="callout">
+    <span class="tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+      Agreed
+    </span>
+    <h3>How the mascot is delivered</h3>
+    <p>Animation is a different discipline with a different cost base, and folding production animation into a fixed price would either inflate the whole engagement or quietly starve the flows. Rather than defer the question entirely, the mascot is delivered in a shape that answers it without paying for it.</p>
+    <p><b>Agreed: no Lottie. The €500 covers three things — component SVG, colour states, and an animation concept shown through short generated reference clips.</b> The clips communicate intent; they are direction for whoever animates the mascot, not assets to ship.</p>
+    <p class="ask">Building the droplet as separate components — body, eyes, arms — is what makes this work later. An animator inherits a rigged character and a defined state set rather than a flat illustration to take apart first. Production animation stays a separate scope and a separate budget.</p>
+  </section>
+
+  <!-- ── Deliverables ───────────────────────────────────────────── -->
+  <h2 class="group-header"><span>What the client receives</span></h2>
+
+  <section class="group">
+    <ul class="plain affirm">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Flow diagram and prioritised issue list</span>
+        <span class="d">How the current app actually works, and which of its structural problems this engagement resolves.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Agreed visual direction</span>
+        <span class="d">Moodboard, colour range, and the component patterns the rest of the design is built from.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Six redesigned flows with their states</span>
+        <span class="d">Recap, Echo detail, Sessions, Year in Review, sharing, and the empty and error states the prototype is missing.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Instagram Stories share cards</span>
+        <span class="d">Designed as the product's main organic channel rather than a generic export.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Droplet mascot, built as components</span>
+        <span class="d">Separate SVG parts, a colour range across its states, and an animation concept with short generated reference clips. No Lottie.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span class="t">Figma file prepared for build</span>
+        <span class="d">Structured layers, named components and exported assets, so implementation starts without a clarification round.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── Assumptions ────────────────────────────────────────────── -->
+  <h2 class="group-header"><span>Assumptions</span></h2>
+  <p class="section-intro">The fixed price holds while these remain true. Each is stated here so it can be confirmed or corrected before work begins rather than discovered at hour 90.</p>
+
+  <section class="group">
+    <ul class="plain">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Scope is fixed at the concept gate</span>
+        <span class="d">The 144.5 hours cover the four blocks listed above. The audit produces the definitive screen list — if it comes out materially larger than the current prototype implies, the estimate is revisited at the gate rather than absorbed. Once the concept is approved the list is locked, and anything added after that is quoted separately.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">The visual direction stays as briefed</span>
+        <span class="d">Dark theme, neon accents, minimalism, Spotify as reference. The moodboard is sized for choosing inside that direction, not for exploring a second one. A change of direction after Gate 2.2 is a new concept stage.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Mascot animation is concept only</span>
+        <span class="d">The €500 covers component SVG, colour states, and an animation concept illustrated with generated reference clips. Production animation — Lottie or finished video — is not included and is estimated on its own.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">History import and device-level data are out of scope</span>
+        <span class="d">These are data and platform problems rather than design ones. No screens are drawn for them here.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">No competitor analysis</span>
+        <span class="d">Stats.fm, Last.fm and Musicat are deliberately excluded. The direction is already decided, so the audit reads the product itself rather than the category.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Interface copy is supplied by the client</span>
+        <span class="d">Screen text, empty-state wording and share-card copy arrive as finished text. Copywriting is not in the 144.5 hours.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+        <span class="t">Feedback arrives within two business days per gate</span>
+        <span class="d">The October deadline depends on this more than on the hours. Slower turnaround moves the calendar without changing the scope, and the Wrapped window does not move with it.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── Terms ──────────────────────────────────────────────────── -->
+  <h2 class="group-header"><span>Engagement terms</span></h2>
+
+  <section class="group">
+    <dl class="terms">
+      <div>
+        <dt>Engagement</dt>
+        <dd>Fixed price of <b>€2,500</b> for the scope described above.</dd>
+      </div>
+      <div>
+        <dt>Reference scope</dt>
+        <dd><b>144.5 hours</b>. The hours are how the fixed price is built and how change requests are priced — they are not billed against tracked time.</dd>
+      </div>
+      <div>
+        <dt>Mascot allocation</dt>
+        <dd><b>€500</b> of the total is ring-fenced for the mascot stage. Character work is priced as a deliverable, not by the hour, and is kept as its own line so it can be adjusted or removed without re-pricing the rest.</dd>
+      </div>
+      <div>
+        <dt>Duration</dt>
+        <dd>Approximately <b>5 working weeks</b> with one designer at 30 hours per week.</dd>
+      </div>
+      <div>
+        <dt>Deadline</dt>
+        <dd>Design complete <b>mid to late October</b>, leaving build runway ahead of Spotify Wrapped season.</dd>
+      </div>
+      <div>
+        <dt>Revision rounds</dt>
+        <dd>Two rounds per block are included. There is no separate revisions line — the fourteen hours are distributed into the blocks that consume them: two in the audit, three in the concept, nine in the redesign. Further rounds are quoted separately.</dd>
+      </div>
+      <div>
+        <dt>Change requests</dt>
+        <dd>Work outside the agreed scope — mascot animation included — is estimated separately and starts only after written approval.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <footer>
+    <span>Echo — design estimate</span>
+    <span>v1.0</span>
+    <span>27 August 2026</span>
+  </footer>
+
+</div>
+
+<script>
+  let openedForPrint = [];
+  window.addEventListener("beforeprint", () => {
+    openedForPrint = [...document.querySelectorAll("details:not([open])")];
+    openedForPrint.forEach(d => d.setAttribute("open", ""));
+  });
+  window.addEventListener("afterprint", () => {
+    openedForPrint.forEach(d => d.removeAttribute("open"));
+    openedForPrint = [];
+  });
+</script>
+</body>
+</html>
