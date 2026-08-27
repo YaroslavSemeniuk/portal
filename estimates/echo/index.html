@@ -226,7 +226,7 @@
 
   .stage {
     display: grid;
-    grid-template-columns: 30px 1fr auto;
+    grid-template-columns: 30px 1fr;
     column-gap: 14px;
     padding: 14px var(--inset);
     position: relative;
@@ -300,19 +300,6 @@
   }
 
   .stage .body { grid-column: 2; grid-row: 1; }
-
-  .stage .alloc {
-    grid-column: 3;
-    grid-row: 1;
-    text-align: right;
-    white-space: nowrap;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    font-variant-numeric: tabular-nums;
-    color: var(--label-secondary);
-    margin-top: 2px;
-  }
 
   .stage h3 {
     margin: 0 0 3px;
@@ -641,13 +628,6 @@
   }
 
   @media (max-width: 400px) {
-    .stage { grid-template-columns: 30px 1fr; }
-    .stage .alloc {
-      grid-column: 2;
-      grid-row: 2;
-      text-align: left;
-      margin-top: 8px;
-    }
     .stage.sub { padding-left: calc(var(--inset) + 10px); }
   }
 
@@ -702,9 +682,9 @@
   <!-- ── Stages ─────────────────────────────────────────────────── -->
   <h2 class="group-header">
     <span>Delivery plan</span>
-    <span class="hint">Indicative allocation</span>
+    <span class="hint">Order of work</span>
   </h2>
-  <p class="section-intro">Four blocks, with two approval gates inside the concept stage. The sequence matters: the audit finds what is structurally broken, the moodboard settles what the product should look like, and only then does the concept commit that look to real screens. Each gate closes one open question before the next stage can spend hours on it — which on a fixed-price engagement is what protects the budget. A direction change caught at hour 20 is a conversation; the same change caught at hour 110 is a rebuild.</p>
+  <p class="section-intro">Four blocks, with two approval gates inside the concept stage. The sequence matters: the audit finds what is structurally broken, the moodboard settles what the product should look like, and only then does the concept commit that look to real screens. Each gate closes one open question before the next block commits work to it — which on a fixed-price engagement is what protects the budget. A direction change caught at the moodboard is a conversation; the same change caught deep in the redesign is a rebuild.</p>
 
   <section class="group stages">
 
@@ -718,7 +698,6 @@
           Deliverable: flow diagram and prioritised UX issue list
         </p>
       </div>
-      <div class="alloc">€700 · 18 h</div>
     </div>
 
     <div class="stage">
@@ -731,7 +710,6 @@
           Deliverable: approved moodboard, then 2–3 key screens
         </p>
       </div>
-      <div class="alloc">€400 · 21.5 h</div>
     </div>
 
     <div class="stage sub">
@@ -740,7 +718,6 @@
         <h3>Moodboard approval <span class="gate-pill">Gate 2.1</span></h3>
         <p class="goal">The client selects the options that work and rules out the ones that do not. Everything after this point is drawn to the approved direction, so this is the cheapest place in the engagement to change your mind about how Echo should look.</p>
       </div>
-      <div class="alloc">included</div>
     </div>
 
     <div class="stage sub">
@@ -749,7 +726,6 @@
         <h3>Concept approval <span class="gate-pill">Gate 2.2</span></h3>
         <p class="goal">Sign-off on the concept screens releases the full redesign. From this point the style is fixed and the screen list is locked — later changes to either are handled as change requests rather than absorbed into the fixed price.</p>
       </div>
-      <div class="alloc">included</div>
     </div>
 
     <div class="stage">
@@ -762,25 +738,23 @@
           Deliverable: all flows and states, prepared for build
         </p>
       </div>
-      <div class="alloc">€900 · 89 h</div>
     </div>
 
     <div class="stage">
       <div class="no">4</div>
       <div class="body">
         <h3>Mascot — droplet</h3>
-        <p class="goal">Character work, priced as a discrete deliverable rather than by the hour: the droplet built as separate SVG components, a colour range covering its states, and an animation concept illustrated with short generated reference clips. It runs alongside the flows and does not block them.</p>
+        <p class="goal">Character work, kept as its own block: the droplet built as separate SVG components, a colour range covering its states, and an animation concept illustrated with short generated reference clips. It runs alongside the flows and does not block them.</p>
         <p class="out">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
           Deliverable: component SVG, state palette, animation concept
         </p>
       </div>
-      <div class="alloc">€500 · 16 h</div>
     </div>
 
   </section>
 
-  <p class="group-footnote">Revisions, QA and handoff are not a separate line. The fourteen hours they represent are folded into the blocks that consume them — two into the audit, three into the concept, nine into the redesign — because that is where feedback rounds and the consistency pass actually happen.</p>
+  <p class="group-footnote">Revisions, QA and handoff are not a separate stage. Feedback rounds, the consistency pass and file preparation are folded into the blocks that consume them — the audit, the concept and the redesign — because that is where they actually happen. The scope breakdown below shows the share each block carries.</p>
 
   <!-- ── Scope ──────────────────────────────────────────────────── -->
   <h2 class="group-header">
