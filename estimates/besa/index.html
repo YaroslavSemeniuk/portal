@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BESA — Design Estimate · YARSY</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Site structure audit and design estimate for BESA GmbH's new website: sitemap findings, proposed structure, phased delivery plan, and cost breakdown.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f5f7f8;
+  --surface:#ffffff;
+  --surface-2:#eef1f3;
+  --ink:#171b21;
+  --ink-soft:#4c5560;
+  --ink-faint:#7b8591;
+  --line:#dde2e7;
+  --accent:#0e7c86;
+  --accent-ink:#075a62;
+  --accent-soft:#e3f1f1;
+  --crit:#a8394a;
+  --crit-soft:#f8e7e9;
+  --warn:#9a6a16;
+  --warn-soft:#f7edda;
+  --info:#2f5aa8;
+  --info-soft:#e6ecf7;
+  --good:#2f7a4f;
+  --good-soft:#e6f2ea;
+  --shadow: 0 1px 2px rgba(23,27,33,.04), 0 8px 24px -12px rgba(23,27,33,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12161b; --surface:#1a2027; --surface-2:#212831;
+    --ink:#e8ebee; --ink-soft:#a7b0ba; --ink-faint:#7a8391; --line:#2a323c;
+    --accent:#3fb8ba; --accent-ink:#8fe0e0; --accent-soft:#193334;
+    --crit:#e08a95; --crit-soft:#3a2226; --warn:#e3b979; --warn-soft:#3a2f1c;
+    --info:#8fadea; --info-soft:#1e2740; --good:#8ecfa8; --good-soft:#1c3327;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12161b; --surface:#1a2027; --surface-2:#212831;
+  --ink:#e8ebee; --ink-soft:#a7b0ba; --ink-faint:#7a8391; --line:#2a323c;
+  --accent:#3fb8ba; --accent-ink:#8fe0e0; --accent-soft:#193334;
+  --crit:#e08a95; --crit-soft:#3a2226; --warn:#e3b979; --warn-soft:#3a2f1c;
+  --info:#8fadea; --info-soft:#1e2740; --good:#8ecfa8; --good-soft:#1c3327;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.55);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Serif", Georgia, "Times New Roman", serif;
+  font-size:16.5px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{ font-family:"IBM Plex Sans Condensed","Arial Narrow",sans-serif; text-wrap:balance; color:var(--ink); letter-spacing:.01em; }
+.mono{ font-family:"IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace; }
+a{ color:var(--accent-ink); }
+code{ font-family:"IBM Plex Mono", monospace; font-size:.92em; background:var(--surface-2); padding:.1em .38em; border-radius:3px; }
+
+.shell{
+  display:grid; grid-template-columns: 216px minmax(0,760px);
+  justify-content:center; gap:48px; max-width:1100px; margin:0 auto;
+  padding-block:40px 96px; padding-inline:20px;
+}
+@media (max-width: 880px){ .shell{ grid-template-columns: minmax(0,1fr); padding-block-start:0; } }
+
+nav.rail{ position:sticky; top:24px; align-self:start; display:flex; flex-direction:column; gap:2px; font-family:"IBM Plex Sans Condensed", sans-serif; }
+nav.rail .tag{ font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 10px 10px; }
+nav.rail a{ display:flex; gap:10px; align-items:baseline; text-decoration:none; color:var(--ink-soft); padding:7px 10px; border-radius:7px; font-size:.93rem; font-weight:500; border-left:2px solid transparent; }
+nav.rail a:hover{ color:var(--ink); background:var(--surface-2); }
+nav.rail a .n{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--ink-faint); }
+nav.rail a.active{ color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft); }
+
+@media (max-width: 880px){
+  nav.rail{ position:sticky; top:0; z-index:20; flex-direction:row; overflow-x:auto; gap:2px; background:var(--bg); padding:10px 14px; border-bottom:1px solid var(--line); -ms-overflow-style:none; scrollbar-width:none; }
+  nav.rail::-webkit-scrollbar{ display:none; }
+  nav.rail .tag{ display:none; }
+  nav.rail a{ white-space:nowrap; padding:6px 10px; border-left:none; border-bottom:2px solid transparent; }
+  nav.rail a.active{ border-left:none; border-bottom-color:var(--accent); }
+}
+
+main{ min-width:0; }
+
+.hero{ padding-block:8px 28px; border-bottom:1px solid var(--line); margin-bottom:40px; }
+.hero .eyebrow{ font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--accent-ink); letter-spacing:.08em; text-transform:uppercase; margin-bottom:14px; display:block; }
+.hero h1{ font-size:2.15rem; line-height:1.15; margin:0 0 14px; font-weight:700; }
+.hero .lede{ font-size:1.07rem; color:var(--ink-soft); max-width:62ch; margin:0 0 26px; }
+.stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.stats .cell{ background:var(--surface); padding:14px 14px 15px; }
+.stats .num{ font-family:"IBM Plex Mono",monospace; font-size:1.5rem; font-weight:600; color:var(--accent-ink); font-variant-numeric:tabular-nums; }
+.stats .lbl{ font-size:.78rem; color:var(--ink-faint); margin-top:3px; line-height:1.3; }
+@media (max-width:560px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+
+section{ scroll-margin-top:70px; margin-bottom:64px; }
+section .kicker{ font-family:"IBM Plex Mono",monospace; font-size:.76rem; color:var(--ink-faint); letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+section h2{ font-size:1.5rem; margin:0 0 16px; font-weight:700; }
+section > p.intro{ color:var(--ink-soft); max-width:66ch; margin:0 0 24px; }
+section h3.sub{ font-size:1.05rem; margin:30px 0 12px; color:var(--ink); font-weight:600; }
+.linkline{ font-size:.92rem; color:var(--ink-soft); margin:-10px 0 24px; }
+.linkline a{ font-family:"IBM Plex Mono",monospace; font-size:.88rem; }
+
+.tree{ font-family:"IBM Plex Mono",monospace; font-size:.86rem; line-height:1.85; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:18px 20px; overflow-x:auto; box-shadow:var(--shadow); }
+.tree .d0{ color:var(--ink); font-weight:600; }
+.tree .d1{ padding-left:1.4em; border-left:1px solid var(--line); margin-left:.35em; color:var(--ink); }
+.tree .d2{ padding-left:2.8em; color:var(--ink-soft); }
+.tree .d3{ padding-left:4.2em; color:var(--ink-faint); }
+.tree .flag{ color:var(--crit); font-weight:600; }
+.tree .flagw{ color:var(--warn); font-weight:600; }
+.tree .note{ color:var(--ink-faint); font-family:"IBM Plex Serif",serif; font-style:italic; font-size:.82em; }
+
+details.appendix{ background:var(--surface); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow); margin:18px 0 0; }
+details.appendix summary{ cursor:pointer; list-style:none; padding:14px 18px; font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:600; font-size:.92rem; display:flex; align-items:center; gap:8px; }
+details.appendix summary::-webkit-details-marker{ display:none; }
+details.appendix summary::before{ content:"+"; color:var(--accent-ink); font-family:"IBM Plex Mono",monospace; width:1em; }
+details.appendix[open] summary::before{ content:"\2212"; }
+details.appendix .tree{ border:none; border-top:1px solid var(--line); border-radius:0 0 10px 10px; box-shadow:none; }
+
+.tier-label{ display:flex; align-items:center; gap:10px; margin:36px 0 16px; }
+.tier-label .dot{ width:9px; height:9px; border-radius:50%; }
+.tier-label span.txt{ font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:600; font-size:1rem; }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:22px 24px; margin-bottom:16px; box-shadow:var(--shadow); border-left:4px solid var(--line); }
+.card.crit{ border-left-color:var(--crit); }
+.card.warn{ border-left-color:var(--warn); }
+.card.info{ border-left-color:var(--info); }
+.card.good{ border-left-color:var(--good); }
+.card .head{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:16px; }
+.card h4{ margin:0; font-family:"IBM Plex Sans Condensed",sans-serif; font-size:1.08rem; font-weight:600; }
+.chip{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.04em; text-transform:uppercase; padding:3px 8px; border-radius:99px; font-weight:600; }
+.chip.crit{ background:var(--crit-soft); color:var(--crit); }
+.chip.warn{ background:var(--warn-soft); color:var(--warn); }
+.chip.info{ background:var(--info-soft); color:var(--info); }
+.chip.good{ background:var(--good-soft); color:var(--good); }
+.card dl{ display:grid; grid-template-columns:96px 1fr; row-gap:26px; column-gap:16px; margin:0; }
+.card dt{ font-family:"IBM Plex Sans Condensed",sans-serif; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); padding-top:2px; }
+.card dd{ margin:0; color:var(--ink-soft); }
+.card dd.path{ font-family:"IBM Plex Mono",monospace; font-size:.85rem; color:var(--ink); word-break:break-word; }
+.card dd.pathlist{ display:flex; flex-direction:column; gap:6px; }
+.card dd.pathlist span{ display:block; }
+.card .solve b{ color:var(--accent-ink); }
+
+.oq{ background:var(--info-soft); border:1px solid color-mix(in srgb, var(--info) 35%, transparent); border-radius:10px; padding:16px 18px; margin:16px 0; display:flex; gap:12px; }
+.oq .m{ font-family:"IBM Plex Mono",monospace; color:var(--info); font-weight:700; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; padding-top:1px; }
+.oq p{ margin:0; color:var(--ink); }
+
+table.vtab{ width:100%; border-collapse:collapse; font-size:.92rem; }
+table.vtab th{ text-align:left; font-family:"IBM Plex Sans Condensed",sans-serif; font-size:.76rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); border-bottom:1px solid var(--line); padding:8px 10px; }
+table.vtab td{ border-bottom:1px solid var(--line); padding:10px 10px; vertical-align:top; color:var(--ink-soft); }
+table.vtab td.path{ font-family:"IBM Plex Mono",monospace; font-size:.83rem; color:var(--ink); }
+table.vtab tr:last-child td{ border-bottom:none; }
+.wrap-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); }
+.wrap-scroll table{ min-width:560px; }
+.wrap-scroll table.vtab th, .wrap-scroll table.vtab td{ padding-inline:14px; }
+
+table.fmt{ width:100%; border-collapse:collapse; font-size:.88rem; }
+table.fmt th{ background:var(--surface-2); text-align:left; font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:600; padding:9px 12px; border-bottom:1px solid var(--line); }
+table.fmt td{ padding:9px 12px; border-bottom:1px solid var(--line); color:var(--ink-soft); }
+table.fmt td:first-child{ color:var(--ink); font-weight:500; font-family:"IBM Plex Sans Condensed",sans-serif;}
+table.fmt tr:last-child td{ border-bottom:none; }
+.pill{ display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:2px 7px; border-radius:5px; background:var(--accent-soft); color:var(--accent-ink); margin:1px 3px 1px 0; }
+.pill.ph2{ background:var(--surface-2); color:var(--ink-faint); }
+
+.pricebox{ background:var(--good-soft); border:1px solid color-mix(in srgb, var(--good) 35%, transparent); border-radius:10px; padding:20px 22px; margin:0 0 28px; }
+.pricebox .top{ display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+.pricebox h3{ margin:0; font-family:"IBM Plex Sans Condensed",sans-serif; font-size:1.1rem; font-weight:700; color:var(--ink); }
+.pricebox .amt{ font-family:"IBM Plex Mono",monospace; font-size:1.7rem; font-weight:600; color:var(--good); font-variant-numeric:tabular-nums; }
+.pricebox ul{ margin:10px 0 0; padding-left:20px; color:var(--ink-soft); font-size:.94rem; }
+.pricebox ul li{ margin-bottom:4px; }
+.badge-fixed{ background:var(--good); color:var(--surface); font-family:"IBM Plex Mono",monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; padding:3px 9px; border-radius:99px; font-weight:700; }
+.badge-est{ background:var(--warn-soft); color:var(--warn); font-family:"IBM Plex Mono",monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; padding:3px 9px; border-radius:99px; font-weight:700; }
+
+table.costtab{ width:100%; border-collapse:collapse; font-size:.88rem; }
+table.costtab th{ background:var(--surface-2); text-align:left; font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:600; padding:9px 12px; border-bottom:1px solid var(--line); }
+table.costtab td{ padding:10px 12px; border-bottom:1px solid var(--line); color:var(--ink-soft); vertical-align:top; }
+table.costtab td:first-child{ color:var(--ink); font-weight:500; font-family:"IBM Plex Sans Condensed",sans-serif; }
+table.costtab td.num{ text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink); white-space:nowrap; }
+table.costtab tr.total td{ border-top:2px solid var(--ink); border-bottom:none; font-weight:700; color:var(--ink); padding-top:14px; font-size:.96rem; }
+table.costtab tr.sub td{ color:var(--ink-faint); font-size:.82rem; padding-top:0; padding-bottom:14px; border-bottom:1px solid var(--line); }
+.assume{ background:var(--surface-2); border-radius:10px; padding:16px 18px; margin:18px 0; font-size:.9rem; color:var(--ink-soft); }
+.assume b{ color:var(--ink); }
+
+.plan{ list-style:none; margin:0; padding:0; counter-reset:step; display:flex; flex-direction:column; gap:2px; }
+.plan li{ counter-increment:step; display:grid; grid-template-columns:34px 1fr; grid-template-rows:auto auto; column-gap:14px; row-gap:6px; padding:16px 4px; border-bottom:1px solid var(--line); }
+.plan li:last-child{ border-bottom:none; }
+.plan li::before{ content:counter(step,decimal-leading-zero); grid-column:1; grid-row:1 / span 2; font-family:"IBM Plex Mono",monospace; color:var(--accent); font-weight:600; font-size:.85rem; padding-top:2px; }
+.plan b{ grid-column:2; grid-row:1; font-family:"IBM Plex Sans Condensed",sans-serif; }
+.plan .d{ grid-column:2; grid-row:2; color:var(--ink-soft); font-size:.94rem; max-width:64ch; }
+
+.timeline{ list-style:none; margin:0; padding:0 0 0 30px; position:relative; counter-reset:tl; }
+.timeline::before{ content:""; position:absolute; left:10px; top:4px; bottom:4px; width:2px; background:var(--line); }
+.timeline li{ position:relative; counter-increment:tl; padding-bottom:30px; }
+.timeline li:last-child{ padding-bottom:0; }
+.timeline li::before{ content:counter(tl); position:absolute; left:-30px; top:0; width:21px; height:21px; border-radius:50%; background:var(--accent); color:#fff; font:600 .68rem/21px "IBM Plex Mono",monospace; text-align:center; box-shadow:0 0 0 4px var(--bg); }
+.timeline .tag{ display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color:var(--accent-ink); background:var(--accent-soft); padding:2px 8px; border-radius:99px; margin-bottom:8px; }
+.timeline h4{ margin:0 0 6px; font-family:"IBM Plex Sans Condensed",sans-serif; font-size:1.03rem; font-weight:600; }
+.timeline p{ margin:0; color:var(--ink-soft); font-size:.95rem; max-width:62ch; }
+.timeline-note{ margin-top:22px; padding:14px 18px; background:var(--accent-soft); border-radius:10px; color:var(--ink); font-size:.94rem; }
+
+footer{ margin-top:60px; padding-top:24px; border-top:1px solid var(--line); color:var(--ink-faint); font-size:.85rem; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <nav class="rail" id="railnav">
+    <span class="tag">besa.de audit</span>
+    <a href="#intro"><span class="n">00</span> Intro</a>
+    <a href="#overview"><span class="n">01</span> Current sitemap</a>
+    <a href="#findings"><span class="n">02</span> Findings</a>
+    <a href="#verify"><span class="n">03</span> Link check</a>
+    <a href="#future"><span class="n">04</span> Proposed sitemap</a>
+    <a href="#actions"><span class="n">05</span> Recommendations</a>
+    <a href="#next"><span class="n">06</span> Next steps</a>
+    <a href="#estimate"><span class="n">07</span> Estimate</a>
+  </nav>
+
+  <main>
+    <div class="hero" id="intro">
+      <span class="eyebrow">besa.de · site audit · Sep 15, 2026</span>
+      <h1>What's actually going on in BESA's site structure</h1>
+      <p class="lede">Before proposing a new structure for the new site, we went through every single page of the current besa.de — separately from design or content, purely at the level of "where does everything live, and does each link go where it promises." Below is what we found, why it matters right now while you're preparing the MVP for 5 products, and what we suggest doing about it.</p>
+      <div class="stats">
+        <div class="cell"><div class="num">349</div><div class="lbl">pages and posts checked by hand</div></div>
+        <div class="cell"><div class="num">100%</div><div class="lbl">sitemap URLs resolve (0 broken)</div></div>
+        <div class="cell"><div class="num">6</div><div class="lbl">duplicate or orphaned pages</div></div>
+        <div class="cell"><div class="num">2</div><div class="lbl">open questions on MVP products</div></div>
+      </div>
+    </div>
+
+    <section id="overview">
+      <div class="kicker">01 · Current sitemap</div>
+      <h2>What besa.de's structure looks like today</h2>
+      <p class="intro">The site runs on WordPress and has 349 real pages: 172 static pages (products, About, Contact, etc.) and 177 blog posts. We cross-checked the site's official sitemap against what the live site actually shows — here's a simplified map of what's made of what.</p>
+      <p class="linkline">Live sitemap we started from: <a href="https://www.besa.de/wp-sitemap.xml" target="_blank" rel="noopener">besa.de/wp-sitemap.xml ↗</a></p>
+
+      <div class="tree">
+        <div class="d0">/ — homepage</div>
+        <div class="d1">/products/ — 6 products × features/downloads/overview (54 pages)</div>
+        <div class="d1">/about/ — company + 21 individual team-member pages (30 pages)</div>
+        <div class="d1">/events/ — conferences, webinars, workshops (22 pages)</div>
+        <div class="d1">/home/downloads/ — <span class="flag">a second, parallel downloads "floor"</span> (21 pages)</div>
+        <div class="d1">/science/ — publications, research, collaborations (15 pages)</div>
+        <div class="d1">/contact/ — 12 separate single-purpose pages (forms, distributors, career…)</div>
+        <div class="d1">/publications/, /faqs/, /support/, /wiki/ — 13 pages</div>
+        <div class="d1"><span class="flagw">3 pages that don't belong to any section</span> — <span class="mono">test-page-for-contact-form</span>, <span class="mono">downloads2-besa_research</span>, <span class="mono">pipeline-eeg</span></div>
+        <div class="d1">177 blog posts spread across 4 language-mixed URL prefixes (allgemein / all / software / science)</div>
+      </div>
+
+      <details class="appendix">
+        <summary>Full current sitemap — all 172 pages, by section</summary>
+        <div class="tree">
+          <div class="d0">/ — homepage</div>
+          <div class="d1">about/ — besa-history, besa-organisation, besa-think-tank, imprint, legal-notice-and-privacy-statement, logsy</div>
+          <div class="d2">besa-team/ — index + 21 individual profile pages</div>
+          <div class="d1">contact/ — index, besa-plot-download, besa-simulator-download, career, distributors, feedback, incident, information-request, sales, subscribe-to-newsletter, trial-order-form, unsubscribe-from-newsletter</div>
+          <div class="d1"><span class="flagw">downloads2-besa_research</span> — stray root-level page</div>
+          <div class="d1">events/ — index, besa-ltm-training (+confirmed), clinical-eeg-workshop-fall-2024, conferences (+1 event), webinars (+3), workshops (+11 events 2021–2026)</div>
+          <div class="d1">faqs/ — data-analysis, licensing, matlab, other-questions <span class="note">(no index page of its own — see Section 03)</span></div>
+          <div class="d1">home/downloads/ — index + 18 children: besa-connectivity, besa-license-key, besa-mri, besa-plot(+confirmed), besa-research(+7-1, +older-versions), besa-simulator(+confirmed), besa-statistics, data-readers, eegfocus, feature-videos, file-formats, license-update, matlab, quick-guides, training-material/tutorials, user-documentation</div>
+          <div class="d1"><span class="flagw">newsletter</span> — stray root-level page</div>
+          <div class="d1"><span class="flagw">pipeline-eeg</span> — stray root-level page, duplicate of products/overview</div>
+          <div class="d1">products/ — index</div>
+          <div class="d2">besa-connectivity/ — downloads, new-features-in-besa-connectivity-2-0, overview</div>
+          <div class="d2">besa-mri/ — besa-mri-overview, certificates, downloads, features/ (+5 feature pages)</div>
+          <div class="d2">besa-research/ — besa-pipeline, besa-research-overview, certificates, downloads, features/ (+8 feature pages), new-features-in-besa-research-7-0, new-features-in-besa-research-7-1, source-modelling</div>
+          <div class="d2">besa-simulator/ — besa-simulator-overview, downloads</div>
+          <div class="d2">besa-statistics/ — besa-statistics-overview, downloads, features/ (+5 feature pages, no index page)</div>
+          <div class="d2">eeg-focus/ — downloads, eeg-focus-overview, features/ (+5 feature pages)</div>
+          <div class="d2"><span class="flagw">features</span>, <span class="flagw">overview</span> — two stray root-level product pages</div>
+          <div class="d1">publications/ — clinical, customers, methods, neuroscience <span class="note">(no index page — redirects to /science/publications/)</span></div>
+          <div class="d1">science/ — index, collaborations, funding, news, sponsoring</div>
+          <div class="d2">publications/ — besa-methods, besa-products-application, publications-by-besa-staff/ (+6 profile pages)</div>
+          <div class="d1">support/ — support-page</div>
+          <div class="d1"><span class="flagw">test-page-for-contact-form</span> — stray root-level page</div>
+          <div class="d1">wiki/ — besa-wiki, introduction</div>
+        </div>
+      </details>
+
+      <p style="margin-top:18px;color:var(--ink-soft)">The page count and nesting depth aren't the problem on their own: the deepest URL on the site is only 4 segments long (e.g. <code>/products/besa-research/features/connectivity/</code>), which is fine for a 349-page catalog. The real issue is that <b>the same information exists in two different branches of the tree at once</b> — that's what's worth fixing in the new structure, not "how many levels deep it goes."</p>
+    </section>
+
+    <section id="findings">
+      <div class="kicker">02 · Details</div>
+      <h2>What we found — and why it matters right now</h2>
+      <p class="intro">We grouped the findings by how much they affect decisions you need to make for the MVP soon — not just by "how bad the bug is."</p>
+
+      <div class="tier-label"><span class="dot" style="background:var(--crit)"></span><span class="txt">Tier 1 — affects how the 5 MVP product pages should be built</span></div>
+
+      <div class="card crit">
+        <div class="head"><span class="chip crit">Critical for MVP</span><h4>No single product-page template</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path pathlist"><span>/products/besa-research/</span><span>/products/besa-mri/</span><span>/products/besa-connectivity/</span><span>/products/besa-statistics/</span><span>/products/besa-simulator/</span></dd>
+          <dt>What it is</dt><dd>Each of the 6 current products has a slightly different set of sub-pages. Four of them have an "overview" page named <code>&lt;product&gt;-overview</code>, but BESA Connectivity's is just called <code>overview</code>, with no product name in it. Three products have a dedicated "features" index page; BESA Statistics has feature pages but no index page for them; BESA Connectivity has no features section at all.</dd>
+          <dt>Why it matters</dt><dd>You're designing right now how to present 5 products consistently. If the current structure is used as a reference "as is," this inconsistency carries straight into the new site.</dd>
+          <dt>What to do</dt><dd class="solve">Lock in <b>one</b> mandatory set of blocks for a product page (overview → capabilities → downloads → certificates if applicable) and apply it identically to all 5 — this is a page-design decision, not technical debt, so it's cheapest to fix now, before build.</dd>
+        </dl>
+      </div>
+
+      <div class="card crit">
+        <div class="head"><span class="chip crit">Technical error</span><h4>A redirect points to a different product's features</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path">/products/besa-statistics/features/</dd>
+          <dt>What it is</dt><dd>This address doesn't show an error — it silently redirects to <code>/products/besa-research/features/</code>, i.e. to a completely different product's capabilities.</dd>
+          <dt>Why it matters</dt><dd>Someone looking for what BESA Statistics can do ends up reading about BESA Research instead, and will most likely just leave without realizing the link was wrong.</dd>
+          <dt>What to do</dt><dd class="solve">These URLs will change anyway on the new site, so the redirect itself doesn't need fixing — what matters is <b>not carrying this mix-up into the new site's redirect map</b>. We're flagging it so whoever builds the redirects knows about it.</dd>
+        </dl>
+      </div>
+
+      <div class="card info">
+        <div class="head"><span class="chip info">Needs your decision</span><h4>Open question: which product is the "extra" one among the 6</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path pathlist"><span>/products/eeg-focus/ (9 pages, live but unlinked)</span><span>/home/downloads/besa-plot/</span><span>/contact/besa-plot-download/ (no product page of its own)</span></dd>
+          <dt>What it is</dt><dd>The current site effectively shows 6 product lines (BESA Research, MRI, Simulator, Connectivity, Statistics, EEG Focus), while the new site's MVP is 5. EEG Focus is already missing from the main menu and the Products page — nothing links to it, even though its pages are live and indexed. At the same time, BESA Plot has a download page and an order form, but no product page of its own at all.</dd>
+          <dt>Why it matters</dt><dd>This directly affects how many product templates need to be designed and built for the MVP.</dd>
+          <dt>What to do</dt><dd class="solve">We're not guessing on your behalf — flagging it as an open question below, in the "Proposed sitemap" section.</dd>
+        </dl>
+      </div>
+
+      <div class="card warn">
+        <div class="head"><span class="chip warn">Matches your own idea</span><h4>Downloads exist in two (in one case, three) parallel versions</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path pathlist"><span>/products/&lt;product&gt;/downloads/ — for all 6 products</span><span>/home/downloads/&lt;product&gt;/ — parallel copy, same 6 products</span><span>/downloads2-besa_research/ — a third, older copy (BESA Research only)</span></dd>
+          <dt>What it is</dt><dd>The same "where to download" page exists at two different addresses (text overlap of 62–74%), and for BESA Research there's a third, clearly outdated copy (<code>downloads2-besa_research</code>).</dd>
+          <dt>Why it matters</dt><dd>When content gets updated in one place, the other copy goes stale — and the site starts contradicting itself.</dd>
+          <dt>What to do</dt><dd class="solve">This is exactly what you already mentioned on the call — that all downloads could live on one page. The audit confirms it: yes, worth doing, precisely because there are effectively three parallel versions right now.</dd>
+        </dl>
+      </div>
+
+      <div class="tier-label"><span class="dot" style="background:var(--warn)"></span><span class="txt">Tier 2 — clean up before the move, so it doesn't carry over as clutter</span></div>
+
+      <div class="card warn">
+        <div class="head"><span class="chip warn">Duplicate content</span><h4>A byte-for-byte duplicate page</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path pathlist"><span>/pipeline-eeg/</span><span>/products/overview/</span></dd>
+          <dt>What it is</dt><dd>A direct text comparison shows these two pages match word for word. It's one page that happens to exist at two different addresses.</dd>
+          <dt>What to do</dt><dd class="solve">Don't carry both over to the new site — keep one.</dd>
+        </dl>
+      </div>
+
+      <div class="card warn">
+        <div class="head"><span class="chip warn">Fragmented flow</span><h4>Three pages for one action: "subscribe to newsletter"</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path pathlist"><span>/newsletter/</span><span>/contact/subscribe-to-newsletter/</span><span>/contact/unsubscribe-from-newsletter/</span></dd>
+          <dt>What it is</dt><dd>One user action ("subscribe / unsubscribe from the newsletter") is scattered across three separate pages in different parts of the site.</dd>
+          <dt>What to do</dt><dd class="solve">Merge into a single subscription block inside Contact — the same consolidation logic as with downloads.</dd>
+        </dl>
+      </div>
+
+      <div class="card warn">
+        <div class="head"><span class="chip warn">4 links · 404</span><h4>Broken links right on the homepage</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path pathlist"><span>/?page_id=422</span><span>/?page_id=4979</span><span>/?page_id=744</span><span>/?page_id=890</span></dd>
+          <dt>What it is</dt><dd>This is an old URL format (addressing pages by numeric ID) left over from an earlier version of the site. All four currently lead to a "page not found."</dd>
+          <dt>What to do</dt><dd class="solve">Remove during the move — the new site will have new URLs anyway; the main thing is not to copy these links over along with the rest of the homepage content.</dd>
+        </dl>
+      </div>
+
+      <div class="card warn">
+        <div class="head"><span class="chip warn">Live since 2021</span><h4>A test page is still published</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path">/test-page-for-contact-form/</dd>
+          <dt>What it is</dt><dd>Literally a test page for checking the contact form — still live and open to anyone.</dd>
+          <dt>What to do</dt><dd class="solve">Remove it; there's no reason to carry it to the new site.</dd>
+        </dl>
+      </div>
+
+      <div class="tier-label"><span class="dot" style="background:var(--info)"></span><span class="txt">Tier 3 — not MVP, but worth keeping in mind for phase 2</span></div>
+
+      <div class="card info">
+        <div class="head"><span class="chip info">Phase 2</span><h4>Blog categories mix German and English</h4></div>
+        <dl>
+          <dt>Where</dt><dd class="path pathlist"><span>/allgemein/ — 64 posts</span><span>/all/ — 57 posts</span><span>/software/ — 55 posts</span><span>/science/ — 1 post</span></dd>
+          <dt>What it is</dt><dd><code>allgemein</code> (German) and <code>all</code> (English) both mean "general," but they're two different categories with separate post URLs. Three more categories (workshops, events, survey) exist in the system but no post is actually tagged with them.</dd>
+          <dt>What to do</dt><dd class="solve">You already mentioned planning to sort through the blog and add it back later — that's the right moment to consolidate categories into one language and drop the unused ones.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section id="verify">
+      <div class="kicker">03 · Link check</div>
+      <h2>Is anything actually missing — and can we trust the current sitemap</h2>
+      <p class="intro">Separately from hunting for duplicates, we checked whether the sitemap actually matches reality: whether every listed page is live, and whether there are pages the site serves that the sitemap stays silent about.</p>
+
+      <div class="wrap-scroll">
+        <table class="vtab">
+          <tr><th>Check</th><th>Result</th><th>What it means</th></tr>
+          <tr><td>All 349 sitemap URLs</td><td class="path">200 OK — every single one</td><td>The sitemap itself has no dead links; it can be trusted as a complete listing.</td></tr>
+          <tr><td class="path">/home/</td><td>redirects to the homepage</td><td>Fine, nothing lost — just a housekeeping URL.</td></tr>
+          <tr><td class="path">/faqs/</td><td>redirects to an external wiki (wiki.besa.de)</td><td>But its 4 child FAQ pages (licensing, matlab…) still live on the main site — the section behaves inconsistently: the entry point sends people off-site, while the actual answers stay on-site.</td></tr>
+          <tr><td class="path">/publications/</td><td>redirects to /science/publications/</td><td>A normal trace of a page moved in the past — nothing lost.</td></tr>
+          <tr><td class="path">?page_id=… (4×, on the homepage)</td><td>404 — page not found</td><td>These are the broken homepage links from Section 02 — they're not in the sitemap because they don't lead anywhere.</td></tr>
+        </table>
+      </div>
+
+      <p style="margin-top:18px;color:var(--ink-soft)">Bottom line: the page list in the sitemap is accurate and alive — nothing significant is "lost." The issues we found aren't about the sitemap being wrong; they're about the structure around it (duplicates, parallel sections, links broken outside the sitemap) confusing both users and whoever builds the next site.</p>
+    </section>
+
+    <section id="future">
+      <div class="kicker">04 · Looking ahead</div>
+      <h2>What structure fits the new site</h2>
+      <p class="intro">This draws not just on the audit of the current site, but on what you described on the call: an MVP for 5 products by December 1, priority on the homepage and the product world, and a segmentation that shouldn't force people into a rigid "are you a clinician or a researcher" split.</p>
+
+      <div class="oq">
+        <span class="m">Open question 1</span>
+        <p>The final line-up of 5 MVP products. Your own discovery notes confirm two things: BESA Research is the flagship product, and BESA Statistics was flagged as either a standalone purchase or an add-on — which decides whether it needs a full product page or a lighter add-on treatment inside another product's page. The other slots aren't named yet. Based on current site navigation, EEG Focus looks like the most likely "extra" one (it's already missing from the menu) — but that's our inference, not your confirmed decision. BESA Plot's status also needs a call: a sixth product with its own page, or a feature/accessory folded into another product?</p>
+      </div>
+
+      <h3 class="sub">MVP — critical scope for December 1</h3>
+      <div class="tree">
+        <div class="d0">/ — new homepage</div>
+        <div class="d1">/products/ — hub with 5 products <span class="flagw">(← pending open question 1)</span></div>
+        <div class="d2">every product: the same template — overview · capabilities (tagged EEG / MEG / both) · link to downloads</div>
+        <div class="d1">/downloads/ — <b>one</b> shared downloads hub with a product filter, instead of three parallel versions</div>
+        <div class="d1">/customers/ — page for existing customers (same entry point as /downloads/, or right next to it)</div>
+        <div class="d1">/contact/ — sales · distributor by region · contact form · career</div>
+        <div class="d1">/contact/report-incident/ — <b>separate</b> and visible, not buried among other forms</div>
+        <div class="d1">/contact/newsletter/ — subscribe + unsubscribe in one place (instead of three pages)</div>
+        <div class="d1">/about/ — brief company info (without the 21 team-member cards — not critical for launch)</div>
+      </div>
+
+      <div class="oq">
+        <span class="m">Why the incident form gets its own line</span>
+        <p>You gave the example of a doctor needing to report an incident involving MEG equipment. That's not a marketing form — it carries operational and regulatory weight, so on the new site it shouldn't get lost among ordinary "contact us" links the way <code>/contact/incident/</code> is currently lost among 11 other same-level contact pages.</p>
+      </div>
+
+      <h3 class="sub">Phase 2 — after the MVP launches</h3>
+      <div class="tree">
+        <div class="d1">/about/team/ — team member cards (currently 21)</div>
+        <div class="d1">/science/ — publications and research</div>
+        <div class="d1">/events/ — conferences, webinars, workshops, merged into one section per your own suggestion</div>
+        <div class="d1">/news/ — the blog, once the team has sorted and cleaned it up</div>
+        <div class="d1">/faq/ — decide: a proper on-site section, or keep sending people to wiki.besa.de, but consistently for the index page and every child page</div>
+      </div>
+
+      <h3 class="sub">Format of the sitemap itself — a table for people, not a tree of links</h3>
+      <p style="color:var(--ink-soft)">A technical sitemap.xml (the one we analyzed) works for search engines and developers, but not for a manager making decisions. A flat list of pages tagged by "who it's for" and "which modality" is easier for you to work with — and it happens to solve your UX challenge too: not a rigid "clinician or researcher" fork, but tags that can be combined freely.</p>
+
+      <table class="fmt">
+        <tr><th>Page</th><th>Audience</th><th>EEG / MEG</th><th>Priority</th></tr>
+        <tr><td>BESA Research</td><td><span class="pill">Clinicians</span><span class="pill">Researchers</span></td><td><span class="pill">EEG</span><span class="pill">MEG</span></td><td><span class="pill">MVP</span></td></tr>
+        <tr><td>BESA Statistics</td><td><span class="pill">Researchers</span></td><td><span class="pill">EEG</span><span class="pill">MEG</span></td><td><span class="pill">MVP</span></td></tr>
+        <tr><td>BESA MRI</td><td><span class="pill">Clinicians</span><span class="pill">Researchers</span></td><td><span class="pill">MEG</span></td><td><span class="pill">MVP</span></td></tr>
+        <tr><td>BESA Connectivity</td><td><span class="pill">Researchers</span></td><td><span class="pill">EEG</span><span class="pill">MEG</span></td><td><span class="pill">MVP</span></td></tr>
+        <tr><td>BESA Simulator</td><td><span class="pill">Researchers</span></td><td><span class="pill">EEG</span><span class="pill">MEG</span></td><td><span class="pill">MVP</span></td></tr>
+        <tr><td>Team / About</td><td><span class="pill ph2">Everyone</span></td><td><span class="pill ph2">—</span></td><td><span class="pill ph2">Phase 2</span></td></tr>
+      </table>
+      <p style="margin-top:12px;color:var(--ink-faint);font-size:.88rem">This is a draft to illustrate the format, not a final list — the exact audience/modality tags for each product get confirmed with you and the team once the final 5-product line-up is settled.</p>
+    </section>
+
+    <section id="actions">
+      <div class="kicker">05 · Summary</div>
+      <h2>Recommendations, point by point</h2>
+      <p class="intro">Short, without repeating the detail above — what we suggest doing, and in what order.</p>
+
+      <ol class="plan">
+        <li><b>Close the open question on products.</b><div class="d">Agree on the final list of 5 MVP products — including the fate of EEG Focus and BESA Plot — before the team starts building product templates.</div></li>
+        <li><b>One template for all 5 product pages.</b><div class="d">The same set of blocks (overview → capabilities tagged EEG/MEG → downloads), with no exceptions like the current BESA Connectivity.</div></li>
+        <li><b>One downloads hub instead of three.</b><div class="d">Confirms the idea you already raised on the call — and the audit shows exactly why it's the right call: the current versions have already drifted apart.</div></li>
+        <li><b>The incident-report form gets its own, visible spot.</b><div class="d">Don't bury it among ordinary contact links, given its regulatory weight.</div></li>
+        <li><b>Merge the newsletter flow into one block.</b><div class="d">Right now it's three separate pages for one action.</div></li>
+        <li><b>Don't carry technical debt over "by inertia."</b><div class="d">The test page, the broken ?page_id= links, the pipeline-eeg duplicate — none of these need a decision, they just shouldn't be migrated.</div></li>
+        <li><b>Team, Publications, Events, Blog — deliberately Phase 2.</b><div class="d">This matches what you already defined as less critical for the December release.</div></li>
+        <li><b>For any future structure discussion, use a table, not a menu tree.</b><div class="d">It's easier to see whether every audience and modality is covered, and it doesn't require technical knowledge to read.</div></li>
+      </ol>
+    </section>
+
+    <section id="next">
+      <div class="kicker">06 · What happens next</div>
+      <h2>Proposed first phase of work</h2>
+      <p class="intro">Before jumping into visual design or rebuilding anything, we recommend starting the engagement with a short, structured phase. It's the fastest way to turn everything above — plus the material you're still finishing on your side — into a sitemap and a homepage concept you've actually signed off on, rather than one we assumed on your behalf.</p>
+
+      <ol class="timeline">
+        <li>
+          <h4>Bring in the full context</h4>
+          <p>Fold in the product/content material your team is currently preparing — the final product line-up (BESA Research confirmed as flagship, BESA Statistics flagged as standalone-or-add-on, the remaining slots still open), feature messaging, the exact list of forms, required languages, and the CMS decision — into one shared picture.</p>
+        </li>
+        <li>
+          <h4>Walk through the open questions together</h4>
+          <p>Go through the open items this audit surfaced (EEG Focus / BESA Plot, the incident and bug-report flows, distributor data, translation languages) and turn each into a documented decision instead of an assumption.</p>
+        </li>
+        <li>
+          <h4>Draft sitemap v1</h4>
+          <p>Build the first correct sitemap for the new site using this full, agreed context — not the current site's menu, and not our first-pass proposal above.</p>
+        </li>
+        <li>
+          <h4>Reference research</h4>
+          <p>Look at medtech and scientific-software companies that present their product offering well, and use them as design references — you mentioned it's hard to find a good example among direct competitors, so we broaden the search to the wider medtech and scientific-software space.</p>
+        </li>
+        <li>
+          <h4>Homepage &amp; navigation concept</h4>
+          <p>Design a concept for the updated homepage and its navigation, grounded in sitemap v1 and the reference research — this is the piece that has to solve the clinician/researcher/EEG/MEG overlap you flagged as the core UX challenge.</p>
+        </li>
+        <li>
+          <h4>Align and sign off</h4>
+          <p>Review the concept with you (and IT, where relevant) before it becomes the basis for anything else — this is the checkpoint where direction gets locked in.</p>
+        </li>
+        <li>
+          <h4>Break down into logical blocks and milestones</h4>
+          <p>Only once the above is agreed: break the new site down into logical content blocks — not literal pages — move into block-by-block redesign, and sequence the build across milestones toward December 1.</p>
+        </li>
+      </ol>
+
+      <div class="timeline-note">We treat this as its own fixed-price phase, separate from general discovery — it's what lets us quote a firm price for each following phase and move forward stage by stage, with full visibility and control over both cost and scope at every step.</div>
+    </section>
+
+    <section id="estimate">
+      <div class="kicker">07 · What this costs</div>
+      <h2>Budget estimate</h2>
+      <p class="intro">This covers design only — built bottom-up from the page inventory in Section 04, at a $30/hr (~$240/day) design rate. Development is scoped and priced separately by our delivery partners, based on this sitemap and the design deliverable; it isn't estimated here.</p>
+
+      <div class="pricebox">
+        <div class="top"><h3>Phase 1 — Discovery &amp; Sitemap</h3><span class="amt">$2,000</span></div>
+        <span class="badge-fixed">Fixed price</span>
+        <ul>
+          <li>Sitemap v1, built on the final product list and full content context</li>
+          <li>Reference research — medtech / scientific-software product presentation</li>
+          <li>Homepage + navigation concept</li>
+          <li>Review and sign-off with you before anything else starts</li>
+        </ul>
+      </div>
+
+      <h3 class="sub">Design estimate — Phase 2 onward <span class="badge-est" style="margin-left:8px;">Working estimate</span></h3>
+      <div class="wrap-scroll">
+        <table class="costtab">
+          <tr><th>Block</th><th>Type</th><th>Design (days)</th></tr>
+          <tr><td>Design system &amp; core components</td><td>Foundation</td><td class="num">2</td></tr>
+          <tr><td>Homepage</td><td>Unique</td><td class="num">2</td></tr>
+          <tr><td>Product page — 1 template → 5 products</td><td>Template</td><td class="num">3</td></tr>
+          <tr><td>Downloads hub</td><td>Unique</td><td class="num">1</td></tr>
+          <tr><td>Contact hub + simple forms (sales, career, newsletter)</td><td>Template</td><td class="num">2</td></tr>
+          <tr><td>Distributor lookup</td><td>Unique</td><td class="num">1</td></tr>
+          <tr><td>Incident / bug-report form</td><td>Unique</td><td class="num">1</td></tr>
+          <tr><td>About</td><td>Unique</td><td class="num">0.5</td></tr>
+          <tr class="total"><td>Design subtotal — 12.5 days</td><td></td><td class="num">$3,000</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:10px;color:var(--ink-faint);font-size:.86rem">Review and revision time isn't a separate line — it's already folded into each block's day count above.</p>
+
+
+      <div class="pricebox">
+        <div class="top"><h3>Total design cost to MVP</h3><span class="amt">≈ $5,000</span></div>
+        <span class="badge-est">Phase 1 fixed + design estimate</span>
+        <ul>
+          <li>$2,000 fixed (Phase 1) + ≈$3,000 estimated (design, Phase 2 onward)</li>
+          <li>Development is out of scope here — priced separately by delivery partners off this sitemap and the design files</li>
+          <li>Excludes Phase 2 content — Team, Science/Publications, Events, Blog</li>
+          <li>Firms up once Phase 1 locks the final 5-product list and form/translation scope</li>
+        </ul>
+      </div>
+
+      <p style="color:var(--ink-soft)">Your own initial ballpark for the completely new site was €20,000–30,000, covering design and development together. This figure is the design slice of that — the delivery partners' development estimate stacks on top of it before the full project number is final.</p>
+    </section>
+
+    <footer>
+      Audit based on besa.de's public sitemap and manual page-by-page verification, September 15, 2026. Raw data (page list, response codes, page snapshots used for duplicate comparisons) available on request.
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.rail a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var activeIdx = 0;
+    sections.forEach(function(s, i){ if(s && s.offsetTop <= pos) activeIdx = i; });
+    links.forEach(function(a,i){ a.classList.toggle('active', i===activeIdx); });
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
