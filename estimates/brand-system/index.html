@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand System — Design Estimate · YARSY</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Fixed-scope estimate for extending an existing identity into a full brand system: graphic language, core identity rules, and applied examples across digital, print and merch.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#080808;
+  --surface:#0e0e0e;
+  --surface-2:#141414;
+  --line:rgba(255,255,255,0.07);
+  --line-strong:rgba(255,255,255,0.14);
+  --text:#f0f0f0;
+  --muted:#6e6e73;
+  --gold:#c9a96e;
+  --blue:#4a9eff;
+  --purple:#a78bfa;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 32px}
+.mono{font-family:'DM Mono',ui-monospace,monospace}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:120px 32px 88px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  background:radial-gradient(ellipse 800px 380px at 50% 0%, rgba(201,169,110,0.10), transparent 70%);
+}
+.eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:22px;
+}
+.hero h1{
+  font-size:52px;
+  font-weight:500;
+  letter-spacing:-.03em;
+  line-height:1.1;
+  margin-bottom:18px;
+}
+.hero-subtitle{
+  font-size:17px;
+  color:var(--muted);
+  max-width:600px;
+  margin:0 auto 40px;
+}
+.hero-meta{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:32px;
+  flex-wrap:wrap;
+}
+.meta-item{text-align:center}
+.meta-label{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.meta-value{font-size:16px;font-weight:500}
+.meta-value.accent{color:var(--gold)}
+.meta-divider{width:1px;height:34px;background:var(--line-strong)}
+
+/* ---------- sections ---------- */
+.section{padding:72px 0;border-bottom:1px solid var(--line)}
+.section:last-of-type{border-bottom:none}
+.section-title{
+  font-size:26px;
+  font-weight:500;
+  letter-spacing:-.02em;
+  margin-bottom:12px;
+}
+.section-desc{
+  font-size:16px;
+  color:var(--muted);
+  max-width:720px;
+  margin-bottom:38px;
+}
+
+/* ---------- scope cards ---------- */
+.scope-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+.scope-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:22px;
+}
+.scope-card h3{
+  font-size:15px;
+  font-weight:500;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex:none}
+.scope-card p{font-size:14px;color:var(--muted)}
+
+.note-box{
+  margin-top:24px;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-left:2px solid var(--gold);
+  border-radius:var(--r);
+  padding:20px 22px;
+}
+.note-box .nl{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:8px;
+}
+.note-box p{font-size:14px;color:var(--muted)}
+.note-box p + p{margin-top:8px}
+
+/* ---------- price ---------- */
+.price-hero{
+  background:linear-gradient(180deg, rgba(201,169,110,0.07), rgba(201,169,110,0.02));
+  border:1px solid rgba(201,169,110,0.22);
+  border-radius:var(--r);
+  padding:28px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+  margin-bottom:22px;
+}
+.price-hero h3{font-size:19px;font-weight:500;margin-bottom:8px}
+.price-hero p{font-size:15px;color:var(--muted);max-width:520px}
+.price-block{text-align:right;flex:none}
+.price{font-size:34px;font-weight:500;letter-spacing:-.02em;color:var(--gold);line-height:1.1}
+.price-note{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.comp{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:22px 24px;
+}
+.comp + .comp{margin-top:12px}
+.comp-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:18px;
+  margin-bottom:8px;
+}
+.comp-name{font-size:16px;font-weight:500}
+.comp-price{font-family:'DM Mono',monospace;font-size:15px;color:var(--gold);flex:none}
+.comp p{font-size:14px;color:var(--muted);margin-bottom:12px}
+.deliv{list-style:none;display:flex;flex-wrap:wrap;gap:7px}
+.deliv li{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.04em;
+  color:#9a9aa0;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:5px 10px;
+}
+
+.total-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border:1px solid var(--line-strong);
+  border-radius:var(--r);
+  padding:20px 24px;
+  margin-top:14px;
+}
+.total-row span:first-child{
+  font-family:'DM Mono',monospace;
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.total-row span:last-child{font-size:26px;font-weight:500;color:var(--gold)}
+
+.excl{margin-top:26px}
+.excl-label{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:12px;
+}
+.tags{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.tags li{
+  font-size:12px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:6px 13px;
+}
+
+/* ---------- roadmap ---------- */
+.stage{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  overflow:hidden;
+}
+.stage + .stage{margin-top:12px}
+.stage-header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:20px 24px;
+  cursor:pointer;
+  user-select:none;
+  transition:background .18s ease;
+}
+.stage-header:hover{background:var(--surface-2)}
+.stage-num{
+  font-family:'DM Mono',monospace;
+  font-size:12px;
+  color:var(--gold);
+  border:1px solid rgba(201,169,110,0.3);
+  border-radius:8px;
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+}
+.stage-title{font-size:16px;font-weight:500;flex:1}
+.stage-dur{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  flex:none;
+}
+.chev{
+  width:9px;height:9px;flex:none;
+  border-right:1.5px solid var(--muted);
+  border-bottom:1.5px solid var(--muted);
+  transform:rotate(45deg);
+  transition:transform .22s ease;
+  margin-left:4px;
+}
+.stage.open .chev{transform:rotate(-135deg)}
+.stage-body{
+  display:none;
+  padding:0 24px 24px;
+}
+.stage.open .stage-body{display:block}
+.stage-desc{font-size:15px;color:#b4b4ba;margin-bottom:16px}
+.involves{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+.module-bullets{list-style:none}
+.module-bullets li{
+  display:flex;
+  gap:10px;
+  font-size:14px;
+  color:var(--muted);
+  padding:7px 0;
+  border-top:1px solid var(--line);
+}
+.bname{color:var(--text);min-width:210px;flex:none}
+.bdash{color:var(--line-strong)}
+
+/* ---------- questions ---------- */
+.questions-block{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:26px 28px;
+}
+.q-item{
+  display:flex;
+  gap:14px;
+  padding:14px 0;
+  border-top:1px solid var(--line);
+  font-size:15px;
+}
+.q-item:first-child{border-top:none;padding-top:0}
+.q-num{
+  font-family:'DM Mono',monospace;
+  font-size:12px;
+  color:var(--gold);
+  flex:none;
+  padding-top:3px;
+}
+.q-item p{color:#b4b4ba}
+.q-item strong{color:var(--text);font-weight:500}
+
+/* ---------- footer ---------- */
+.footer{
+  padding:52px 32px 64px;
+  text-align:center;
+  border-top:1px solid var(--line);
+}
+.footer .logo{
+  font-family:'DM Mono',monospace;
+  font-size:13px;
+  letter-spacing:.3em;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+.footer p{font-size:13px;color:var(--muted)}
+
+@media (max-width: 600px) {
+  .hero { padding: 64px 20px 56px; }
+  .hero h1 { font-size: 36px; }
+  .hero-subtitle { font-size: 15px; }
+  .hero-meta { gap: 16px; flex-direction: column; }
+  .meta-divider { display: none; }
+
+  .wrap { padding: 0 16px; }
+  .section { padding: 48px 0; }
+  .section-title { font-size: 22px; }
+
+  .scope-grid { grid-template-columns: 1fr; }
+
+  .price-hero { flex-direction: column; padding: 20px; gap: 16px; }
+  .price-block { text-align: left; }
+  .price { font-size: 30px; }
+
+  .comp-top { flex-direction: column; gap: 4px; }
+  .total-row { padding: 16px 18px; }
+  .total-row span:last-child { font-size: 22px; }
+
+  .stage-header { padding: 16px; gap: 12px; }
+  .stage-dur { display: none; }
+  .stage-body { padding: 0 16px 20px; }
+
+  .module-bullets li { flex-direction: column; gap: 3px; }
+  .bname { min-width: unset; }
+  .bdash { display: none; }
+
+  .questions-block { padding: 20px; }
+  .q-item { flex-direction: column; gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">Design Estimate</div>
+  <h1>Brand System &amp; Guidelines</h1>
+  <p class="hero-subtitle">Extending an existing identity into a working brand system — one graphic language, applied consistently across every surface the team actually ships.</p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">Engagement</div>
+      <div class="meta-value">Fixed scope</div>
+    </div>
+    <div class="meta-divider"></div>
+    <div class="meta-item">
+      <div class="meta-label">Timeline</div>
+      <div class="meta-value">3 weeks</div>
+    </div>
+    <div class="meta-divider"></div>
+    <div class="meta-item">
+      <div class="meta-label">Total</div>
+      <div class="meta-value accent">$3 000</div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ APPROACH ============ -->
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">How we read this brief</h2>
+    <p class="section-desc">Strategy, positioning and tone of voice are already defined on your side — we leave them untouched and treat them as input. This engagement is not a rebrand. It takes what already exists (logo, product design system, marketing angles) and builds the missing layer above it: a graphic language, and the rules that let anyone on the team apply it without asking a designer.</p>
+
+    <div class="scope-grid">
+      <div class="scope-card">
+        <h3><span class="dot"></span>Start from what exists</h3>
+        <p>We audit the current logo, product design system and defined angles, and map what carries over, what needs expansion, and what is missing entirely.</p>
+      </div>
+      <div class="scope-card">
+        <h3><span class="dot"></span>Derive the graphic language</h3>
+        <p>Patterns, shapes and imagery rules are pulled out of the existing system rather than invented beside it — so the brand and the product look like one company.</p>
+      </div>
+      <div class="scope-card">
+        <h3><span class="dot"></span>One approved direction</h3>
+        <p>We present a small number of concept directions on sample surfaces. You pick one. Everything after that point executes against the approved direction only.</p>
+      </div>
+      <div class="scope-card">
+        <h3><span class="dot"></span>Prove it on real surfaces</h3>
+        <p>Applied examples show the system working on web, social, email, ads, print, merch and slides — enough to demonstrate the rules, not production-final files.</p>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <div class="nl">Fixed constraints</div>
+      <p>Strategy, positioning and messaging stay untouched — supplied by you, used as input. Logo redesign is out of scope; we define usage rules for the existing mark.</p>
+      <p>Applied examples are demonstrations of the system, not pixel-perfect final production files. The website is a light mockup indicating direction — a full website build is not part of this engagement.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">Scope &amp; pricing</h2>
+    <p class="section-desc">One fixed package. Five components, each with a defined deliverable — no hourly billing, no open-ended discovery.</p>
+
+    <div class="price-hero">
+      <div>
+        <h3>Brand System Package</h3>
+        <p>Audit of existing assets, graphic language concepts, core identity rules, applied examples across all requested formats, and a compiled brand book with source files.</p>
+      </div>
+      <div class="price-block">
+        <div class="price">$3 000</div>
+        <div class="price-note">Fixed · 3 weeks</div>
+      </div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top">
+        <div class="comp-name">Asset Audit &amp; System Map</div>
+        <div class="comp-price">$400</div>
+      </div>
+      <p>Establishes the starting point: what the existing logo, product design system and strategy documents already define, and where the brand layer has gaps.</p>
+      <ul class="deliv">
+        <li>Asset inventory</li>
+        <li>Gap map</li>
+        <li>Carry-over vs expand list</li>
+        <li>Kickoff alignment call</li>
+      </ul>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top">
+        <div class="comp-name">Graphic Language Concepts</div>
+        <div class="comp-price">$700</div>
+      </div>
+      <p>Provides three concept directions for the graphic language, each shown on the same two sample surfaces so the comparison is like-for-like. One direction is approved and carried forward.</p>
+      <ul class="deliv">
+        <li>3 concept directions</li>
+        <li>2 sample surfaces each</li>
+        <li>Rationale per direction</li>
+        <li>Selection round</li>
+      </ul>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top">
+        <div class="comp-name">Core Identity Definition</div>
+        <div class="comp-price">$800</div>
+      </div>
+      <p>Defines the rules layer of the brand book: how the mark is used, how type and colour behave outside the product, and what the pattern and icon set consists of.</p>
+      <ul class="deliv">
+        <li>Logo usage rules</li>
+        <li>Marketing type scale</li>
+        <li>Expanded palette + ratios</li>
+        <li>Imagery direction</li>
+        <li>Pattern set</li>
+        <li>Icon library</li>
+      </ul>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top">
+        <div class="comp-name">Applied Examples Rollout</div>
+        <div class="comp-price">$800</div>
+      </div>
+      <p>Demonstrates the approved system across every requested format, so each team already knows what their surface looks like under the new language.</p>
+      <ul class="deliv">
+        <li>Social templates</li>
+        <li>LinkedIn profile + carousel</li>
+        <li>Email template</li>
+        <li>Ad creative set</li>
+        <li>Print &amp; merch</li>
+        <li>Slide examples</li>
+        <li>Website mockup</li>
+      </ul>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top">
+        <div class="comp-name">Brand Book Assembly &amp; Handoff</div>
+        <div class="comp-price">$300</div>
+      </div>
+      <p>Delivers the system as something the team can use and extend: a compiled document, editable source files, and a walkthrough of how to apply the rules.</p>
+      <ul class="deliv">
+        <li>Brand book PDF</li>
+        <li>Editable Figma file</li>
+        <li>Exported assets</li>
+        <li>Handoff walkthrough</li>
+      </ul>
+    </div>
+
+    <div class="total-row">
+      <span>Total</span>
+      <span>$3 000</span>
+    </div>
+
+    <div class="excl">
+      <div class="excl-label">Not included</div>
+      <ul class="tags">
+        <li>Strategy, positioning, messaging</li>
+        <li>Logo redesign</li>
+        <li>Full website build</li>
+        <li>Copywriting</li>
+        <li>Photo / video production</li>
+        <li>Motion &amp; animation</li>
+        <li>Print production &amp; prepress liaison</li>
+        <li>Merch manufacturing</li>
+        <li>Localisation</li>
+        <li>Product UI redesign</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">Execution roadmap</h2>
+    <p class="section-desc">Three weeks, five stages. The direction is locked at the end of week one — everything after that is application, not exploration.</p>
+
+    <div class="stage open">
+      <div class="stage-header">
+        <div class="stage-num">01</div>
+        <div class="stage-title">Asset Audit &amp; System Map</div>
+        <div class="stage-dur">Days 1–3</div>
+        <div class="chev"></div>
+      </div>
+      <div class="stage-body">
+        <p class="stage-desc">This stage establishes what the brand already has before anything new is drawn. We take the existing logo, product design system, marketing angles, brand vision and tone-of-voice guidelines and read them as one system, identifying which elements are stable, which need to be expanded for marketing use, and which do not exist yet. The output is the shared factual base the rest of the engagement builds on.</p>
+        <div class="involves">This stage involves</div>
+        <ul class="module-bullets">
+          <li><span class="bname">Asset inventory</span><span class="bdash">—</span><span>Structured review of every existing brand and product asset provided as input.</span></li>
+          <li><span class="bname">System map</span><span class="bdash">—</span><span>Shows how product design tokens and brand elements currently relate to each other.</span></li>
+          <li><span class="bname">Gap list</span><span class="bdash">—</span><span>Names what marketing surfaces need that the current system does not yet define.</span></li>
+          <li><span class="bname">Kickoff alignment</span><span class="bdash">—</span><span>One call to confirm interpretation, priorities and the final list of applied formats.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-header">
+        <div class="stage-num">02</div>
+        <div class="stage-title">Graphic Language Concepts</div>
+        <div class="stage-dur">Days 4–7</div>
+        <div class="chev"></div>
+      </div>
+      <div class="stage-body">
+        <p class="stage-desc">This stage produces the creative decision the whole engagement depends on. We develop three distinct directions for the graphic language — pattern, shape, composition and imagery treatment — each derived from the existing identity rather than placed beside it. Every direction is shown on the same two sample surfaces so the choice is made on evidence, and one direction is approved before any rollout begins.</p>
+        <div class="involves">This stage involves</div>
+        <ul class="module-bullets">
+          <li><span class="bname">Three directions</span><span class="bdash">—</span><span>Distinct takes on pattern, shape language and composition, each with a stated rationale.</span></li>
+          <li><span class="bname">Sample surfaces</span><span class="bdash">—</span><span>Each direction shown on two identical surfaces for a like-for-like comparison.</span></li>
+          <li><span class="bname">Selection round</span><span class="bdash">—</span><span>Review session where one direction is approved, with one round of refinement.</span></li>
+          <li><span class="bname">Direction lock</span><span class="bdash">—</span><span>Written confirmation of the approved direction, closing exploration for this engagement.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-header">
+        <div class="stage-num">03</div>
+        <div class="stage-title">Core Identity Definition</div>
+        <div class="stage-dur">Days 8–12</div>
+        <div class="chev"></div>
+      </div>
+      <div class="stage-body">
+        <p class="stage-desc">This stage turns the approved direction into rules. It covers how the existing mark may and may not be used, how typography behaves in marketing contexts as opposed to product UI, how the palette expands beyond the product tokens, and what the pattern and icon set contains. These are the pages a new designer, agency or contractor reads first.</p>
+        <div class="involves">This stage involves</div>
+        <ul class="module-bullets">
+          <li><span class="bname">Logo usage guidelines</span><span class="bdash">—</span><span>Clear space, minimum sizes, permitted variants, backgrounds and explicit misuse cases.</span></li>
+          <li><span class="bname">Marketing typography</span><span class="bdash">—</span><span>Display and body scale for marketing surfaces, mapped against the product type system.</span></li>
+          <li><span class="bname">Expanded colour palette</span><span class="bdash">—</span><span>Marketing-level palette with usage ratios, pairings and accessibility contrast notes.</span></li>
+          <li><span class="bname">Imagery direction</span><span class="bdash">—</span><span>Defines subject, treatment and crop rules, with a reference board for sourcing.</span></li>
+          <li><span class="bname">Pattern &amp; icon library</span><span class="bdash">—</span><span>Small reusable set built from the approved graphic language, ready to extend later.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-header">
+        <div class="stage-num">04</div>
+        <div class="stage-title">Applied Examples Rollout</div>
+        <div class="stage-dur">Days 13–18</div>
+        <div class="chev"></div>
+      </div>
+      <div class="stage-body">
+        <p class="stage-desc">This stage proves the system holds across formats. The approved language is applied to each requested surface at the level needed to demonstrate the rules — layout logic, hierarchy and element usage — rather than as final production artwork. The exact list of print, merch and social formats is confirmed at kickoff and sized to fit within this stage.</p>
+        <div class="involves">This stage involves</div>
+        <ul class="module-bullets">
+          <li><span class="bname">Social media</span><span class="bdash">—</span><span>Post templates showing how the language holds in feed formats and profile assets.</span></li>
+          <li><span class="bname">LinkedIn set</span><span class="bdash">—</span><span>Account design plus one carousel example demonstrating narrative pacing across slides.</span></li>
+          <li><span class="bname">Email</span><span class="bdash">—</span><span>Marketing email layout with header, content blocks and signature treatment.</span></li>
+          <li><span class="bname">Ad creative</span><span class="bdash">—</span><span>Creative set in the agreed channel sizes, showing message and visual hierarchy.</span></li>
+          <li><span class="bname">Print &amp; merch</span><span class="bdash">—</span><span>Selected items from banners, stickers, business cards, flyers, posters and merch.</span></li>
+          <li><span class="bname">Presentation slides</span><span class="bdash">—</span><span>Example slide layouts covering title, content, data and section-break cases.</span></li>
+          <li><span class="bname">Website mockup</span><span class="bdash">—</span><span>One light page mockup indicating direction, not a build-ready design.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-header">
+        <div class="stage-num">05</div>
+        <div class="stage-title">Brand Book Assembly &amp; Handoff</div>
+        <div class="stage-dur">Days 19–21</div>
+        <div class="chev"></div>
+      </div>
+      <div class="stage-body">
+        <p class="stage-desc">This stage delivers the system in a form the team can use without us. Rules and applied examples are compiled into one document, source files are organised and handed over, and a walkthrough covers how to apply the language to surfaces that were not part of this scope.</p>
+        <div class="involves">This stage involves</div>
+        <ul class="module-bullets">
+          <li><span class="bname">Compiled brand book</span><span class="bdash">—</span><span>Single document covering core identity rules and every applied example produced.</span></li>
+          <li><span class="bname">Source files</span><span class="bdash">—</span><span>Editable Figma file structured so the team can extend the system themselves.</span></li>
+          <li><span class="bname">Exported assets</span><span class="bdash">—</span><span>Logo variants, patterns and icons exported in the formats each team needs.</span></li>
+          <li><span class="bname">Handoff walkthrough</span><span class="bdash">—</span><span>One session covering how to apply the rules to future surfaces and edge cases.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUESTIONS ============ -->
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">To confirm before we start</h2>
+    <p class="section-desc">The package is fixed at $3 000 — the answers below size the applied examples stage so the right formats get covered. Nothing here changes the price; it changes where the effort lands.</p>
+
+    <div class="questions-block">
+      <div class="q-item">
+        <div class="q-num">01</div>
+        <p><strong>Print &amp; merch — which items actually matter?</strong> The brief lists banners, stickers, business cards, flyers and posters. We would rather do five items properly than eleven superficially. Which ones do you print or order most often, and in what formats and sizes?</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">02</div>
+        <p><strong>Merch — what physical items are planned?</strong> Apparel, tote, notebook, drinkware, conference giveaways? Each behaves differently under a pattern system, so the list shapes how the graphic language is built.</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">03</div>
+        <p><strong>Social — which platforms beyond LinkedIn?</strong> Instagram, X, Facebook, YouTube? And roughly how many recurring post types do you actually run, so templates map to real content rather than hypothetical ones.</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">04</div>
+        <p><strong>Email — marketing or transactional?</strong> A newsletter or campaign layout, a transactional template, or a signature and header set. These are different deliverables.</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">05</div>
+        <p><strong>Ad creative — which channels and sizes?</strong> LinkedIn, Meta, Google Display and programmatic all have different constraints. Naming the priority channel keeps the creative set usable.</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">06</div>
+        <p><strong>Presentations — which deck types?</strong> Sales, investor, conference or internal. And which tool the team builds in, since Figma, Google Slides and PowerPoint each constrain what a template can do.</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">07</div>
+        <p><strong>Website mockup — which page?</strong> Homepage is the usual answer. Desktop only, or desktop plus one mobile view?</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">08</div>
+        <p><strong>Product design system — what access do we get?</strong> Read-only reference, or may we extend its tokens so the brand and product layers stay in sync?</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">09</div>
+        <p><strong>Approvals — who signs off, and how fast?</strong> The three-week timeline assumes one decision-maker and feedback within two business days at each review point.</p>
+      </div>
+      <div class="q-item">
+        <div class="q-num">10</div>
+        <p><strong>Final format — how does the team want to consume this?</strong> PDF brand book, a living Figma file, or both. We default to both.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="logo">YARSY</div>
+  <p>AI-Orchestrated Product Studio · Design estimate, valid 30 days</p>
+</footer>
+
+<script>
+document.querySelectorAll('.stage-header').forEach(function(h){
+  h.addEventListener('click', function(){
+    h.parentElement.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
