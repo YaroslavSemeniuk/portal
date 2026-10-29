@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="uk"><head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Скіл merch-design – встановлення · YARSY</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F7F4EC;--ink:#1D1A19;--mute:#6B5744;--line:#E2DACB;--acc:#B04922;--card:#FFFDF8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1A1817;--ink:#EDE7DC;--mute:#B5A48F;--line:#38322D;--acc:#E07A50;--card:#221F1D}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:40px 16px 80px}
+h1{font:500 42px/1.1 'Cormorant Garamond',Georgia,serif;letter-spacing:.04em;margin:0 0 8px}
+h2{font:500 28px/1.2 'Cormorant Garamond',Georgia,serif;margin:0 0 10px}
+.lead{color:var(--mute);margin:0 0 20px}a{color:var(--acc)}
+.dl{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0 8px}
+.btn{display:inline-block;padding:12px 20px;border-radius:10px;background:var(--acc);color:#fff;text-decoration:none;font-weight:600}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.note{font-size:14px;color:var(--mute)}
+.step{display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin:20px 0}
+.n{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:600}
+.step ul{padding-left:20px;margin:0}.step li{margin:0 0 8px}
+.step img{width:100%;border-radius:10px;box-shadow:0 8px 28px #0003}
+@media(max-width:700px){.step{grid-template-columns:1fr}h1{font-size:34px}}
+</style></head><body><main>
+<p class="note"><a href="../">← Стандарт по мерчу</a></p>
+<h1>Скіл merch-design для Claude</h1>
+<p class="lead">Скіл знає наш стандарт по мерчу: розміщення лого, розміри й відступи, флети, кадри на людях і збірку презентації. А ще вміє оцінити готову роботу.</p>
+<div class="dl">
+<a class="btn" href="../downloads/merch-design-team-lite.zip" download>Скачати скіл (zip, 49 МБ)</a>
+<a class="btn ghost" href="../downloads/merch-design-install-guide.pdf" download>Інструкція PDF</a>
+</div>
+<p class="note">Zip не розпаковуйте – Claude приймає його як є. Працює однаково в claude.ai і в застосунку Claude Desktop.</p>
+
+<div class="step"><div><div class="n">Крок 1</div><h2>Відкрийте налаштування</h2><ul><li>Натисніть на своє ім'я <b>внизу ліворуч</b>.</li><li>Виберіть <b>Settings</b> (або <b>⇧⌘,</b>).</li></ul></div><img src="img/s1.jpg" alt="Меню акаунта, пункт Settings" style="max-width:300px;justify-self:center"></div>
+<div class="step"><div><div class="n">Крок 2</div><h2>Увімкніть запуск коду</h2><ul><li>Ліворуч виберіть <b>Capabilities</b>.</li><li>У блоці <b>Code execution and file creation</b> увімкніть <b>Run code in the cloud</b> – без цього скіли не працюють.</li></ul></div><img src="img/s2.jpg" alt="Capabilities, Run code in the cloud"></div>
+<div class="step"><div><div class="n">Крок 3</div><h2>Додайте скіл</h2><ul><li>У розділі Customize виберіть <b>Skills</b>.</li><li>Вгорі праворуч натисніть <b>+ Add</b> → <b>Upload skill</b>.</li></ul></div><img src="img/s3.jpg" alt="Skills, Add, Upload skill"></div>
+<div class="step"><div><div class="n">Крок 4</div><h2>Завантажте zip</h2><ul><li>Перетягніть <b>merch-design-team-lite.zip</b> у поле або натисніть <b>browse</b>.</li><li>Натисніть <b>Upload</b> і зачекайте перевірку (Security scan).</li></ul></div><img src="img/s4.jpg" alt="Upload a skill"></div>
+<div class="step"><div><div class="n">Крок 5</div><h2>Перевірте і почніть</h2><ul><li>Скіл <b>merch-design</b> з'явиться у списку <b>Created by you</b>.</li><li>Новий чат: <b>«Зроби мерч для &lt;бренд&gt;»</b> + лого (SVG), брендбук і фото-мокапи.</li><li>Оцінка готової роботи: <b>«Оціни мерч»</b> + мокапи або PDF.</li></ul></div><img src="img/s5.jpg" alt="Список скілів"></div>
+<p class="note">Матеріали містять бренд клієнта – тільки для внутрішньої роботи. Якщо zip не завантажується – напишіть Ярославу.</p>
+</main></body></html>
